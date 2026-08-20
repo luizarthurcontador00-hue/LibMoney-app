@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recomeçar o LibMoney neste navegador</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.png">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+
+<!--
+  Apaga a cópia local do LibMoney neste navegador, para o app baixar tudo de
+  novo da nuvem.
+
+  Existe porque o caminho pelos menus do navegador falha em silêncio. O banco
+  do app fica em IndexedDB, e o navegador só apaga um IndexedDB quando
+  nenhuma aba está com ele aberto — com o app aberto numa aba, o pedido de
+  exclusão fica pendente para sempre e a pessoa acha que apagou. Foi
+  exatamente o que aconteceu na primeira tentativa.
+
+  Esta página não abre o banco. Por isso ela consegue apagar, e por isso ela
+  consegue dizer com certeza se apagou.
+-->
+
+<style>
+  .caixa{max-width:520px;text-align:left}
+  .caixa h1{font-size:25px;margin-bottom:8px}
+  .caixa .sub{margin-bottom:0}
+  .oque{
+    list-style:none;padding:0;margin:20px 0;display:grid;gap:10px;font-size:15px;
+  }
+  .oque li{display:flex;gap:11px;align-items:flex-start;color:var(--ink-soft)}
+  .oque .sim,.oque .nao{
+    flex:none;width:22px;height:22px;border-radius:7px;display:grid;
+    place-items:center;font-weight:800;font-size:13px;
+  }
+  .oque .sim{background:var(--down-soft);color:var(--down-word)}
+  .oque .nao{background:var(--brand-soft);color:var(--brand-word)}
+  .caixa .botao{width:100%;margin-top:6px}
+  .estado{margin-top:18px}
+  .girando{
+    display:inline-block;width:16px;height:16px;border-radius:50%;
+    border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;
+    animation:girar .8s linear infinite;
+  }
+  @keyframes girar{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="centro">
+  <div class="caixa">
+    <a class="marca" href="/" style="margin-bottom:18px">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2" y="6" width="20" height="14" rx="4" fill="#66CC33"/>
+        <path d="M2 11h20" stroke="#132B06" stroke-width="2"/>
+        <circle cx="17" cy="15.5" r="1.7" fill="#132B06"/>
+      </svg>
+      LibMoney
+    </a>
+
+    <h1>Recomeçar neste navegador</h1>
+    <p class="sub">
+      Apaga a cópia que este navegador guardou e faz o app baixar tudo de novo
+      da sua conta.
+    </p>
+
+    <ul class="oque">
+      <li><span class="sim">✕</span>
+        <span>Apaga <b>só o que está guardado neste navegador</b>.</span></li>
+      <li><span class="nao">✓</span>
+        <span>Não encosta na sua conta, nos seus lançamentos na nuvem, nem no
+        aplicativo do celular.</span></li>
+      <li><span class="nao">✓</span>
+        <span>Ao entrar de novo, o app baixa tudo da sua conta.</span></li>
+    </ul>
+
+    <div class="aviso" id="cuidado">
+      <b>Antes de continuar</b>
+      Só use isto se os seus lançamentos estão na sua conta na nuvem. Se você
+      usa o LibMoney só aqui neste navegador, sem entrar numa conta, isto
+      apaga tudo e não tem como voltar.
+    </div>
+
+    <button class="botao" id="botao" type="button">
+      Apagar a cópia deste navegador
+    </button>
+
+    <div id="estado" class="estado"></div>
+
+    <p class="pe-caixa" id="rodape">
+      Fecha as outras abas do LibMoney antes — o navegador não apaga um banco
+      que ainda está aberto em algum lugar.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var botao  = document.getElementById('botao');
+  var estado = document.getElementById('estado');
+
+  // Uma exclusão bloqueada não é cancelada: fica pendente e o navegador a
+  // conclui sozinho assim que a última aba solta o banco. Então na segunda
+  // tentativa costuma não haver mais nada — e dizer "não havia nada guardado"
+  // a quem acabou de ler "ainda há uma aba aberta" soa como se tivesse
+  // falhado. Lembrar que já houve tentativa é o que deixa a frase honesta.
+  var jaTentou = false;
+
+  function recado(texto, tipo) {
+    estado.className = 'recado ' + tipo;
+    estado.innerHTML = texto;
+  }
+
+  async function listar() {
+    if (!indexedDB.databases) return null;   // Firefox antigo não tem
+    try { return (await indexedDB.databases()).map(function (d) { return d.name; }); }
+    catch (e) { return null; }
+  }
+
+  // O navegador só conclui a exclusão quando ninguém mais está com o banco
+  // aberto. `onblocked` é o aviso de que alguma aba ainda está — e é a falha
+  // que faz o caminho pelos menus não funcionar sem dizer nada.
+  function apagar(nome) {
+    return new Promise(function (resolve) {
+      var p = indexedDB.deleteDatabase(nome);
+      var respondeu = false;
+      function responde(v) { if (!respondeu) { respondeu = true; resolve(v); } }
+      p.onsuccess = function () { responde('ok'); };
+      p.onerror   = function () { responde('erro'); };
+      p.onblocked = function () { responde('bloqueado'); };
+      setTimeout(function () { responde('bloqueado'); }, 4000);
+    });
+  }
+
+  botao.addEventListener('click', async function () {
+    botao.disabled = true;
+    botao.innerHTML = '<span class="girando"></span> Apagando...';
+    recado('', '');
+
+    try {
+      var bancos = await listar();
+
+      if (bancos === null) {
+        // Sem a API de listar, tenta o nome que o app usa.
+        bancos = ['sqflite_databases'];
+      }
+      if (bancos.length === 0) {
+        recado(jaTentou
+          ? '<b>Pronto.</b> A cópia deste navegador foi apagada.'
+            + '<br>Agora entre no app: ele vai baixar tudo da sua conta.'
+          : 'Não havia nada guardado aqui. Pode entrar no app normalmente.',
+          'info');
+        pronto();
+        return;
+      }
+      jaTentou = true;
+
+      var bloqueou = false;
+      for (var i = 0; i < bancos.length; i++) {
+        var r = await apagar(bancos[i]);
+        if (r === 'bloqueado') bloqueou = true;
+      }
+
+      var sobrou = await listar();
+
+      if (bloqueou && sobrou && sobrou.length > 0) {
+        recado('<b>Ainda há uma aba do LibMoney aberta.</b><br>'
+             + 'Feche todas as outras abas do LibMoney (inclusive o app) e '
+             + 'toque de novo. O navegador não apaga um banco que ainda está '
+             + 'aberto em algum lugar.', 'erro');
+        botao.disabled = false;
+        botao.textContent = 'Tentar de novo';
+        return;
+      }
+
+      // De propósito sem "tantos KB viraram tantos": `storage.estimate()`
+      // demora a acompanhar a exclusão e devolve o número velho por alguns
+      // segundos — dizia "16 KB viraram 16 KB" logo depois de apagar de
+      // verdade. A prova boa é a lista de bancos estar vazia, que é medida na
+      // hora e é exatamente o que importa.
+      recado('<b>Pronto.</b> A cópia deste navegador foi apagada.'
+           + '<br>Agora entre no app: ele vai baixar tudo da sua conta.', 'info');
+      pronto();
+
+    } catch (err) {
+      recado('Não deu para apagar por aqui: ' + (err && err.message ? err.message : err)
+           + '<br>Feche todas as abas do LibMoney e tente de novo.', 'erro');
+      botao.disabled = false;
+      botao.textContent = 'Tentar de novo';
+    }
+  });
+
+  function pronto() {
+    document.getElementById('cuidado').style.display = 'none';
+    document.getElementById('rodape').style.display = 'none';
+    botao.outerHTML = '<a class="botao" href="/app/" '
+      + 'style="width:100%;margin-top:6px">Entrar no LibMoney</a>';
+  }
+})();
+</script>
+</body>
+</html>
