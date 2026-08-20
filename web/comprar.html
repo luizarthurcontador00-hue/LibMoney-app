@@ -1,0 +1,157 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comprar a Licença Vitalícia — LibMoney</title>
+<link rel="icon" href="/favicon.png">
+<meta name="robots" content="noindex">
+
+<!--
+  A compra mora aqui, numa página do site, e não dentro do aplicativo.
+
+  Não é preferência de organização: o Google exige o faturamento dele para
+  venda de conteúdo digital em apps distribuídos pela Play Store, e "licença
+  para usar o app" é exatamente isso. Vendendo pelo site, o app apenas
+  reconhece a licença — que é o modelo de Netflix e Spotify.
+
+  Como efeito colateral bom, nada deste fluxo entra no APK.
+-->
+
+<style>
+  @font-face{font-family:'Baloo2';src:url('/fontes/Baloo2.ttf') format('truetype');font-weight:400 800;font-display:swap}
+  @font-face{font-family:'Nunito';src:url('/fontes/Nunito.ttf') format('truetype');font-weight:400 800;font-display:swap}
+  :root{
+    --verde:#66CC33; --verde-escuro:#3F7A1F; --verde-claro:#EAF7DC;
+    --texto:#241B36; --suave:#8079A0; --linha:#E9F1E1; --fundo:#F9FCF4;
+    --erro:#F0384F;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fundo);color:var(--texto);
+       font-family:'Nunito',system-ui,-apple-system,sans-serif;
+       display:flex;align-items:center;justify-content:center;
+       min-height:100vh;padding:24px}
+  .caixa{width:100%;max-width:420px;background:#fff;border-radius:22px;
+         padding:28px;box-shadow:0 10px 34px rgba(102,204,51,.18)}
+  h1{font-family:'Baloo2',sans-serif;font-size:23px;margin:0 0 4px;line-height:1.25}
+  .sub{font-size:14px;color:var(--suave);margin:0 0 20px;line-height:1.5}
+  .preco{font-family:'Baloo2',sans-serif;font-size:38px;font-weight:800;
+         color:var(--verde-escuro);line-height:1}
+  .preco small{display:block;font-family:'Nunito',sans-serif;font-size:13px;
+               font-weight:600;color:var(--suave);margin-top:2px}
+  ul{list-style:none;padding:0;margin:18px 0 22px;font-size:14px}
+  li{padding:5px 0 5px 24px;position:relative;line-height:1.45}
+  li:before{content:'✓';position:absolute;left:0;color:var(--verde);font-weight:800}
+  label{display:block;font-size:13px;font-weight:700;margin:0 0 5px}
+  input{width:100%;padding:12px 13px;border:1.5px solid var(--linha);
+        border-radius:12px;font-size:15px;font-family:inherit;margin-bottom:13px;
+        background:#fff;color:var(--texto)}
+  input:focus{outline:none;border-color:var(--verde)}
+  button{width:100%;padding:14px;border:0;border-radius:13px;font-size:16px;
+         font-weight:800;font-family:inherit;color:#fff;cursor:pointer;
+         background:linear-gradient(135deg,#7BD94A,#3F7A1F)}
+  button:disabled{opacity:.55;cursor:default}
+  .aviso{margin-top:14px;padding:11px 13px;border-radius:12px;font-size:13px;
+         line-height:1.45;display:none}
+  .aviso.erro{display:block;background:#FDECEE;color:var(--erro)}
+  .aviso.info{display:block;background:var(--verde-claro);color:var(--verde-escuro)}
+  .rodape{margin-top:18px;font-size:12px;color:var(--suave);text-align:center;line-height:1.5}
+  .rodape a{color:var(--verde-escuro)}
+  .teste{margin-top:16px;padding:11px 13px;border-radius:12px;font-size:12.5px;
+         line-height:1.5;background:#FFF6E5;color:#8A5A00}
+</style>
+
+<div class="caixa">
+  <h1>Licença Vitalícia</h1>
+  <p class="sub">Pagamento único. Não vence, não vira mensalidade.</p>
+
+  <div class="preco">R$ 29,90<small>uma vez, e é seu</small></div>
+
+  <ul>
+    <li>O app inteiro, funcionando sem internet</li>
+    <li>Seus dados guardados no seu aparelho</li>
+    <li>Backup e restauração</li>
+  </ul>
+
+  <form id="form">
+    <label for="email">Seu e-mail do LibMoney</label>
+    <input id="email" type="email" autocomplete="email" required
+           placeholder="voce@email.com">
+
+    <label for="senha">Sua senha</label>
+    <input id="senha" type="password" autocomplete="current-password" required
+           placeholder="a mesma que você usa no app">
+
+    <button id="botao" type="submit">Ir para o pagamento</button>
+  </form>
+
+  <div id="aviso" class="aviso"></div>
+
+  <div class="teste">
+    <strong>Ambiente de teste.</strong> Nenhuma cobrança real acontece aqui
+    ainda.
+  </div>
+
+  <p class="rodape">
+    Entramos com a sua conta para saber para quem liberar a licença.<br>
+    Ainda não tem conta? <a href="/app/">Crie no app</a> e volte aqui.
+  </p>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient(
+  'https://fuaddebijztislqypxqk.supabase.co',
+  'sb_publishable_0ok6EgwVc3E2CeYVg5_nCw_VSSaQ_gq',
+);
+
+const form   = document.getElementById('form');
+const botao  = document.getElementById('botao');
+const aviso  = document.getElementById('aviso');
+
+function mostrar(texto, tipo) {
+  aviso.textContent = texto;
+  aviso.className = 'aviso ' + tipo;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  botao.disabled = true;
+  botao.textContent = 'Um instante...';
+  mostrar('', '');
+
+  try {
+    // Entrar é o que identifica quem está comprando. O id do usuário nunca
+    // vem de um campo da página: quem o lê é a função no servidor, a partir
+    // do token desta sessão. Aceitar um id enviado pela página deixaria
+    // alguém pagar e liberar a conta de outra pessoa.
+    const { error: erroLogin } = await supabase.auth.signInWithPassword({
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('senha').value,
+    });
+    if (erroLogin) {
+      mostrar('E-mail ou senha não conferem. Use os mesmos do aplicativo.',
+              'erro');
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke('criar-pagamento', {
+      body: { voltar_para: location.origin + '/obrigado.html' },
+    });
+    if (error) throw error;
+
+    // Em ambiente de teste o checkout tem endereço próprio; em produção, o
+    // outro. A função devolve os dois e a página usa o que existir.
+    const destino = data.link_teste || data.link;
+    if (!destino) throw new Error('o checkout não veio no retorno');
+
+    mostrar('Abrindo o pagamento...', 'info');
+    location.href = destino;
+
+  } catch (err) {
+    mostrar('Não deu para abrir o pagamento agora. Tente de novo em alguns '
+            + 'minutos.\n\n' + (err?.message ?? err), 'erro');
+  } finally {
+    botao.disabled = false;
+    botao.textContent = 'Ir para o pagamento';
+  }
+});
+</script>
