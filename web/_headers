@@ -1,14 +1,17 @@
 # Cabeçalhos de resposta. Cloudflare Pages e Netlify leem este mesmo
-# arquivo, com o mesmo formato.
+# arquivo, com o mesmo formato — é o que torna trocar de hospedagem uma troca
+# de conta, e não de código.
 
+# O app roda o banco num worker com WebAssembly, e isso exige isolamento entre
+# origens. Sem estas duas linhas a página do app carrega e o banco nunca abre:
+# some tudo, e não aparece erro nenhum. É a falha mais fácil de não perceber
+# deste projeto — se um dia o app abrir vazio na web, olhe aqui primeiro.
+/app/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+# O isolamento vale só em /app de propósito: aplicado ao site inteiro, barra a
+# fonte da marca nas páginas de divulgação.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-
-# Quando o app voltar a ser servido daqui, o bloco abaixo volta junto. Ele
-# liga o isolamento entre origens, sem o qual o banco no navegador não abre —
-# a página carrega e não mostra dado nenhum, sem erro visível.
-#
-# /app/*
-#   Cross-Origin-Opener-Policy: same-origin
-#   Cross-Origin-Embedder-Policy: require-corp

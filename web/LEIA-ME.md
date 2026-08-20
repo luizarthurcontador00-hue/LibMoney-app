@@ -1,19 +1,12 @@
-# O site publicado
+# O site e o app web publicados
 
-A saída pronta do site de divulgação. O fonte mora no repositório privado
-`LibMoney`, em `site/`, e isto aqui é o resultado de:
+Saída pronta de `python scripts/montar_site.py --com-app`. O fonte mora no
+repositório privado `LibMoney`.
 
-```
-python scripts/montar_site.py
-```
+    /            site de divulgação
+    /app         o aplicativo, aberto no navegador
 
-**O aplicativo web não está aqui.** Ele tem endereço próprio por enquanto, e
-os botões de entrar apontam para lá. Quando ele voltar a ser servido junto,
-rode `montar_site.py --com-app` e descomente os blocos de `/app` em
-`_headers` e `_redirects` — sem eles a página do app abre e o banco no
-navegador nunca abre.
-
-## Configuração na Cloudflare Pages
+## Cloudflare Pages
 
 | campo | valor |
 |---|---|
@@ -22,5 +15,12 @@ navegador nunca abre.
 | Comando de build | *(vazio)* |
 | Diretório de saída | `/` |
 
-Vazio de propósito: o conteúdo já vem pronto. Pedir para a Cloudflare
-compilar exigiria instalar o Flutter no ambiente de build dela.
+Vazio de propósito: o Flutter já compilou na máquina.
+
+## Os dois arquivos que não podem sumir
+
+`_headers` liga o isolamento entre origens em `/app/*`. Sem ele a página do
+app carrega e o banco no navegador **nunca abre** — sem erro visível, só sem
+dado nenhum. Se um dia o app abrir vazio na web, olhe aqui primeiro.
+
+`_redirects` faz qualquer caminho dentro de `/app` cair no index do app.

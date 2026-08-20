@@ -1,6 +1,6 @@
-# Sem regras por enquanto: só há páginas estáticas aqui.
+# O app é uma página só que resolve as rotas por conta própria, então
+# qualquer caminho dentro de /app cai no index dele.
 #
-# Quando o app voltar para cá, esta linha volta junto — ela faz qualquer
-# caminho dentro de /app cair no index dele, que resolve as rotas sozinho:
-#
-# /app/*  /app/index.html  200
+# O curinga é limitado a /app de propósito. Quando era "/*", toda página de
+# divulgação abria o aplicativo.
+/app/*  /app/index.html  200
