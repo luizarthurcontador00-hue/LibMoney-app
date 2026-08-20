@@ -1,6 +1,6 @@
-# O app Flutter é uma página só que resolve as rotas por conta própria, então
-# qualquer caminho dentro de /app cai no index dele.
+# Sem regras por enquanto: só há páginas estáticas aqui.
 #
-# O curinga é limitado a /app justamente para não engolir o site: quando era
-# "/*", toda página de divulgação abria o aplicativo.
-/app/*  /app/index.html  200
+# Quando o app voltar para cá, esta linha volta junto — ela faz qualquer
+# caminho dentro de /app cair no index dele, que resolve as rotas sozinho:
+#
+# /app/*  /app/index.html  200
