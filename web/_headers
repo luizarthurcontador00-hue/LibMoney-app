@@ -1,22 +1,27 @@
-# Cabecalhos de resposta. Cloudflare Pages e Netlify leem este arquivo no
-# mesmo formato.
-#
-# Sobre a ordem e a repeticao abaixo: a primeira versao tinha /app/* antes de
-# /* e so os dois cabecalhos de isolamento nele. Publicado, /* funcionava e
-# /app/* nao. Nao esta documentado se regras que se sobrepoem somam ou se a
-# ultima vence, entao a configuracao aqui funciona dos dois jeitos: a regra
-# geral vem primeiro, e o bloco do /app repete tudo o que precisa.
-
-/*
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-
-# O app roda o banco num worker com WebAssembly, e isso exige isolamento entre
-# origens. Sem estas duas linhas a pagina carrega e o banco nunca abre: some
-# tudo, sem erro nenhum. E a falha mais facil de nao perceber deste projeto —
-# se um dia o app abrir vazio na web, olhe aqui primeiro.
-/app/*
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
+# Cabecalhos de resposta. Cloudflare Pages e Netlify leem este arquivo no
+# mesmo formato.
+#
+# Sobre a ordem e a repeticao abaixo: a primeira versao tinha /app/* antes de
+# /* e so os dois cabecalhos de isolamento nele. Publicado, /* funcionava e
+# /app/* nao. Nao esta documentado se regras que se sobrepoem somam ou se a
+# ultima vence, entao a configuracao aqui funciona dos dois jeitos: a regra
+# geral vem primeiro, e o bloco do /app repete tudo o que precisa.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# O app roda o banco num worker com WebAssembly, e isso exige isolamento entre
+# origens. Sem estas duas linhas a pagina carrega e o banco nunca abre: some
+# tudo, sem erro nenhum. E a falha mais facil de nao perceber deste projeto -
+# se um dia o app abrir vazio na web, olhe aqui primeiro.
+/app/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+# As fontes nunca mudam de conteudo sem mudar de nome. Um ano de cache tira
+# 374 KB de cada visita repetida - que e quase todo o peso do site.
+/fontes/*
+  Cache-Control: public, max-age=31536000, immutable

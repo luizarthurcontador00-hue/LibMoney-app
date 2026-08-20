@@ -1,8 +1,13 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Comprar a Licença Vitalícia — LibMoney</title>
 <link rel="icon" href="/favicon.png">
 <meta name="robots" content="noindex">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
 
 <!--
   A compra mora aqui, numa página do site, e não dentro do aplicativo.
@@ -16,83 +21,77 @@
 -->
 
 <style>
-  @font-face{font-family:'Baloo2';src:url('/fontes/Baloo2.ttf') format('truetype');font-weight:400 800;font-display:swap}
-  @font-face{font-family:'Nunito';src:url('/fontes/Nunito.ttf') format('truetype');font-weight:400 800;font-display:swap}
-  :root{
-    --verde:#66CC33; --verde-escuro:#3F7A1F; --verde-claro:#EAF7DC;
-    --texto:#241B36; --suave:#8079A0; --linha:#E9F1E1; --fundo:#F9FCF4;
-    --erro:#F0384F;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fundo);color:var(--texto);
-       font-family:'Nunito',system-ui,-apple-system,sans-serif;
-       display:flex;align-items:center;justify-content:center;
-       min-height:100vh;padding:24px}
-  .caixa{width:100%;max-width:420px;background:#fff;border-radius:22px;
-         padding:28px;box-shadow:0 10px 34px rgba(102,204,51,.18)}
-  h1{font-family:'Baloo2',sans-serif;font-size:23px;margin:0 0 4px;line-height:1.25}
-  .sub{font-size:14px;color:var(--suave);margin:0 0 20px;line-height:1.5}
-  .preco{font-family:'Baloo2',sans-serif;font-size:38px;font-weight:800;
-         color:var(--verde-escuro);line-height:1}
-  .preco small{display:block;font-family:'Nunito',sans-serif;font-size:13px;
-               font-weight:600;color:var(--suave);margin-top:2px}
-  ul{list-style:none;padding:0;margin:18px 0 22px;font-size:14px}
-  li{padding:5px 0 5px 24px;position:relative;line-height:1.45}
-  li:before{content:'✓';position:absolute;left:0;color:var(--verde);font-weight:800}
-  label{display:block;font-size:13px;font-weight:700;margin:0 0 5px}
-  input{width:100%;padding:12px 13px;border:1.5px solid var(--linha);
-        border-radius:12px;font-size:15px;font-family:inherit;margin-bottom:13px;
-        background:#fff;color:var(--texto)}
-  input:focus{outline:none;border-color:var(--verde)}
-  button{width:100%;padding:14px;border:0;border-radius:13px;font-size:16px;
-         font-weight:800;font-family:inherit;color:#fff;cursor:pointer;
-         background:linear-gradient(135deg,#7BD94A,#3F7A1F)}
-  button:disabled{opacity:.55;cursor:default}
-  .aviso{margin-top:14px;padding:11px 13px;border-radius:12px;font-size:13px;
-         line-height:1.45;display:none}
-  .aviso.erro{display:block;background:#FDECEE;color:var(--erro)}
-  .aviso.info{display:block;background:var(--verde-claro);color:var(--verde-escuro)}
-  .rodape{margin-top:18px;font-size:12px;color:var(--suave);text-align:center;line-height:1.5}
-  .rodape a{color:var(--verde-escuro)}
-  .teste{margin-top:16px;padding:11px 13px;border-radius:12px;font-size:12.5px;
-         line-height:1.5;background:#FFF6E5;color:#8A5A00}
+  .caixa{max-width:460px}
+  .topo-caixa{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
+  .preco{display:flex;align-items:baseline;gap:9px;margin:2px 0 4px}
+  .preco strong{font-family:'Baloo2',sans-serif;font-size:46px;font-weight:800;
+                letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+  .preco span{color:var(--ink-soft);font-size:15px;font-weight:700}
+  .obs{font-size:14px;color:var(--ink-soft)}
+  .lista{list-style:none;padding:0;margin:22px 0 24px;display:grid;gap:10px}
+  .lista li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink-soft)}
+  .lista svg{flex:none;margin-top:5px}
+  .risca{border:0;border-top:1px solid var(--line);margin:24px 0}
 </style>
+</head>
+<body>
 
-<div class="caixa">
-  <h1>Licença Vitalícia</h1>
-  <p class="sub">Pagamento único. Não vence, não vira mensalidade.</p>
+<div class="centro">
+  <div class="caixa">
+    <div class="topo-caixa">
+      <a class="marca" href="/">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2" y="6" width="20" height="14" rx="4" fill="#66CC33"/>
+          <path d="M2 11h20" stroke="#132B06" stroke-width="2"/>
+          <circle cx="17" cy="15.5" r="1.7" fill="#132B06"/>
+        </svg>
+        LibMoney
+      </a>
+    </div>
 
-  <div class="preco">R$ 29,90<small>uma vez, e é seu</small></div>
+    <h1>Licença Vitalícia</h1>
+    <p class="sub">Pagamento único. Não vence, não vira mensalidade.</p>
 
-  <ul>
-    <li>O app inteiro, funcionando sem internet</li>
-    <li>Seus dados guardados no seu aparelho</li>
-    <li>Backup e restauração</li>
-  </ul>
+    <div class="preco"><strong>R$ 29,90</strong><span>uma vez, e é seu</span></div>
+    <p class="obs">Sem assinatura. Sem renovação.</p>
 
-  <form id="form">
-    <label for="email">Seu e-mail do LibMoney</label>
-    <input id="email" type="email" autocomplete="email" required
-           placeholder="voce@email.com">
+    <ul class="lista">
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          O app inteiro, sem limite de lançamentos</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Funciona sem internet, sempre</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Seus dados guardados no seu aparelho</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Backup, restauração e atualizações</li>
+    </ul>
 
-    <label for="senha">Sua senha</label>
-    <input id="senha" type="password" autocomplete="current-password" required
-           placeholder="a mesma que você usa no app">
+    <hr class="risca">
 
-    <button id="botao" type="submit">Ir para o pagamento</button>
-  </form>
+    <form id="form">
+      <label class="campo" for="email">Seu e-mail do LibMoney</label>
+      <input id="email" type="email" autocomplete="email" required
+             placeholder="voce@email.com">
 
-  <div id="aviso" class="aviso"></div>
+      <label class="campo" for="senha">Sua senha</label>
+      <input id="senha" type="password" autocomplete="current-password" required
+             placeholder="a mesma que você usa no app">
 
-  <div class="teste">
-    <strong>Ambiente de teste.</strong> Nenhuma cobrança real acontece aqui
-    ainda.
+      <button class="botao" id="botao" type="submit">Ir para o pagamento</button>
+    </form>
+
+    <div id="aviso" class="recado"></div>
+
+    <div class="aviso" style="margin:18px 0 0;font-size:13.5px">
+      <b>Ambiente de teste.</b>
+      Nenhuma cobrança real acontece aqui ainda.
+    </div>
+
+    <p class="pe-caixa">
+      Entramos com a sua conta para saber para quem liberar a licença.<br>
+      Ainda não tem conta? <a href="/app/">Crie no app</a> e volte aqui.
+    </p>
   </div>
-
-  <p class="rodape">
-    Entramos com a sua conta para saber para quem liberar a licença.<br>
-    Ainda não tem conta? <a href="/app/">Crie no app</a> e volte aqui.
-  </p>
 </div>
 
 <script type="module">
@@ -109,7 +108,7 @@ const aviso  = document.getElementById('aviso');
 
 function mostrar(texto, tipo) {
   aviso.textContent = texto;
-  aviso.className = 'aviso ' + tipo;
+  aviso.className = 'recado ' + tipo;
 }
 
 form.addEventListener('submit', async (e) => {
@@ -155,3 +154,5 @@ form.addEventListener('submit', async (e) => {
   }
 });
 </script>
+</body>
+</html>
