@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LibMoney — saiba para onde vai o seu dinheiro</title>
+<meta name="description" content="App de finanças pessoais que mostra o saldo de cada dia do mês, compara o que você planejou com o que gastou e trata a fatura do cartão do jeito certo. 7 dias grátis.">
+<meta property="og:title" content="LibMoney">
+<meta property="og:description" content="Saiba para onde vai o seu dinheiro, dia a dia.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/app/favicon.png">
+<style>
+/* As mesmas duas fontes que vão dentro do aplicativo, servidas daqui.
+   Baloo 2 carrega os números; Nunito, todo o resto. */
+@font-face{
+  font-family:'Baloo2';
+  src:url('/fontes/Baloo2.ttf') format('truetype');
+  font-weight:400 800; font-display:swap;
+}
+@font-face{
+  font-family:'Nunito';
+  src:url('/fontes/Nunito.ttf') format('truetype');
+  font-weight:400 800; font-display:swap;
+}
+:root{
+  /* Os mesmos valores do AppColors do aplicativo. Site e app discordarem de
+     cor é o tipo de detalhe que ninguém sabe nomear mas todo mundo percebe. */
+  --tinta:#241B36;
+  --tinta-suave:#8079A0;
+  --tinta-fraca:#B3AAC9;
+  --verde:#66CC33;
+  /* O verde da marca não tem contraste suficiente para texto sobre branco.
+     Esta versão escurecida é a que carrega palavra; o #66CC33 fica para
+     preenchimentos, marcas e o botão. */
+  --verde-texto:#3F7A1F;
+  --verde-claro:#EAF7DC;
+  --rosa:#FF5C8A;
+  --papel:#F9FCF4;
+  --superficie:#FFFFFF;
+  --linha:#E9F1E1;
+  /* Verde e vermelho de valor são outros: um saldo positivo não pode se
+     confundir com um botão. */
+  --entrada:#12A454;
+  --entrada-clara:#E1F8E9;
+  --vermelho:#F0384F;
+  --vermelho-claro:#FDE7EA;
+  --raio:22px;
+  --largura:1080px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--papel);
+  color:var(--tinta);
+  font-family:'Nunito',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{
+  line-height:1.15;text-wrap:balance;margin:0;
+  font-family:'Baloo2',system-ui,sans-serif;letter-spacing:-.01em;
+}
+/* Todo valor em dinheiro. tabular-nums trava a largura dos dígitos: sem
+   isso as colunas dançam a cada centavo. */
+.num,table.dias td,.plano .valor strong{
+  font-family:'Baloo2',system-ui,sans-serif;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.01em;
+}
+a{color:inherit}
+.env{max-width:var(--largura);margin:0 auto;padding:0 24px}
+
+/* ---------- topo ---------- */
+.topo{
+  position:sticky;top:0;z-index:10;
+  background:rgba(36,27,54,.94);
+  backdrop-filter:saturate(140%) blur(8px);
+  color:#fff;
+}
+.topo .env{display:flex;align-items:center;gap:16px;height:62px}
+.marca{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.marca svg{display:block}
+.topo nav{margin-left:auto;display:flex;align-items:center;gap:22px;font-size:15px}
+.topo nav a{color:#D6DAD7;text-decoration:none}
+.topo nav a:hover{color:#fff}
+.entrar{
+  border:1px solid #3A3E3B;border-radius:999px;padding:7px 16px;
+  color:#fff !important;text-decoration:none;font-weight:600;
+}
+.entrar:hover{border-color:var(--verde)}
+@media(max-width:640px){.esconde-mobile{display:none}}
+
+/* ---------- herói ---------- */
+.heroi{background:var(--tinta);color:#fff;padding:76px 0 88px}
+.heroi .env{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+@media(max-width:900px){.heroi .env{grid-template-columns:1fr;gap:40px}}
+.heroi h1{font-size:clamp(38px,5.4vw,60px);font-weight:800;letter-spacing:-.03em}
+.heroi h1 em{font-style:normal;color:var(--verde)}
+.chamada{margin:22px 0 0;font-size:19px;color:#C8CEC9;max-width:34em}
+.acoes{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:34px}
+.botao{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--verde);color:#0B0D0B;
+  font-weight:800;font-size:17px;text-decoration:none;
+  padding:15px 26px;border-radius:999px;
+  transition:transform .12s ease, filter .12s ease;
+}
+.botao:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.botao-fantasma{
+  display:inline-flex;align-items:center;gap:8px;
+  color:#fff;text-decoration:none;font-weight:600;
+  padding:15px 8px;border-bottom:1px solid transparent;
+}
+.botao-fantasma:hover{border-bottom-color:var(--verde)}
+.selo{margin-top:16px;font-size:14.5px;color:#9AA29C}
+.selo b{color:#fff;font-weight:700}
+.aviso-navegador{
+  margin:18px 0 0;padding:12px 14px;font-size:13.5px;line-height:1.5;
+  color:#D8DED9;background:#1A1D1A;border-left:3px solid var(--verde);
+  border-radius:0 8px 8px 0;max-width:34em;
+}
+.aviso-navegador b{color:#fff;display:block;margin-bottom:4px}
+.aviso-navegador[hidden]{display:none}
+.linha-botoes{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.mini{
+  display:inline-block;background:var(--verde);color:#0B0D0B;border:0;
+  font-family:inherit;font-size:14px;font-weight:800;text-decoration:none;
+  padding:9px 16px;border-radius:999px;cursor:pointer;
+}
+.mini + .mini{background:#2A2E2B;color:#fff}
+.plataforma{
+  display:flex;align-items:center;gap:8px;
+  margin:10px 0 0;font-size:13.5px;color:#8A918C;
+}
+.plataforma b{color:#C8CEC9;font-weight:700}
+.plataforma svg{flex:none}
+
+/* dois planos lado a lado */
+.planos{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+@media(max-width:620px){.planos{grid-template-columns:1fr}}
+.plano{border:1px solid var(--linha);border-radius:13px;padding:20px;position:relative}
+.plano.destaque{border-color:var(--verde);border-width:2px;background:#FBFEF9}
+.plano .nome{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-suave)}
+.plano .valor{display:flex;align-items:baseline;gap:6px;margin:8px 0 2px}
+.plano .valor strong{font-size:31px;font-weight:800;letter-spacing:-.025em}
+.plano .valor span{color:var(--tinta-suave);font-size:15px}
+.plano .obs{margin:0;font-size:13.5px;color:var(--tinta-suave)}
+.fita{
+  position:absolute;top:-11px;right:16px;background:var(--verde);color:#0B0D0B;
+  font-size:11.5px;font-weight:800;letter-spacing:.04em;padding:4px 10px;border-radius:999px;
+}
+
+/* ---------- grade ilustrativa ---------- */
+.ilustra{
+  background:var(--superficie);border-radius:18px;overflow:hidden;
+  box-shadow:0 22px 50px rgba(0,0,0,.35);
+}
+.ilustra-topo{
+  background:var(--tinta);color:#fff;padding:13px 18px;
+  font-size:13.5px;font-weight:700;letter-spacing:.02em;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.ilustra-topo span{color:#8D948F;font-weight:500}
+table.dias{width:100%;border-collapse:separate;border-spacing:0 3px;padding:6px;font-size:14.5px;color:var(--tinta)}
+table.dias th{
+  text-align:right;font-weight:800;font-size:10.5px;letter-spacing:.06em;
+  color:var(--tinta-fraca);text-transform:uppercase;padding:10px 14px 6px;
+}
+table.dias th:first-child{text-align:left}
+/* Fundo alternado no lugar de régua entre as linhas: guia o olho na
+   horizontal sem desenhar grade, que é o que separa "cartão" de "planilha". */
+table.dias tbody tr:nth-child(odd) td{background:#F1F8E9}
+table.dias tbody tr td:first-child{border-radius:12px 0 0 12px}
+table.dias tbody tr td:last-child{border-radius:0 12px 12px 0}
+table.dias td{padding:12px 14px;text-align:right;font-weight:700}
+table.dias td:first-child{text-align:left;color:var(--verde);font-weight:800}
+.ent{color:var(--entrada);font-weight:800}
+.sai{color:var(--vermelho);font-weight:800}
+
+/* Os dois cartões de número que abrem o Resumo no app. */
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 14px 4px}
+.mini-stat{border-radius:16px;padding:13px 15px}
+.mini-stat.in{background:var(--entrada-clara)}
+.mini-stat.out{background:var(--vermelho-claro)}
+.mini-stat .k{font-size:11px;font-weight:800;color:var(--tinta-suave)}
+.mini-stat .v{font-size:18px;font-weight:800;margin-top:4px;font-family:'Baloo2',sans-serif;font-variant-numeric:tabular-nums}
+.mini-stat.in .v{color:var(--entrada)}
+.mini-stat.out .v{color:var(--vermelho)}
+.sal{font-weight:800}
+.neg{color:var(--vermelho)}
+.pino{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.pino.ok{background:var(--verde)}
+.pino.ruim{background:var(--vermelho)}
+.ilustra-nota{
+  padding:12px 16px;background:#FAFBFA;border-top:1px solid var(--linha);
+  font-size:12.5px;color:var(--tinta-suave);
+}
+
+/* ---------- seções ---------- */
+section{padding:78px 0}
+.rotulo{
+  font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--verde-texto);margin-bottom:14px;
+}
+h2{font-size:clamp(27px,3.4vw,36px);font-weight:800;letter-spacing:-.02em;max-width:20em}
+.sub{color:var(--tinta-suave);margin-top:14px;max-width:44em;font-size:17.5px}
+
+.cartoes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+@media(max-width:900px){.cartoes{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.cartoes{grid-template-columns:1fr}}
+.cartao{
+  background:var(--superficie);border:1px solid var(--linha);
+  border-radius:var(--raio);padding:24px;
+}
+.cartao h3{font-size:17.5px;font-weight:800;margin-bottom:9px}
+.cartao p{margin:0;color:var(--tinta-suave);font-size:15.5px;line-height:1.55}
+.icone{
+  width:36px;height:36px;border-radius:9px;background:#EEF7E9;
+  display:grid;place-items:center;margin-bottom:15px;
+}
+
+/* ---------- destaque cartão de crédito ---------- */
+.faixa{background:var(--tinta);color:#fff}
+.faixa .env{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+@media(max-width:900px){.faixa .env{grid-template-columns:1fr;gap:34px}}
+.faixa h2{color:#fff}
+.faixa .sub{color:#C8CEC9}
+.compara{display:grid;gap:12px;margin-top:8px}
+.linha-comp{
+  display:flex;gap:14px;align-items:flex-start;
+  background:#171A17;border:1px solid #262A27;border-radius:12px;padding:16px 18px;
+}
+.linha-comp .marca-x{color:var(--vermelho);font-weight:800;font-size:18px;line-height:1.35}
+.linha-comp .marca-v{color:var(--verde);font-weight:800;font-size:18px;line-height:1.35}
+.linha-comp p{margin:0;font-size:15.5px;color:#C8CEC9}
+.linha-comp b{color:#fff}
+
+/* ---------- preço ---------- */
+.preco-caixa{
+  background:var(--superficie);border:1px solid var(--linha);border-radius:18px;
+  padding:38px;max-width:520px;margin-top:36px;
+}
+.preco-valor{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.preco-valor strong{font-size:46px;font-weight:800;letter-spacing:-.03em}
+.preco-valor span{color:var(--tinta-suave);font-size:17px}
+.lista{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:11px}
+.lista li{display:flex;gap:11px;align-items:flex-start;font-size:16px}
+.lista svg{flex:none;margin-top:4px}
+.preco-caixa .botao{margin-top:28px;width:100%;justify-content:center}
+.miudo{font-size:13.5px;color:var(--tinta-suave);margin-top:14px;text-align:center}
+
+/* ---------- perguntas ---------- */
+.perguntas{display:grid;gap:0;margin-top:34px;border-top:1px solid var(--linha)}
+details{border-bottom:1px solid var(--linha)}
+summary{
+  cursor:pointer;padding:20px 0;font-weight:700;font-size:17px;
+  list-style:none;display:flex;justify-content:space-between;gap:20px;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--verde-texto);font-weight:800;font-size:22px;line-height:1}
+details[open] summary::after{content:"−"}
+details p{margin:0 0 22px;color:var(--tinta-suave);max-width:52em}
+
+/* ---------- rodapé ---------- */
+footer{background:var(--tinta);color:#8D948F;padding:46px 0;font-size:14.5px}
+footer .env{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+footer a{color:#C8CEC9;text-decoration:none}
+footer a:hover{color:#fff}
+footer .direita{margin-left:auto;display:flex;gap:20px}
+@media(max-width:640px){footer .direita{margin-left:0;width:100%}}
+:focus-visible{outline:2px solid var(--verde);outline-offset:3px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="env">
+    <a class="marca" href="/" style="text-decoration:none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="2" y="6" width="20" height="14" rx="3.5" fill="#66CC33"/>
+        <path d="M2 11h20" stroke="#0E100E" stroke-width="2"/>
+        <circle cx="17" cy="15.5" r="1.6" fill="#0E100E"/>
+      </svg>
+      LibMoney
+    </a>
+    <nav>
+      <a class="esconde-mobile" href="#recursos">Recursos</a>
+      <a class="esconde-mobile" href="#preco">Preço</a>
+      <a class="esconde-mobile" href="#perguntas">Dúvidas</a>
+      <a class="entrar" href="/app/">Entrar</a>
+    </nav>
+  </div>
+</header>
+
+<div class="heroi">
+  <div class="env">
+    <div>
+      <h1>Saiba para onde vai o seu dinheiro, <em>dia a dia</em>.</h1>
+      <p class="chamada">
+        O LibMoney mostra quanto você vai ter em cada dia do mês, compara o que
+        você planejou com o que realmente gastou, e trata a fatura do cartão do
+        jeito certo — sem bagunçar o saldo de hoje.
+      </p>
+      <div class="acoes">
+        <!-- Um único lugar para trocar quando a Play Store existir. -->
+        <a class="botao" href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16" stroke="#0B0D0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Baixar para Android
+        </a>
+        <a class="botao-fantasma" href="/app/">Já uso, quero entrar →</a>
+      </div>
+      <p class="selo"><b>7 dias grátis.</b> Depois R$ 9,99 por mês. Cancele quando quiser.</p>
+      <div class="aviso-navegador" id="avisoNavegador" hidden>
+        <b>Você abriu dentro de outro aplicativo.</b>
+        O navegador do WhatsApp e do Instagram não consegue instalar
+        aplicativos. Toque no botão abaixo para abrir no Chrome.
+        <span class="linha-botoes">
+          <a class="mini" id="irChrome" href="#">Abrir no Chrome</a>
+          <button class="mini" id="copiarLink" type="button">Copiar o link</button>
+        </span>
+      </div>
+      <p class="plataforma">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 9h12v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9Z" stroke="#9AA29C" stroke-width="1.8"/>
+          <path d="m8 6 1.2-2M16 6l-1.2-2" stroke="#9AA29C" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Por enquanto só para <b>Android</b>. A versão para iPhone está a caminho.
+      </p>
+    </div>
+
+    <!-- Ilustração de como o Resumo funciona. Não é uma captura de tela:
+         é a explicação do conceito, montada em HTML. -->
+    <div class="ilustra">
+      <div class="ilustra-topo">Resumo de agosto <span>assim funciona</span></div>
+      <div class="mini-stats">
+        <div class="mini-stat in"><div class="k">Entradas</div><div class="v">R$ 4.300,00</div></div>
+        <div class="mini-stat out"><div class="k">Saídas</div><div class="v">R$ 4.629,90</div></div>
+      </div>
+      <table class="dias">
+        <thead>
+          <tr><th>Dia</th><th>Entrou</th><th>Saiu</th><th>Saldo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="pino ok"></span>05</td><td class="ent">3.200,00</td><td class="sai">—</td><td class="sal">4.180,00</td></tr>
+          <tr><td><span class="pino ok"></span>10</td><td>—</td><td class="sai">1.450,00</td><td class="sal">2.730,00</td></tr>
+          <tr><td><span class="pino ok"></span>15</td><td>—</td><td class="sai">389,90</td><td class="sal">2.340,10</td></tr>
+          <tr><td><span class="pino ruim"></span>22</td><td>—</td><td class="sai">2.610,00</td><td class="sal neg">−269,90</td></tr>
+          <tr><td><span class="pino ok"></span>30</td><td class="ent">1.100,00</td><td class="sai">180,00</td><td class="sal">650,10</td></tr>
+        </tbody>
+      </table>
+      <p class="ilustra-nota">
+        O ponto vermelho no dia 22 é a fatura do cartão vencendo. Você enxerga o
+        aperto três semanas antes dele acontecer.
+      </p>
+    </div>
+  </div>
+</div>
+
+<section id="recursos">
+  <div class="env">
+    <p class="rotulo">O que ele faz</p>
+    <h2>Feito para quem quer enxergar o mês inteiro, não só o extrato de ontem.</h2>
+    <p class="sub">
+      Um extrato conta o que já aconteceu. O LibMoney foi construído para
+      responder outra pergunta: o que vai acontecer, e em que dia.
+    </p>
+
+    <div class="cartoes">
+      <div class="cartao">
+        <div class="icone"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 15v-4m4 4V8m4 7v-6" stroke="#3D8419" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <h3>Saldo de cada dia</h3>
+        <p>Uma linha por dia do mês, com o que entra, o que sai e quanto sobra. Um sinal colorido avisa quando o saldo vai ficar negativo.</p>
+      </div>
+      <div class="cartao">
+        <div class="icone"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M5 7h14M5 12h9M5 17h11" stroke="#3D8419" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <h3>Projetado x Real</h3>
+        <p>Você diz quanto pretende gastar em cada categoria. No fim do mês vê, lado a lado, onde acertou e onde o dinheiro escapou.</p>
+      </div>
+      <div class="cartao">
+        <div class="icone"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="2.5" stroke="#3D8419" stroke-width="2.2"/><path d="M3 10h18" stroke="#3D8419" stroke-width="2.2"/></svg></div>
+        <h3>Cartão de crédito de verdade</h3>
+        <p>Compra no crédito não sai da conta na hora. Ela entra na fatura certa, pelo dia de fechamento, e sai no vencimento.</p>
+      </div>
+      <div class="cartao">
+        <div class="icone"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 8h16M4 16h16" stroke="#3D8419" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <h3>Contas fixas e parcelas</h3>
+        <p>Aluguel, luz, internet e mensalidade você cadastra uma vez. Parcelamento em 10x já nasce com as dez parcelas nos meses certos.</p>
+      </div>
+      <div class="cartao">
+        <div class="icone"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6" stroke="#3D8419" stroke-width="2.2" stroke-linecap="round"/><path d="M17 3v4h-4M7 21v-4h4" stroke="#3D8419" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Celular e computador juntos</h3>
+        <p>Lançou no celular, aparece no navegador. Sem internet o app continua funcionando, e sobe sozinho quando a conexão volta.</p>
+      </div>
+      <div class="cartao">
+        <div class="icone"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-9.6A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 7 3.4C19 16.6 12 21 12 21Z" stroke="#3D8419" stroke-width="2.2" stroke-linejoin="round"/></svg></div>
+        <h3>Objetivos</h3>
+        <p>Guardar para a viagem ou para a reserva. O dinheiro separado não é despesa nem receita, e o app trata assim.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faixa">
+  <div class="env">
+    <div>
+      <p class="rotulo" style="color:var(--verde)">A diferença que importa</p>
+      <h2>Quase todo app erra o cartão de crédito.</h2>
+      <p class="sub">
+        Ele desconta a compra do seu saldo no dia em que você passou o cartão.
+        Só que o dinheiro não saiu da conta naquele dia. Ele vai sair todo de
+        uma vez, no vencimento da fatura, e é aí que o mês aperta.
+      </p>
+    </div>
+    <div class="compara">
+      <div class="linha-comp">
+        <span class="marca-x">✕</span>
+        <p><b>O jeito errado:</b> mercado de R$ 380 no crédito dia 3 vira R$ 380 a menos no saldo do dia 3. Seu saldo fica errado o mês inteiro.</p>
+      </div>
+      <div class="linha-comp">
+        <span class="marca-v">✓</span>
+        <p><b>No LibMoney:</b> a compra entra na fatura que fecha depois do dia 3. No dia 3 o saldo não muda. No vencimento, a fatura sai inteira.</p>
+      </div>
+      <div class="linha-comp">
+        <span class="marca-v">✓</span>
+        <p><b>E no planejamento:</b> a compra continua contando como gasto de mercado no mês em que você comprou, porque é ali que ela conta para o seu orçamento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="preco">
+  <div class="env">
+    <p class="rotulo">Preço</p>
+    <h2>Sete dias para experimentar. Sem cartão para começar.</h2>
+    <div class="preco-caixa">
+      <div class="planos">
+        <div class="plano">
+          <p class="nome">Mensal</p>
+          <div class="valor"><strong>R$ 9,99</strong><span>/mês</span></div>
+          <p class="obs">Cobrado todo mês.</p>
+        </div>
+        <!-- O valor anual está definido só aqui e na tela de assinatura do
+             app. Para mudar o preço, são esses dois lugares. -->
+        <div class="plano destaque">
+          <span class="fita">2 meses grátis</span>
+          <p class="nome">Anual</p>
+          <div class="valor"><strong>R$ 99,90</strong><span>/ano</span></div>
+          <p class="obs">Sai por R$ 8,32 por mês.</p>
+        </div>
+      </div>
+      <ul class="lista">
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 13 4.5 4.5L19 7" stroke="#3D8419" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Todos os recursos, sem limite de lançamentos</li>
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 13 4.5 4.5L19 7" stroke="#3D8419" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Sincronização entre celular e navegador</li>
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 13 4.5 4.5L19 7" stroke="#3D8419" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Backup automático dos seus dados</li>
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 13 4.5 4.5L19 7" stroke="#3D8419" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Se você parar de assinar, continua vendo tudo o que lançou</li>
+      </ul>
+      <a class="botao" href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">Começar os 7 dias</a>
+      <p class="miudo">Cancele quando quiser, direto pela Google Play. Disponível para Android; iPhone em breve.</p>
+    </div>
+  </div>
+</section>
+
+<section id="perguntas">
+  <div class="env">
+    <p class="rotulo">Dúvidas</p>
+    <h2>O que costumam perguntar</h2>
+    <div class="perguntas">
+      <details>
+        <summary>O que acontece com meus dados se eu parar de pagar?</summary>
+        <p>Nada é apagado. O app passa a ser somente leitura: você continua abrindo, consultando e exportando tudo o que lançou, mas não consegue criar nem editar até assinar de novo.</p>
+      </details>
+      <details>
+        <summary>Preciso de internet para usar?</summary>
+        <p>Só no primeiro acesso, para entrar na conta. Depois disso o app funciona normalmente sem conexão, e o que você lançar offline sobe sozinho quando a internet voltar.</p>
+      </details>
+      <details>
+        <summary>O app se conecta ao meu banco?</summary>
+        <p>Não. Nós não pedimos, não guardamos e não usamos a senha do seu banco. Você lança à mão ou importa o extrato em arquivo OFX, que é o mesmo arquivo que o banco te deixa baixar.</p>
+      </details>
+      <details>
+        <summary>Tem para iPhone?</summary>
+        <p>Ainda não. Hoje o LibMoney é para Android, e a versão para iPhone está sendo preparada. No iPhone dá para usar pelo navegador, entrando pelo endereço do app, com a mesma conta e os mesmos dados.</p>
+      </details>
+      <details>
+        <summary>Dá para usar no computador?</summary>
+        <p>Dá. É a mesma conta e os mesmos dados, pelo navegador. O que você lança em um aparece no outro.</p>
+      </details>
+      <details>
+        <summary>Por que o Android avisa que é de fonte desconhecida?</summary>
+        <p>Porque no momento o download é o arquivo direto, e não pela loja. É o aviso padrão do Android para qualquer app instalado assim. Estamos publicando na Google Play, e quando estiver no ar o botão passa a levar para lá.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="env">
+    <span>LibMoney</span>
+    <div class="direita">
+      <a href="/privacidade.html">Privacidade</a>
+      <a href="/termos.html">Termos de uso</a>
+      <a href="/app/">Entrar no app</a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+// O navegador embutido do WhatsApp, Instagram e afins não conclui download de
+// APK nem entrega o arquivo ao instalador do Android: a pessoa toca e nada
+// acontece. Como é justamente por mensagem que um app é compartilhado, o site
+// precisa reconhecer a situação e oferecer a saída, em vez de deixar a pessoa
+// achar que o app está quebrado.
+(function () {
+  var ua = navigator.userAgent || '';
+  var embutido = /wv|FBAN|FBAV|Instagram|Line\/|MicroMessenger|GSA\//.test(ua)
+    || (/Android/.test(ua) && /Version\/[\d.]+.*Chrome/.test(ua));
+  if (!embutido) return;
+
+  var aviso = document.getElementById('avisoNavegador');
+  aviso.hidden = false;
+
+  // O esquema intent:// é a única forma no Android de mandar um endereço para
+  // o Chrome a partir de outro app. Sem o "package", o sistema reabriria o
+  // mesmo navegador embutido de onde viemos.
+  var url = location.href.split('#')[0];
+  document.getElementById('irChrome').href =
+    'intent://' + url.replace(/^https?:\/\//, '') +
+    '#Intent;scheme=https;package=com.android.chrome;end';
+
+  var botao = document.getElementById('copiarLink');
+  botao.addEventListener('click', function () {
+    navigator.clipboard.writeText(url).then(function () {
+      botao.textContent = 'Link copiado';
+    }, function () {
+      botao.textContent = url;
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abrindo o LibMoney</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/app/favicon.png">
+<style>
+  :root{--tinta:#0E100E;--suave:#5C6360;--verde:#66CC33;--papel:#F6F7F5;--linha:#E3E7E4}
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;background:var(--papel);color:var(--tinta);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    display:grid;place-items:center;padding:24px;line-height:1.6;
+  }
+  .caixa{max-width:400px;width:100%;text-align:center}
+  h1{font-size:25px;font-weight:800;letter-spacing:-.5px;margin:22px 0 10px;line-height:1.2}
+  p{margin:0 0 8px;color:#3A3F3B;font-size:16px}
+  .miudo{font-size:13.5px;color:var(--suave);margin-top:22px}
+  .botao{
+    display:block;margin:26px 0 0;background:var(--verde);color:#0B0D0B;
+    font-size:17px;font-weight:800;text-decoration:none;
+    padding:16px 24px;border-radius:999px;border:0;width:100%;cursor:pointer;
+    font-family:inherit;
+  }
+  .secundario{
+    display:inline-block;margin-top:16px;color:#3D8419;font-size:15px;font-weight:600;
+  }
+  .erro{
+    display:none;background:#FFF6DA;border:1px solid #E8C766;border-radius:10px;
+    padding:14px 16px;margin-top:20px;font-size:14px;text-align:left;color:#4A3C10;
+  }
+</style>
+</head>
+<body>
+<div class="caixa">
+
+  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="2" y="6" width="20" height="14" rx="3.5" fill="#66CC33"/>
+    <path d="M2 11h20" stroke="#0E100E" stroke-width="2"/>
+    <circle cx="17" cy="15.5" r="1.6" fill="#0E100E"/>
+  </svg>
+
+  <h1>E-mail confirmado</h1>
+  <p>Sua conta está pronta. Toque no botão para entrar no app.</p>
+
+  <button class="botao" id="abrir" type="button">Abrir o LibMoney</button>
+  <a class="secundario" id="navegador" href="/app/">Prefiro usar pelo navegador</a>
+
+  <div class="erro" id="erro">
+    <b>O app não abriu?</b><br>
+    Provavelmente ele ainda não está instalado neste aparelho.
+    <a href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk" style="color:#3D8419;font-weight:700">Baixe o LibMoney</a>
+    e depois entre com o e-mail e a senha que você acabou de cadastrar.
+  </div>
+
+  <p class="miudo">
+    Você só precisa disso uma vez. Nas próximas aberturas o app já entra sozinho.
+  </p>
+</div>
+
+<script>
+// O Supabase confirma o e-mail e manda para cá com a sessão no endereço:
+// os tokens vêm depois do "#", e o fluxo PKCE usa "?code=". Repassamos os
+// dois para o app do jeito que chegaram — é isso que faz a pessoa entrar já
+// conectada, em vez de ter que digitar a senha de novo.
+var destino = 'libmoney://login' + window.location.search + window.location.hash;
+
+function abrir() {
+  // Um marcador de tempo: se o app abrir, esta página vai para segundo plano
+  // e o navegador congela os temporizadores. Se em 1,5s ainda estivermos
+  // visíveis, é sinal de que nada abriu — quase sempre porque o app não está
+  // instalado.
+  var antes = Date.now();
+  window.location.href = destino;
+  setTimeout(function () {
+    if (!document.hidden && Date.now() - antes < 2500) {
+      document.getElementById('erro').style.display = 'block';
+    }
+  }, 1500);
+}
+
+document.getElementById('abrir').addEventListener('click', abrir);
+
+// Uma tentativa automática, porque em parte dos navegadores ela funciona e
+// poupa um toque. Onde não funciona, o Chrome do Android simplesmente ignora
+// e o botão continua ali — que é justamente o motivo desta página existir:
+// o toque da pessoa é o gesto que o navegador exige para abrir um app.
+if (window.location.hash || window.location.search) {
+  window.location.href = destino;
+}
+
+// Quem abrir no computador não tem app para abrir; o link para o navegador
+// leva a sessão junto.
+document.getElementById('navegador').href = '/app/' + window.location.search + window.location.hash;
+</script>
+</body>
+</html>

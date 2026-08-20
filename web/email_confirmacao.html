@@ -1,0 +1,103 @@
+<!--
+  Modelo do e-mail de confirmação de cadastro.
+  Cole no Supabase em Authentication > Emails > Confirm signup, no campo "Corpo".
+
+  Escrito em tabelas e com estilo em cada tag de propósito. Cliente de e-mail
+  não é navegador: o Gmail remove blocos <style>, o Outlook ignora flexbox e
+  grid, e vários bloqueiam SVG. Por isso nada de fonte externa, nada de SVG, e
+  o botão é uma célula de tabela pintada em vez de um link estilizado — é a
+  única forma que funciona no Outlook.
+
+  A variável {{ .ConfirmationURL }} é preenchida pelo Supabase.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F6F7F5;margin:0;padding:32px 12px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background-color:#FFFFFF;border-radius:16px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+        <tr>
+          <td style="background-color:#0E100E;padding:26px 32px;">
+            <span style="color:#FFFFFF;font-size:21px;font-weight:800;letter-spacing:-0.4px;">Lib</span><span style="color:#66CC33;font-size:21px;font-weight:800;letter-spacing:-0.4px;">Money</span>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:36px 32px 8px 32px;">
+            <h1 style="margin:0 0 14px 0;font-size:25px;line-height:1.25;font-weight:800;color:#0E100E;letter-spacing:-0.5px;">
+              Falta um toque para começar
+            </h1>
+            <p style="margin:0 0 8px 0;font-size:16px;line-height:1.6;color:#3A3F3B;">
+              Confirme seu e-mail e sua conta está pronta. A partir daí você tem
+              <strong style="color:#0E100E;">7 dias grátis</strong> com tudo liberado.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding:24px 32px 8px 32px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" bgcolor="#66CC33" style="border-radius:999px;">
+                  <a href="{{ .ConfirmationURL }}"
+                     style="display:inline-block;padding:16px 38px;font-size:17px;font-weight:800;color:#0B0D0B;text-decoration:none;border-radius:999px;">
+                    Confirmar meu e-mail
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:20px 32px 0 32px;">
+            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#6B7270;">
+              Se o botão não funcionar, copie e cole este endereço no navegador:
+            </p>
+            <p style="margin:8px 0 0 0;font-size:12.5px;line-height:1.5;word-break:break-all;">
+              <a href="{{ .ConfirmationURL }}" style="color:#3D8419;">{{ .ConfirmationURL }}</a>
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:28px 32px 0 32px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F6F7F5;border-radius:12px;">
+              <tr>
+                <td style="padding:18px 20px;">
+                  <p style="margin:0 0 10px 0;font-size:13px;font-weight:800;color:#0E100E;letter-spacing:0.4px;text-transform:uppercase;">
+                    O que vem depois
+                  </p>
+                  <p style="margin:0 0 7px 0;font-size:14.5px;line-height:1.55;color:#3A3F3B;">
+                    Você cadastra suas contas e o que entra e sai todo mês. Leva uns 10 minutos, e o app conduz passo a passo.
+                  </p>
+                  <p style="margin:0;font-size:14.5px;line-height:1.55;color:#3A3F3B;">
+                    Feito isso, o Resumo mostra quanto você vai ter em cada dia do mês.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:26px 32px 34px 32px;">
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#8A918C;">
+              Se não foi você que criou esta conta, é só ignorar este e-mail. Nada é criado sem essa confirmação.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="background-color:#0E100E;padding:18px 32px;">
+            <p style="margin:0;font-size:12.5px;color:#8A918C;">
+              LibMoney &nbsp;·&nbsp;
+              <a href="https://libmoney.com.br/privacidade.html" style="color:#C8CEC9;text-decoration:none;">Privacidade</a> &nbsp;·&nbsp;
+              <a href="https://libmoney.com.br/termos.html" style="color:#C8CEC9;text-decoration:none;">Termos</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
