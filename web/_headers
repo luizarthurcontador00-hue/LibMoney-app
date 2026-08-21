@@ -20,6 +20,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Embedder-Policy: require-corp
+  Cache-Control: no-cache, must-revalidate
 
 # Estes três arquivos decidem qual versão do aplicativo abre. Revalidá-los
 # evita que o CDN ou o navegador mantenha a interface anterior depois de uma
