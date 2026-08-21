@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LibMoney — veja o futuro do seu dinheiro</title>
+<title>LibMoney — saiba como o mês termina</title>
 <meta name="description" content="App de finanças pessoais que mostra o saldo de cada dia do mês, compara o que você planejou com o que gastou e trata a fatura do cartão do jeito certo. 7 dias grátis, depois R$ 29,90 uma única vez.">
 <meta name="theme-color" content="#F9FCF4">
 <link rel="canonical" href="https://libmoney.com.br/">
-<meta property="og:title" content="LibMoney — veja o futuro do seu dinheiro">
+<meta property="og:title" content="LibMoney — saiba como o mês termina">
 <meta property="og:description" content="Saiba quanto você vai ter em cada dia do mês, antes do mês acontecer.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://libmoney.com.br/">
@@ -162,8 +162,13 @@ section{padding:var(--passo) 0;position:relative}
    paralaxe de mouse saem de preserve-3d sem baixar nada.
    ------------------------------------------------------------------------ */
 .cena{
-  perspective:1400px;perspective-origin:52% 42%;
+  perspective:1550px;perspective-origin:52% 38%;
   position:relative;min-height:clamp(400px,44vw,520px);
+}
+.cena::before{
+  content:"";position:absolute;inset:8% -5% 0 5%;border-radius:48%;
+  background:radial-gradient(circle at 54% 44%,rgba(31,143,85,.22),rgba(34,197,94,.07) 38%,transparent 70%);
+  filter:blur(24px);transform:translateZ(-80px);pointer-events:none;
 }
 .palco{
   position:relative;width:100%;height:100%;transform-style:preserve-3d;
@@ -175,22 +180,28 @@ section{padding:var(--passo) 0;position:relative}
 
 /* O painel principal: o Resumo do mês, que é a tela que abre o app. */
 .painel{
-  position:relative;transform-style:preserve-3d;transform:translateZ(0);
+  position:relative;transform-style:preserve-3d;transform:translateZ(24px);
   background:var(--surface);border:1px solid var(--line);
-  border-radius:var(--raio-g);box-shadow:var(--sombra-3);overflow:hidden;
+  border-radius:26px;
+  box-shadow:0 52px 100px rgba(25,48,34,.18),0 20px 44px rgba(25,48,34,.12),
+             0 2px 0 rgba(255,255,255,.9) inset;
+  overflow:hidden;
 }
-/* O cabeçalho verde em degradê é a assinatura do app: é a primeira coisa que
-   quem já usa reconhece. Mesmo gradientePrimario do AppColors. */
-.painel-cab{background:linear-gradient(135deg,#66CC33,#9FE066);color:#fff;padding:14px 18px 12px}
+.painel-cab{
+  background:rgba(255,255,255,.94);color:var(--ink);padding:15px 18px;
+  display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;
+  border-bottom:1px solid var(--line);
+}
 .painel-cab .primeira{display:flex;align-items:center;gap:13px}
 .painel-cab .risquinhos{display:grid;gap:3.5px;flex:none}
-.painel-cab .risquinhos i{display:block;width:17px;height:2px;border-radius:2px;background:#fff}
+.painel-cab .risquinhos i{display:block;width:17px;height:2px;border-radius:2px;background:var(--ink)}
 .painel-cab .t{font-family:'Baloo2',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em}
 .painel-cab .mes{
-  display:flex;align-items:center;justify-content:center;gap:12px;margin-top:11px;
-  font-size:14.5px;font-weight:700;opacity:.96;
+  display:flex;align-items:center;justify-content:center;justify-self:end;gap:8px;
+  font-size:12px;font-weight:800;background:var(--bg);border:1px solid var(--line);
+  border-radius:11px;padding:7px 10px;opacity:.96;
 }
-.painel-cab .mes svg{opacity:.85}
+.painel-cab .mes svg{opacity:.75}
 
 .tres{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 14px 4px}
 .tres .cx{border-radius:15px;padding:11px 12px;min-width:0}
@@ -213,10 +224,7 @@ section{padding:var(--passo) 0;position:relative}
   color:var(--ink-faint);padding-bottom:5px;
 }
 .cab-dias span:first-child,.linha-dia span:first-child{text-align:left}
-.linha-dia{border-radius:13px;font-weight:800}
-/* Fundo alternado no lugar de régua entre linhas: guia o olho sem desenhar
-   grade, que é o que separa "cartão" de "planilha". Mesma escolha do app. */
-.linha-dia:nth-child(odd){background:var(--brand-soft)}
+.linha-dia{border-radius:13px;font-weight:800;border:1px solid var(--line);margin-bottom:5px;background:#fff}
 .linha-dia .dia{color:var(--brand-word);font-size:13px}
 .linha-dia .vazio{color:var(--ink-faint);font-weight:700}
 .linha-dia .mais{color:var(--up)}
@@ -248,7 +256,8 @@ section{padding:var(--passo) 0;position:relative}
   backdrop-filter:saturate(170%) blur(16px);
   -webkit-backdrop-filter:saturate(170%) blur(16px);
   border:1px solid var(--glass-line);
-  border-radius:18px;padding:13px 16px;box-shadow:var(--sombra-2);
+  border-radius:18px;padding:13px 16px;
+  box-shadow:0 24px 55px rgba(25,48,34,.18),0 1px 0 rgba(255,255,255,.95) inset;
   animation:boiar 7s ease-in-out infinite;
 }
 @keyframes boiar{0%,100%{translate:0 0}50%{translate:0 -9px}}
@@ -409,10 +418,17 @@ section{padding:var(--passo) 0;position:relative}
 }
 .cartao3d .face{
   position:absolute;inset:0;border-radius:22px;overflow:hidden;
-  background:linear-gradient(135deg,#3F7A1F 0%,#66CC33 46%,#9FE066 100%);
+  background:
+    radial-gradient(circle at 85% 18%,rgba(255,255,255,.34),transparent 28%),
+    linear-gradient(135deg,#17663f 0%,#1f8f55 48%,#5fd488 100%);
   box-shadow:0 44px 80px rgba(0,0,0,.5), 0 10px 24px rgba(0,0,0,.35);
   padding:24px;display:flex;flex-direction:column;justify-content:space-between;
-  color:#0E2005;
+  color:#f7fff9;
+}
+.cartao3d .face::before{
+  content:"";position:absolute;inset:8px -8px -8px 8px;border-radius:22px;
+  border-right:8px solid rgba(7,54,31,.5);border-bottom:8px solid rgba(7,54,31,.56);
+  transform:translateZ(-10px);pointer-events:none;
 }
 /* O brilho que atravessa o plástico. Um só, na diagonal, bem diluído. */
 .cartao3d .face::after{
@@ -424,14 +440,14 @@ section{padding:var(--passo) 0;position:relative}
   background:rgba(0,0,0,.5);filter:blur(20px);transform:translateZ(-50px);
 }
 .cartao3d .chip{width:42px;height:31px;border-radius:7px;
-  background:linear-gradient(140deg,#F2E3A8,#C9A83E);
-  box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+  background:linear-gradient(140deg,#f4e8b8,#c7a33a);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.14),0 3px 8px rgba(0,0,0,.16)}
 .cartao3d .marca-cartao{display:flex;align-items:center;justify-content:space-between}
 .cartao3d .nome{font-family:'Baloo2',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.02em}
 .cartao3d .rot{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.72}
 .cartao3d .valor{font-family:'Baloo2',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;line-height:1}
-.cartao3d .barra{height:7px;border-radius:99px;background:rgba(14,32,5,.20);margin-top:9px;overflow:hidden}
-.cartao3d .barra i{display:block;height:100%;border-radius:99px;background:#0E2005;width:0;
+.cartao3d .barra{height:7px;border-radius:99px;background:rgba(255,255,255,.22);margin-top:9px;overflow:hidden}
+.cartao3d .barra i{display:block;height:100%;border-radius:99px;background:#fff;width:0;
                    transition:width 1.3s cubic-bezier(.32,.72,.3,1) .3s}
 /* As duas formas de propósito: o observador marca ora o próprio elemento, ora
    um antepassado dele, dependendo de qual entrou na tela primeiro. Escrito só
@@ -549,7 +565,8 @@ section{padding:var(--passo) 0;position:relative}
                 width:min(720px,100%);}
 .tela-pc{
   background:var(--surface);border:1px solid var(--line);border-radius:16px;
-  box-shadow:var(--sombra-3);overflow:hidden;transform-style:preserve-3d;
+  box-shadow:0 42px 90px rgba(25,48,34,.2),0 8px 24px rgba(25,48,34,.1);
+  overflow:hidden;transform-style:preserve-3d;
 }
 .tela-pc .barra-nav{
   display:flex;align-items:center;gap:7px;padding:11px 14px;
@@ -574,11 +591,12 @@ section{padding:var(--passo) 0;position:relative}
   position:absolute;right:-6%;bottom:-14%;width:min(178px,27%);
   transform:translateZ(90px);
   background:var(--surface);border:1px solid var(--line);border-radius:24px;
-  box-shadow:var(--sombra-3);padding:9px;transform-style:preserve-3d;
+  box-shadow:0 35px 70px rgba(25,48,34,.26),0 8px 20px rgba(25,48,34,.14);
+  padding:9px;transform-style:preserve-3d;
 }
 .celular .entalhe{width:38%;height:5px;border-radius:99px;background:var(--line);margin:2px auto 9px}
-.celular .cab{background:linear-gradient(135deg,var(--brand),var(--brand-light));
-              border-radius:13px;padding:11px 12px;color:var(--on-brand)}
+.celular .cab{background:linear-gradient(135deg,#17663f,#39b970);
+              border-radius:13px;padding:11px 12px;color:#fff}
 .celular .cab .k{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.8}
 .celular .cab .v{font-family:'Baloo2',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em}
 .celular .lista{display:grid;gap:5px;margin-top:9px}
@@ -768,11 +786,11 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
 <div class="heroi">
   <div class="env">
     <div>
-      <span class="selo-topo"><span class="ponto"></span>Finanças pessoais, dia a dia</span>
-      <h1>Seu dinheiro.<br><span class="verde">Sob controle.</span></h1>
+      <span class="selo-topo"><span class="ponto"></span>Feito para a vida real</span>
+      <h1>Saiba como o mês termina.<br><span class="verde">Antes de ele começar.</span></h1>
       <p class="sub">
-        Organize suas finanças, acompanhe seu saldo projetado e saiba
-        exatamente o que está por vir — antes do mês acontecer.
+        Coloque salário, contas, parcelas e faturas no calendário. O LibMoney
+        mostra quanto sobra em cada dia, inclusive depois do que ainda vai vencer.
       </p>
 
       <div class="acoes">
@@ -782,9 +800,9 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
             <path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16" stroke="currentColor"
                   stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Começar agora
+          Baixar para Android
         </a>
-        <a class="botao-2" href="#como">Conhecer o LibMoney</a>
+        <a class="botao-2" href="#como">Ver como funciona</a>
       </div>
 
       <p class="abaixo-cta">
@@ -824,11 +842,11 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
             </div>
             <div class="mes">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="m6 15 6-6 6 6" stroke="#fff" stroke-width="2.4"
+                <path d="m6 15 6-6 6 6" stroke="currentColor" stroke-width="2.4"
                       stroke-linecap="round" stroke-linejoin="round"/></svg>
               Agosto de 2026
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="m6 9 6 6 6-6" stroke="#fff" stroke-width="2.4"
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.4"
                       stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
@@ -886,15 +904,14 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
 <!-- ======================= O PROBLEMA ======================= -->
 <section class="problema" id="como">
   <div class="env">
-    <p class="rotulo rev" style="justify-content:center">O problema</p>
+    <p class="rotulo rev" style="justify-content:center">O que o saldo não mostra</p>
     <h2 class="pergunta rev" data-atraso="1" style="margin-inline:auto">
-      Você sabe quanto tem hoje.<br>
-      <span class="apagado">Mas sabe quanto terá no dia 22?</span>
+      O saldo de hoje parece tranquilo.<br>
+      <span class="apagado">Até as próximas contas chegarem.</span>
     </h2>
     <p class="sub rev" data-atraso="2" style="margin-inline:auto;text-align:center">
-      O extrato do banco conta o que já aconteceu. Só que o aperto do mês é
-      feito do que ainda vai acontecer: a fatura que fecha, a parcela que cai,
-      o boleto que vence numa terça.
+      O banco mostra o dinheiro que está na conta agora. O LibMoney acrescenta
+      o que ainda falta pagar e receber, no dia em que cada coisa acontece.
     </p>
 
     <div class="dois-saldos">
@@ -924,11 +941,10 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div>
       <p class="rotulo rev">Saldo projetado</p>
-      <h2 class="rev" data-atraso="1">Veja o futuro do seu dinheiro.</h2>
+      <h2 class="rev" data-atraso="1">Veja o mês inteiro, dia por dia.</h2>
       <p class="sub rev" data-atraso="2">
-        O LibMoney pega tudo o que já está marcado — salário, aluguel, contas
-        fixas, parcelas, faturas de cartão — e desenha o saldo de cada dia até
-        o fim do mês. O aperto do dia 22 aparece no dia 1.
+        Salário, aluguel, contas fixas, parcelas e faturas entram na mesma
+        linha do tempo. Se faltar dinheiro no dia 22, você descobre antes.
       </p>
 
       <div class="passos rev" data-atraso="3">
@@ -1032,29 +1048,28 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div>
       <p class="rotulo rev">A diferença que importa</p>
-      <h2 class="rev" data-atraso="1">Quase todo app erra o cartão de crédito.</h2>
+      <h2 class="rev" data-atraso="1">A fatura sai no dia em que vence.</h2>
       <p class="sub rev" data-atraso="2">
-        Ele desconta a compra do seu saldo no dia em que você passou o cartão.
-        Só que o dinheiro não saiu naquele dia. Ele vai sair todo de uma vez,
-        no vencimento — e é aí que o mês aperta.
+        Uma compra no crédito conta no orçamento quando foi feita, mas só sai
+        do saldo quando a fatura vence. O LibMoney mantém essas duas datas no
+        lugar certo.
       </p>
 
       <div class="confronto">
         <div class="item-confronto erra rev" data-atraso="1">
           <span class="sinal">✕</span>
-          <p><b>O jeito errado:</b> mercado de R$ 380 no crédito, dia 3, vira
-          R$ 380 a menos no saldo do dia 3. Seu saldo fica errado o mês inteiro.</p>
+          <p><b>Se descontar no dia da compra:</b> o saldo cai antes de o
+          dinheiro realmente sair da conta.</p>
         </div>
         <div class="item-confronto acerta rev" data-atraso="2">
           <span class="sinal">✓</span>
-          <p><b>No LibMoney:</b> a compra entra na fatura que fecha depois do
-          dia 3. No dia 3 o saldo não muda. No vencimento, a fatura sai inteira.</p>
+          <p><b>No fluxo de caixa:</b> o valor sai inteiro no vencimento da
+          fatura, como acontece na conta bancária.</p>
         </div>
         <div class="item-confronto acerta rev" data-atraso="3">
           <span class="sinal">✓</span>
-          <p><b>E no planejamento:</b> a compra continua contando como gasto de
-          mercado no mês em que você comprou, porque é ali que ela conta para o
-          seu orçamento.</p>
+          <p><b>No orçamento:</b> a compra continua sendo gasto de mercado no
+          mês em que foi feita.</p>
         </div>
       </div>
     </div>
@@ -1087,11 +1102,10 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">Projetado x Real</p>
-      <h2 class="rev" data-atraso="1">Planeje. Compare. Ajuste.</h2>
+      <h2 class="rev" data-atraso="1">Compare o planejado com o que aconteceu.</h2>
       <p class="sub rev" data-atraso="2">
-        Você diz quanto pretende gastar em cada categoria. Durante o mês, o
-        LibMoney mostra os dois lado a lado — e onde o dinheiro está escapando
-        enquanto ainda dá tempo de mudar.
+        Defina quanto pretende gastar em cada categoria. Durante o mês, veja
+        o previsto e o realizado lado a lado para corrigir a rota cedo.
       </p>
     </div>
 
@@ -1132,7 +1146,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">O resto do mês</p>
-      <h2 class="rev" data-atraso="1">O que você já assumiu, e o que ainda quer.</h2>
+      <h2 class="rev" data-atraso="1">Parcelas, objetivos e extrato sem planilha.</h2>
     </div>
 
     <div class="trio">
@@ -1223,11 +1237,11 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">Onde você estiver</p>
-      <h2 class="rev" data-atraso="1">Lançou no celular, aparece no navegador.</h2>
+      <h2 class="rev" data-atraso="1">Use no celular. Continue no navegador.</h2>
       <p class="sub rev" data-atraso="2">
-        O app funciona inteiro sem internet e toda conta com licença mantém
-        também cópias de segurança na nuvem. Com a assinatura Sync, os dados
-        ficam iguais automaticamente em todos os seus aparelhos.
+        Sem internet, o app continua funcionando no celular. Toda licença tem
+        backup na nuvem. Com o Sync, as alterações também aparecem
+        automaticamente nos outros aparelhos.
       </p>
     </div>
 
@@ -1267,7 +1281,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">Recursos</p>
-      <h2 class="rev" data-atraso="1">Tudo o que o mês exige, num lugar só.</h2>
+      <h2 class="rev" data-atraso="1">O necessário para cuidar do mês.</h2>
     </div>
 
     <div class="grupos">
@@ -1338,7 +1352,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">Preço</p>
-      <h2 class="rev" data-atraso="1">Sete dias para experimentar. Depois, uma vez só.</h2>
+      <h2 class="rev" data-atraso="1">Teste por sete dias. Se gostar, pague uma vez.</h2>
       <p class="sub rev" data-atraso="2">
         Sem cartão para começar, e sem mensalidade para continuar. Você paga
         uma vez e o app é seu.
@@ -1467,9 +1481,9 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
 <!-- ======================= CHAMADA FINAL ======================= -->
 <section class="final">
   <div class="env">
-    <h2 class="rev">Seu dinheiro merece mais organização.</h2>
+    <h2 class="rev">Veja o próximo aperto antes que ele chegue.</h2>
     <p class="sub rev" data-atraso="1">
-      Comece agora a enxergar o mês inteiro, e não só o extrato de ontem.
+      Baixe no Android, lance as contas que já conhece e veja como o mês fecha.
     </p>
     <div class="acoes rev" data-atraso="2">
       <a class="botao" href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">
