@@ -35,8 +35,9 @@ if (!window._flutter) {
 }
 _flutter.buildConfig = {"engineRevision":"83675ed27633283e7fc296c8bca22e841224c096","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
-_flutter.loader.load({
-  serviceWorkerSettings: {
-    serviceWorkerVersion: "3687475451" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
-  }
-});
+
+// O banco local continua funcionando offline pelo sqflite web. O service
+// worker do Flutter, por outro lado, prendia o app inteiro numa publicação
+// antiga: até o bootstrap que saberia da versão nova vinha do próprio cache.
+// Sem ele, cada abertura revalida o bundle e recebe a versão publicada.
+_flutter.loader.load();

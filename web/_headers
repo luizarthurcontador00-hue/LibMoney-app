@@ -15,11 +15,21 @@
 # origens. Sem estas duas linhas a pagina carrega e o banco nunca abre: some
 # tudo, sem erro nenhum. E a falha mais facil de nao perceber deste projeto -
 # se um dia o app abrir vazio na web, olhe aqui primeiro.
-/app/*
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
+/app/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+# Estes três arquivos decidem qual versão do aplicativo abre. Revalidá-los
+# evita que o CDN ou o navegador mantenha a interface anterior depois de uma
+# publicação; os assets pesados continuam usando o cache normal do browser.
+/app/index.html
+  Cache-Control: no-cache, must-revalidate
+/app/flutter_bootstrap.js
+  Cache-Control: no-cache, must-revalidate
+/app/main.dart.js
+  Cache-Control: no-cache, must-revalidate
 
 # As fontes nunca mudam de conteudo sem mudar de nome. Um ano de cache tira
 # 374 KB de cada visita repetida - que e quase todo o peso do site.
