@@ -1,4 +1,4 @@
-# Cabecalhos de resposta. Cloudflare Pages e Netlify leem este arquivo no
+# Cabeçalhos de resposta da Cloudflare Pages, no formato `_headers`.
 # mesmo formato.
 #
 # Sobre a ordem e a repeticao abaixo: a primeira versao tinha /app/* antes de
@@ -7,9 +7,13 @@
 # ultima vence, entao a configuracao aqui funciona dos dois jeitos: a regra
 # geral vem primeiro, e o bloco do /app repete tudo o que precisa.
 
-/*
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
+# A página /limpar.html apaga a cópia local. Ela nunca deve poder ser colocada
+# dentro de outro site, onde um clique poderia ser disfarçado.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Frame-Options: DENY
 
 # O app roda o banco num worker com WebAssembly, e isso exige isolamento entre
 # origens. Sem estas duas linhas a pagina carrega e o banco nunca abre: some

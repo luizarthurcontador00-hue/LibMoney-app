@@ -102,23 +102,15 @@
   var botao  = document.getElementById('botao');
   var estado = document.getElementById('estado');
 
-  // Uma exclusão bloqueada não é cancelada: fica pendente e o navegador a
-  // conclui sozinho assim que a última aba solta o banco. Então na segunda
-  // tentativa costuma não haver mais nada — e dizer "não havia nada guardado"
-  // a quem acabou de ler "ainda há uma aba aberta" soa como se tivesse
-  // falhado. Lembrar que já houve tentativa é o que deixa a frase honesta.
-  var jaTentou = false;
-
   function recado(texto, tipo) {
     estado.className = 'recado ' + tipo;
     estado.innerHTML = texto;
   }
 
-  async function listar() {
-    if (!indexedDB.databases) return null;   // Firefox antigo não tem
-    try { return (await indexedDB.databases()).map(function (d) { return d.name; }); }
-    catch (e) { return null; }
-  }
+  // O adaptador sqflite-web usa este único banco para o arquivo
+  // `libmoney.db`. Enumerar IndexedDB e apagar tudo do domínio parecia mais
+  // abrangente, mas também apagaria bancos de páginas que não são do app.
+  var bancoLibMoney = 'sqflite_databases';
 
   // O navegador só conclui a exclusão quando ninguém mais está com o banco
   // aberto. `onblocked` é o aviso de que alguma aba ainda está — e é a falha
@@ -141,32 +133,8 @@
     recado('', '');
 
     try {
-      var bancos = await listar();
-
-      if (bancos === null) {
-        // Sem a API de listar, tenta o nome que o app usa.
-        bancos = ['sqflite_databases'];
-      }
-      if (bancos.length === 0) {
-        recado(jaTentou
-          ? '<b>Pronto.</b> A cópia deste navegador foi apagada.'
-            + '<br>Agora entre no app: ele vai baixar tudo da sua conta.'
-          : 'Não havia nada guardado aqui. Pode entrar no app normalmente.',
-          'info');
-        pronto();
-        return;
-      }
-      jaTentou = true;
-
-      var bloqueou = false;
-      for (var i = 0; i < bancos.length; i++) {
-        var r = await apagar(bancos[i]);
-        if (r === 'bloqueado') bloqueou = true;
-      }
-
-      var sobrou = await listar();
-
-      if (bloqueou && sobrou && sobrou.length > 0) {
+      var resultado = await apagar(bancoLibMoney);
+      if (resultado === 'bloqueado') {
         recado('<b>Ainda há uma aba do LibMoney aberta.</b><br>'
              + 'Feche todas as outras abas do LibMoney (inclusive o app) e '
              + 'toque de novo. O navegador não apaga um banco que ainda está '
@@ -179,8 +147,8 @@
       // De propósito sem "tantos KB viraram tantos": `storage.estimate()`
       // demora a acompanhar a exclusão e devolve o número velho por alguns
       // segundos — dizia "16 KB viraram 16 KB" logo depois de apagar de
-      // verdade. A prova boa é a lista de bancos estar vazia, que é medida na
-      // hora e é exatamente o que importa.
+      // verdade. O retorno de sucesso da própria exclusão é a confirmação
+      // que não depende dessa medição atrasada.
       recado('<b>Pronto.</b> A cópia deste navegador foi apagada.'
            + '<br>Agora entre no app: ele vai baixar tudo da sua conta.', 'info');
       pronto();

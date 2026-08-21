@@ -33,14 +33,14 @@ addEventListener("message", eventListener);
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"83675ed27633283e7fc296c8bca22e841224c096","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
+_flutter.buildConfig = {"engineRevision":"83675ed27633283e7fc296c8bca22e841224c096","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
 
 // O banco local continua funcionando offline pelo sqflite web. O service
 // worker do Flutter, por outro lado, prendia o app inteiro numa publicação
 // antiga: até o bootstrap que saberia da versão nova vinha do próprio cache.
 // Sem ele, cada abertura revalida o bundle e recebe a versão publicada.
-const versaoBundle = "2599473899" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */;
+const versaoBundle = "4164194927" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */;
 _flutter.buildConfig.builds[0].mainJsPath =
     `main.dart.js?v=${encodeURIComponent(versaoBundle)}`;
 _flutter.loader.load();

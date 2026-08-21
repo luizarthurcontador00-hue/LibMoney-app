@@ -51,8 +51,8 @@ aplicativo, que resolve as rotas por conta própria. O curinga é limitado a
 `/app` de propósito: quando era `/*`, toda página de divulgação abria o
 aplicativo.
 
-Cloudflare Pages e Netlify leem os dois arquivos no mesmo formato. Trocar de
-hospedagem é trocar de conta, não de código.
+O LibMoney usa Cloudflare Pages. Os arquivos `_headers` e `_redirects` são
+publicados junto do site e definem, respectivamente, os cabeçalhos e as rotas.
 
 ## O APK não fica aqui
 
@@ -64,18 +64,17 @@ https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk
 
 Já foi diferente, e custou caro: um binário de 68 MB republicado a cada
 ajuste do site queimou a cota de publicação da conta num único dia. Além
-disso o arquivo nunca esteve versionado — sobrevivia só porque o deploy do
-Netlify é aditivo, e em qualquer hospedagem nova daria 404.
+disso o arquivo nunca esteve versionado; em uma hospedagem nova ele daria 404
+até ser publicado explicitamente no repositório de downloads.
 
 ## Depois de mudar de endereço
 
 Duas coisas fora daqui precisam saber do endereço novo:
 
-1. **Supabase** → Authentication → URL Configuration: acrescente
-   `https://libmoney.com.br/abrir.html` nas Redirect URLs. **Não apague os
-   endereços antigos** — quem já tem o aplicativo instalado carrega o endereço
-   antigo dentro dele, e apagar quebra a confirmação de e-mail e a recuperação
-   de senha dessas pessoas.
+1. **Supabase** → Authentication → URL Configuration: mantenha
+   `https://libmoney.com.br/abrir.html` nas Redirect URLs. Não mantenha
+   endereços de hospedagens aposentadas: versões do aplicativo que dependiam
+   deles devem ser atualizadas.
 
 2. **`lib/sync/supabase_config.dart`**, a constante `supabaseRedirectApp`.
    Mudar isso exige gerar um APK novo.
