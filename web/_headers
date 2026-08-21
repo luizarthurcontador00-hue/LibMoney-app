@@ -30,6 +30,8 @@
   Cache-Control: no-cache, must-revalidate
 /app/main.dart.js
   Cache-Control: no-cache, must-revalidate
+/app/flutter_service_worker.js
+  Cache-Control: no-cache, must-revalidate
 
 # As fontes nunca mudam de conteudo sem mudar de nome. Um ano de cache tira
 # 374 KB de cada visita repetida - que e quase todo o peso do site.
