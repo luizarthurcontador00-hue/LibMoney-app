@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assinatura recebida | LibMoney</title>
+<link rel="icon" href="/favicon.png">
+<meta name="robots" content="noindex">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+
+<!--
+  Irmã de obrigado.html, para a assinatura em vez do pagamento único.
+
+  Mesma regra: esta página não libera nada. Quem concede o Sync é o webhook,
+  no servidor, depois de conferir a assinatura com o próprio Mercado Pago.
+  Aqui só se pergunta, algumas vezes seguidas, se já chegou.
+-->
+
+<style>
+  .caixa{text-align:center;max-width:440px}
+  .selo{
+    width:76px;height:76px;border-radius:50%;margin:0 auto 20px;
+    display:grid;place-items:center;background:var(--brand-soft);
+  }
+  .caixa h1{font-size:25px;margin-bottom:10px}
+  .caixa p{color:var(--ink-soft);font-size:15px;line-height:1.6}
+  .caixa .botao{margin-top:24px}
+  .voltar{display:inline-block;margin-top:14px;font-size:13.5px;
+          color:var(--ink-soft);font-weight:700;text-decoration:none}
+  .voltar:hover{color:var(--brand-word)}
+  .girando{
+    display:block;width:30px;height:30px;border-radius:50%;
+    border:3px solid var(--brand-soft);border-top-color:var(--brand);
+    animation:girar .9s linear infinite;
+  }
+  @keyframes girar{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="centro">
+  <div class="caixa" id="caixa">
+    <div class="selo" id="selo"><span class="girando"></span></div>
+    <h1 id="titulo">Confirmando sua assinatura</h1>
+    <p id="texto">Isso costuma levar alguns segundos.</p>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient(
+  'https://fuaddebijztislqypxqk.supabase.co',
+  'sb_publishable_0ok6EgwVc3E2CeYVg5_nCw_VSSaQ_gq',
+);
+
+const selo   = document.getElementById('selo');
+const titulo = document.getElementById('titulo');
+const texto  = document.getElementById('texto');
+
+const certo = `<svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+  <path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8"
+        stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const carta = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+  <rect x="3" y="5" width="18" height="14" rx="3" stroke="#3F7A1F" stroke-width="2"/>
+  <path d="m3.5 7 8.5 6 8.5-6" stroke="#3F7A1F" stroke-width="2"
+        stroke-linejoin="round"/></svg>`;
+
+function pronto() {
+  selo.innerHTML = certo;
+  titulo.textContent = 'Sync ativado';
+  texto.innerHTML = 'A partir de agora seus dados sincronizam entre '
+    + 'aparelhos, e você pode entrar pelo navegador.'
+    + '<br><a class="botao" href="/app/">Abrir o LibMoney</a>';
+}
+
+function demorando() {
+  selo.innerHTML = carta;
+  titulo.textContent = 'Assinatura recebida';
+  texto.innerHTML = 'A confirmação do banco às vezes demora alguns minutos. '
+    + 'Assim que chegar, o Sync aparece no app sem exigir outra ação.'
+    + '<br><a class="botao" href="/app/">Abrir o LibMoney</a>'
+    + '<br><a class="voltar" href="/assinar.html">Voltar</a>';
+}
+
+const esperas = [1500, 2000, 3000, 4000, 5000, 6000];
+
+(async function conferir() {
+  for (const espera of esperas) {
+    try {
+      const { data } = await supabase.rpc('meus_direitos');
+      if (data && data.sync === true) return pronto();
+    } catch (_) {
+      // Sem sessão nesta aba, ou rede oscilando: segue tentando.
+    }
+    await new Promise(r => setTimeout(r, espera));
+  }
+  demorando();
+})();
+</script>
+</body>
+</html>

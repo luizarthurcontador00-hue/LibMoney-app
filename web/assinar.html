@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assinar o Sync | LibMoney</title>
+<link rel="icon" href="/favicon.png">
+<meta name="robots" content="noindex">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+
+<!--
+  Irmã de comprar.html, mesma razão de existir fora do app: o Google exige o
+  faturamento dele para cobrança recorrente dentro de apps distribuídos pela
+  Play Store, e uma assinatura é exatamente isso. Nada deste fluxo entra no
+  APK — o app só reconhece o direito depois que o webhook o concede.
+-->
+
+<style>
+  .caixa{max-width:460px}
+  .topo-caixa{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
+  .obs{font-size:14px;color:var(--ink-soft)}
+  .lista{list-style:none;padding:0;margin:22px 0 24px;display:grid;gap:10px}
+  .lista li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink-soft)}
+  .lista svg{flex:none;margin-top:5px}
+  .risca{border:0;border-top:1px solid var(--line);margin:24px 0}
+
+  .periodos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 20px}
+  .periodo{
+    border:1.5px solid var(--line);border-radius:var(--raio-m);padding:14px;
+    cursor:pointer;text-align:left;background:var(--surface);
+  }
+  .periodo input{position:absolute;opacity:0;pointer-events:none}
+  .periodo .rotulo{font-size:12.5px;font-weight:800;color:var(--ink-soft);
+                    text-transform:uppercase;letter-spacing:.04em}
+  .periodo .valor{font-family:'Baloo2',sans-serif;font-size:24px;font-weight:800;
+                   letter-spacing:-.03em;margin-top:4px}
+  .periodo .cada{font-size:12.5px;color:var(--ink-soft)}
+  .periodo:has(input:checked){border-color:var(--brand);background:var(--brand-soft)}
+  .periodo .economize{
+    display:inline-block;margin-top:4px;font-size:11px;font-weight:800;
+    color:var(--brand-word);
+  }
+</style>
+</head>
+<body>
+
+<div class="centro">
+  <div class="caixa">
+    <div class="topo-caixa">
+      <a class="marca" href="/">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path fill="var(--brand)" fill-rule="evenodd" d="M2.8 12 A9.2 9.2 0 1 0 21.2 12 A9.2 9.2 0 1 0 2.8 12 Z M6.5 12 A5.5 5.5 0 1 0 17.5 12 A5.5 5.5 0 1 0 6.5 12 Z M10.26 2.15 A10 10 0 0 1 13.74 2.15 L12.94 6.68 A5.4 5.4 0 0 0 11.06 6.68 Z"/>
+        </svg>
+        LibMoney
+      </a>
+    </div>
+
+    <h1>Sync</h1>
+    <p class="sub">Sincronize entre aparelhos e entre pelo navegador.</p>
+
+    <ul class="lista">
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Sincronização automática dos seus dados</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Usar em mais de um aparelho</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Entrar pelo navegador</li>
+    </ul>
+
+    <hr class="risca">
+
+    <form id="form">
+      <div class="periodos" role="radiogroup" aria-label="Período da assinatura">
+        <label class="periodo">
+          <input type="radio" name="periodo" value="mensal" checked>
+          <div class="rotulo">Mensal</div>
+          <div class="valor">R$ 14,90</div>
+          <div class="cada">por mês</div>
+        </label>
+        <label class="periodo">
+          <input type="radio" name="periodo" value="anual">
+          <div class="rotulo">Anual</div>
+          <div class="valor">R$ 149,90</div>
+          <div class="cada">por ano</div>
+          <span class="economize">2 meses de desconto</span>
+        </label>
+      </div>
+
+      <label class="campo" for="email">Seu e-mail do LibMoney</label>
+      <input id="email" type="email" autocomplete="email" required
+             placeholder="voce@email.com">
+
+      <label class="campo" for="senha">Sua senha</label>
+      <input id="senha" type="password" autocomplete="current-password" required
+             placeholder="a mesma que você usa no app">
+
+      <button class="botao" id="botao" type="submit">Ir para o pagamento</button>
+    </form>
+
+    <div id="aviso" class="recado"></div>
+
+    <p class="pe-caixa">
+      Precisa já ter a Licença Vitalícia — o Sync é uma assinatura por cima
+      dela.<br>
+      Ainda não tem conta? <a href="/app/">Crie no app</a> e volte aqui.
+    </p>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient(
+  'https://fuaddebijztislqypxqk.supabase.co',
+  'sb_publishable_0ok6EgwVc3E2CeYVg5_nCw_VSSaQ_gq',
+);
+
+const form   = document.getElementById('form');
+const botao  = document.getElementById('botao');
+const aviso  = document.getElementById('aviso');
+
+function mostrar(texto, tipo) {
+  aviso.textContent = texto;
+  aviso.className = 'recado ' + tipo;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  botao.disabled = true;
+  botao.textContent = 'Um instante...';
+  mostrar('', '');
+
+  try {
+    const periodo = form.periodo.value;
+
+    // Mesma regra de comprar.html: o id de quem assina nunca vem de um
+    // campo desta página, só do token da sessão criada aqui.
+    const { error: erroLogin } = await supabase.auth.signInWithPassword({
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('senha').value,
+    });
+    if (erroLogin) {
+      mostrar('E-mail ou senha não conferem. Use os mesmos do aplicativo.',
+              'erro');
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke('criar-assinatura', {
+      body: {
+        periodo,
+        voltar_para: location.origin + '/obrigado-assinatura.html',
+      },
+    });
+    if (error) throw error;
+
+    const destino = data.link_teste || data.link;
+    if (!destino) throw new Error('o checkout não veio no retorno');
+
+    mostrar('Abrindo o pagamento...', 'info');
+    location.href = destino;
+
+  } catch (err) {
+    mostrar('Não deu para abrir o pagamento agora. Tente de novo em alguns '
+            + 'minutos.\n\n' + (err?.message ?? err), 'erro');
+  } finally {
+    botao.disabled = false;
+    botao.textContent = 'Ir para o pagamento';
+  }
+});
+</script>
+</body>
+</html>

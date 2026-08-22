@@ -1388,20 +1388,25 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       </div>
 
       <div class="futuros">
-        <!-- Sync e Premium não têm valor definido nem forma de comprar. Anunciar
-             um número aqui seria vender o que ninguém consegue pagar — a tela de
-             licença do app diz exatamente a mesma coisa. -->
-        <div class="plano futuro rev" data-atraso="2">
-          <div class="nome">Sync <span class="emBreve">Em breve</span></div>
-          <p class="obs" style="margin-top:6px">Assinatura mensal opcional para quem já tem a licença.</p>
+        <!-- O valor do Sync está definido aqui, em
+             lib/features/licenca/tela_licenca.dart e na Edge Function
+             criar-assinatura, que é quem cobra de verdade — os três lugares
+             mudam juntos. Premium continua sem valor: anunciar um número
+             ali venderia o que ninguém consegue pagar ainda. -->
+        <div class="plano rev" data-atraso="2">
+          <div class="nome">Sync</div>
+          <div class="cifra"><strong class="num">R$ 14,90</strong><span>por mês</span></div>
+          <p class="obs">Ou R$ 149,90 por ano — dois meses de desconto. Cancele quando quiser.</p>
           <ul class="lista">
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Sincronização automática dos seus dados</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Usar em mais de um aparelho</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Entrar pelo navegador</li>
           </ul>
+          <a class="botao" href="/assinar.html">Assinar o Sync</a>
+          <p class="miudo">Precisa já ter a Licença Vitalícia — o Sync é por cima dela.</p>
         </div>
 
         <div class="plano futuro rev" data-atraso="3">
@@ -1416,8 +1421,8 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
         </div>
 
         <p class="nota-futuros rev" data-atraso="4">
-          As assinaturas ainda não estão à venda e não têm valor definido.
-          Cancelar uma delas, quando existirem, nunca tira a sua licença nem os
+          O Premium ainda não está à venda e não tem valor definido. Cancelar
+          o Sync ou o Premium, quando existir, nunca tira a sua licença nem os
           seus lançamentos.
         </p>
       </div>
@@ -1443,8 +1448,10 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       <details>
         <summary>Preciso pagar todo mês?<span class="mais">+</span></summary>
         <p>Não. A Licença Vitalícia é um pagamento único de R$ 29,90 e não
-        vence. As assinaturas Sync e Premium são opcionais, ainda não estão à
-        venda, e nunca vão ser necessárias para usar o app.</p>
+        vence. O Sync é uma assinatura opcional por cima dela (R$ 14,90/mês
+        ou R$ 149,90/ano), só para quem quer sincronizar entre aparelhos ou
+        entrar pelo navegador — nunca é necessária para usar o app. O
+        Premium ainda não está à venda.</p>
       </details>
       <details>
         <summary>Preciso de internet para usar?<span class="mais">+</span></summary>
@@ -1461,7 +1468,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       <details>
         <summary>Tem para iPhone?<span class="mais">+</span></summary>
         <p>Ainda não. Hoje o aplicativo instalado é para Android. O acesso pelo
-        navegador faz parte do Sync, que ainda não está disponível para compra.</p>
+        navegador faz parte do Sync, que já pode ser assinado.</p>
       </details>
       <details>
         <summary>Por que o Android avisa que é de fonte desconhecida?<span class="mais">+</span></summary>
