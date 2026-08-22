@@ -40,7 +40,7 @@ _flutter.buildConfig = {"engineRevision":"83675ed27633283e7fc296c8bca22e841224c0
 // worker do Flutter, por outro lado, prendia o app inteiro numa publicação
 // antiga: até o bootstrap que saberia da versão nova vinha do próprio cache.
 // Sem ele, cada abertura revalida o bundle e recebe a versão publicada.
-const versaoBundle = "4164194927" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */;
+const versaoBundle = "123467538" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */;
 _flutter.buildConfig.builds[0].mainJsPath =
     `main.dart.js?v=${encodeURIComponent(versaoBundle)}`;
 _flutter.loader.load();
