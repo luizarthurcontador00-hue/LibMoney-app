@@ -1,0 +1,8 @@
+# O app em /app/ e as paginas de transacao (comprar, assinar, obrigado...)
+# ja se declaram noindex na propria tag <meta name="robots">. Este arquivo
+# so cuida de indexacao de busca; nao bloqueia acesso, so pede para os
+# buscadores nao listarem essas paginas nos resultados.
+User-agent: *
+Allow: /
+
+Sitemap: https://libmoney.com.br/sitemap.xml
