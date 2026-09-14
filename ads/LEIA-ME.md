@@ -5,7 +5,9 @@ Tudo em arquivo final, sem marca d'água, pronto para subir no gerenciador.
 - **Estáticos:** 1080 x 1350 (4:5), PNG.
 - **Reels:** 1080 x 1920 (9:16), MP4 H.264, 30 fps, **sem áudio** (para poder
   entrar música na hora de subir, ou rodar mudo com legenda).
-- **CTA único em tudo:** *Teste 7 dias grátis* + *Depois, R$ 9,99/mês*.
+- **Preço em tudo:** *Baixar por R$ 29,90* + *Pagamento único, sem mensalidade ·
+  Android*. O sync (R$ 14,90/mês, 7 dias grátis) aparece só no conceito E, para
+  não competir com o argumento principal, que é não ter mensalidade.
   Nenhuma peça diz "baixe grátis".
 
 ---
@@ -43,12 +45,12 @@ muda entre 1, 2 e 3 é a headline. É o que permite ler o teste A/B.
 | `ad_D2.png` | Sem planilha. Sem **enrolação**. |
 | `ad_D3.png` | Simples o bastante para **usar todo dia**. |
 
-### E — Preço (fundo verde escuro, sem print)
+### E — Pagamento único (fundo verde escuro, sem print)
 | Arquivo | Headline |
 |---|---|
-| `ad_E1.png` | Controle das suas finanças por **menos que um lanche**. |
-| `ad_E2.png` | Menos de **R$ 0,35 por dia** para saber onde está o seu dinheiro. |
-| `ad_E3.png` | Quanto vale saber para onde vai **o seu dinheiro**? |
+| `ad_E1.png` | Um app de finanças **sem mensalidade**. |
+| `ad_E2.png` | Pague **uma vez**. Use para sempre. |
+| `ad_E3.png` | R$ 29,90 hoje. **Zero** depois. |
 
 ### F — Resultado do mês (fundo claro)
 | Arquivo | Headline |
@@ -67,7 +69,8 @@ muda entre 1, 2 e 3 é a headline. É o que permite ler o teste A/B.
 | `reel_fluxo.mp4` | 12,5 s | Fluxo diário + troca de mês |
 | `reel_curto.mp4` | 10,6 s | Fluxo + Projetado x Real + troca de mês |
 
-Os três terminam no mesmo cartão de marca (logo, *Teste 7 dias grátis*, preço).
+Os três terminam no mesmo cartão de marca (logo, *R$ 29,90, uma vez só*,
+*pagamento único, sem mensalidade*).
 
 **Texto de cada Reel**
 
@@ -86,14 +89,15 @@ e saldo." → "E os próximos meses já aparecem."
 
 **1.** Você ganha, paga as contas e no dia 20 não sobra nada — mas não sabe
 explicar por quê. O LibMoney mostra dia por dia para onde o dinheiro foi, e
-compara o que você planejou com o que realmente gastou. Teste 7 dias grátis.
+compara o que você planejou com o que realmente gastou. R$ 29,90, uma vez só.
 
 **2.** Controlar dinheiro não precisa de planilha. Lançou receita, despesa,
 gasto no cartão ou transferência em segundos — e o app fecha o mês para você.
-7 dias grátis, depois R$ 9,99/mês.
+Sem mensalidade: você paga R$ 29,90 uma vez e o app é seu.
 
 **3.** Contas, cartões, faturas e objetivos em um app só. Saldo do dia, do mês e
-dos próximos meses. Disponível para Android. Teste 7 dias grátis.
+dos próximos meses. R$ 29,90 no Android, pagamento único. Quer os mesmos dados
+em mais de um aparelho? O sync custa R$ 14,90/mês e tem 7 dias grátis.
 
 ---
 
@@ -103,5 +107,7 @@ dos próximos meses. Disponível para Android. Teste 7 dias grátis.
 - Nenhum número apresentado como resultado de usuário: todos os valores nas
   telas são da conta de teste e aparecem só como interface do produto.
 - Nada de WhatsApp ou IA.
+- "Grátis" não aparece em nenhuma peça: o app é pago. A única coisa grátis são
+  os 7 dias de teste do sync, e isso está escrito só onde o sync é o assunto.
 - A tela de Objetivos ficou de fora: o único objetivo cadastrado está em 0%,
   e como prova de produto isso joga contra.
