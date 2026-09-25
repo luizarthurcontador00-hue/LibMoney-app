@@ -1,0 +1,41 @@
+/* O guia usa a base de documento (.doc) de privacidade e termos, que já tem
+   a largura de leitura certa. Aqui fica só o que um artigo tem e um termo de
+   uso não: trilha, quadros de exemplo e a chamada para o app. */
+.trilha{font-size:14px;color:var(--ink-soft);margin-bottom:18px}
+.trilha a{color:var(--ink-soft);text-decoration:none;font-weight:700}
+.trilha a:hover{color:var(--brand-word)}
+.doc .linha-fina{font-size:19px;line-height:1.55;color:var(--ink-soft);margin:6px 0 10px}
+.doc .data{margin-bottom:34px}
+.resumo{
+  background:var(--brand-soft);border-radius:var(--raio);padding:18px 22px;margin:0 0 30px;
+}
+.resumo b{display:block;color:var(--brand-word);font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.resumo ol{margin:0;padding-left:20px}
+.resumo li{color:var(--ink);margin-bottom:5px}
+.quadro{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--raio);
+  box-shadow:var(--sombra-1);padding:14px 20px;margin:22px 0 26px;
+}
+.quadro .tit{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);padding:6px 0 4px}
+.quadro .l{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-weight:700;color:var(--ink)}
+.quadro .l:last-child{border-bottom:0}
+.quadro .l.forte{font-weight:800}
+.quadro .v{font-family:'Baloo2',sans-serif;font-variant-numeric:tabular-nums;font-weight:800;white-space:nowrap}
+.quadro .pos{color:var(--brand-word)}
+.quadro .neg{color:var(--down-word)}
+.quadro .nota{font-size:14px;color:var(--ink-soft);padding:8px 0 4px;font-weight:600}
+.chamada{
+  margin:44px 0 10px;background:#241B36;color:#F2F0F7;border-radius:var(--raio-g);
+  padding:28px;display:flex;flex-direction:column;gap:12px;
+}
+.chamada h2{margin:0!important;color:#fff}
+.chamada p{color:#D9D4E6!important;margin:0!important}
+.chamada .botao{align-self:flex-start;margin-top:6px}
+.chamada small{color:#A79FC0;font-size:14px}
+.relacionados{display:grid;gap:12px;margin-top:18px}
+.relacionados a{
+  display:block;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:14px 18px;text-decoration:none;color:var(--ink)!important;font-weight:800;
+}
+.relacionados a:hover{border-color:var(--brand)}
+.relacionados a span{display:block;font-weight:600;color:var(--ink-soft);font-size:14.5px}

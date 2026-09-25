@@ -79,7 +79,7 @@
         {"@type": "Question", "name": "Preciso de internet para usar?",
          "acceptedAnswer": {"@type": "Answer", "text": "Só no primeiro acesso, para entrar na conta. Depois disso o app funciona normalmente sem conexão. Quando a internet voltar, ele pode atualizar a sua cópia de segurança na nuvem."}},
         {"@type": "Question", "name": "O app se conecta ao meu banco?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Não. Nós não pedimos, não guardamos e não usamos a senha do seu banco. Você lança à mão ou importa o extrato em arquivo OFX, que é o mesmo arquivo que o banco te deixa baixar."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "Só se você quiser. Nós não pedimos, não guardamos e não usamos a senha do seu banco. Você lança à mão ou importa o extrato em arquivo OFX, que é o mesmo arquivo que o banco te deixa baixar. Quem assina o Sync pode, se quiser, conectar a conta pelo Open Finance, com a autorização dada no próprio banco."}},
         {"@type": "Question", "name": "Tem para iPhone?",
          "acceptedAnswer": {"@type": "Answer", "text": "Ainda não. Hoje o aplicativo instalado é para Android. O acesso pelo navegador faz parte do Sync, que já pode ser assinado."}},
         {"@type": "Question", "name": "Por que o Android avisa que é de fonte desconhecida?",
@@ -323,7 +323,19 @@ section{padding:var(--passo) 0;position:relative}
 .nav-baixo span.ativa .quadrs i:nth-child(1),
 .nav-baixo span.ativa .quadrs i:nth-child(4){opacity:1}
 
-/* As duas fichas de vidro que flutuam sobre o painel. */
+/* O celular com a tela real. A moldura é CSS, não imagem: fica nítida em
+   qualquer tela e não pesa nada. */
+.tela-cel{
+  position:relative;transform-style:preserve-3d;transform:translateZ(24px);
+  width:min(300px,72vw);margin:0 auto;
+  background:#1B1826;border-radius:44px;padding:11px;
+  box-shadow:0 52px 100px rgba(25,48,34,.22),0 20px 44px rgba(25,48,34,.14),
+             inset 0 0 0 1.5px rgba(255,255,255,.10);
+}
+.tela-cel img{display:block;width:100%;height:auto;border-radius:34px}
+.ficha .v.neg{color:var(--down-word)}
+
+/* As duas fichas de vidro que flutuam sobre o celular. */
 .ficha{
   position:absolute;transform-style:preserve-3d;
   background:var(--glass);
@@ -563,8 +575,11 @@ section{padding:var(--passo) 0;position:relative}
 .trilho.real.estourou i{background:var(--down)}
 .dentro .trilho i,
 .trilho.dentro i{width:var(--w)}
+/* O rótulo ganha um fundo claro próprio: direto sobre a barra, "REAL" em
+   cinza sumia no vermelho de quem estourou. */
 .trilho .rot{
-  position:absolute;top:0;bottom:0;left:12px;display:flex;align-items:center;gap:8px;
+  position:absolute;top:4px;bottom:4px;left:6px;display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.9);border-radius:6px;padding:0 9px;
   font-size:12.5px;font-weight:800;color:var(--ink);z-index:1;
   font-family:'Baloo2',sans-serif;font-variant-numeric:tabular-nums;
 }
@@ -584,7 +599,12 @@ section{padding:var(--passo) 0;position:relative}
 .bloco:hover{transform:translateY(-4px);box-shadow:var(--sombra-2);border-color:var(--line-strong)}
 .bloco h3{margin-bottom:8px}
 .bloco > p{color:var(--ink-soft);font-size:15.5px;line-height:1.55}
-.bloco .visual{margin-top:auto;padding-top:24px}
+/* O desenho vem primeiro, numa área de altura fixa: com ele embaixo do
+   texto, o cartão de texto mais curto ficava com um buraco no meio. */
+.bloco .visual{order:-1;min-height:214px;margin-bottom:22px;padding:20px;
+               border-radius:18px;background:var(--ground);
+               display:flex;flex-direction:column;justify-content:center}
+@media(max-width:980px){.bloco .visual{min-height:0}}
 
 /* parcelas */
 .compra{display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -777,7 +797,7 @@ details p{margin:0 0 24px;color:var(--ink-soft);max-width:56em;font-size:16px}
    Rodapé
    ========================================================================== */
 footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0 40px;font-size:15px}
-.pe{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,1fr));gap:36px}
+.pe{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:36px}
 @media(max-width:760px){.pe{grid-template-columns:1fr 1fr;gap:30px}.pe .sobre{grid-column:1/-1}}
 .pe .sobre p{color:var(--ink-soft);font-size:14.5px;margin-top:12px;max-width:30em}
 .pe h4{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
@@ -819,6 +839,143 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   .palco,.cartao3d,.dois-aparelhos{transform:none}
   .ficha{animation:none}
 }
+
+/* ==========================================================================
+   Comece em 3 minutos
+   ========================================================================== */
+/* Mostra as quatro perguntas do passo a passo do app, com as mesmas
+   palavras. O medo de quem chega é "vou ter que cadastrar tudo antes de ver
+   alguma coisa"; ver que são quatro perguntas e um número no fim responde. */
+.comeco{display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) minmax(0,1.05fr);gap:14px;margin-top:44px;align-items:stretch}
+.comeco .fim{grid-column:3;grid-row:1/3}
+@media(max-width:900px){.comeco{grid-template-columns:repeat(2,minmax(0,1fr))}.comeco .fim{grid-column:1/-1;grid-row:auto}}
+@media(max-width:560px){.comeco{grid-template-columns:1fr}}
+.etapa-c{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--raio);
+  padding:18px 18px 16px;box-shadow:var(--sombra-1);display:flex;flex-direction:column;gap:10px;
+}
+.etapa-c .qual{font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+.etapa-c h3{font-size:18px;line-height:1.2}
+.campo-c{
+  margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  border:1px solid var(--line-strong);border-radius:12px;padding:9px 12px;font-size:14.5px;font-weight:700;
+}
+.campo-c .num{font-weight:800;white-space:nowrap}
+.chips-c{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.chips-c span{font-size:13px;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-soft)}
+.chips-c span.on{background:var(--brand-soft);border-color:transparent;color:var(--brand-word)}
+.comeco .fim{
+  background:#241B36;color:#fff;border-radius:var(--raio);padding:22px;
+  display:flex;flex-direction:column;justify-content:center;gap:6px;box-shadow:var(--sombra-2);
+}
+.comeco .fim small{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9FE066}
+.comeco .fim p{font-size:16px;color:#D9D4E6}
+.comeco .fim .grande{font-size:clamp(36px,4vw,48px);color:#9FE066;font-weight:800;line-height:1.1}
+.comeco-conta{margin-top:18px;color:var(--ink-soft);font-size:14.5px}
+
+/* ==========================================================================
+   Comparação
+   ========================================================================== */
+/* "Planilha ou app?" é uma das buscas mais comuns de quem quer se organizar.
+   A tabela responde sem desmerecer as outras opções: cada uma serve para
+   alguma coisa, e dizer isso é o que faz o resto da tabela ser acreditado. */
+.compara{margin-top:44px;border:1px solid var(--line);border-radius:var(--raio-g);overflow:hidden;background:var(--surface);box-shadow:var(--sombra-1)}
+.compara table{width:100%;border-collapse:collapse;font-size:15.5px}
+.compara th,.compara td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.compara tr:last-child td{border-bottom:0}
+.compara thead th{font-family:'Baloo2',sans-serif;font-size:17px;background:var(--ground)}
+.compara thead th.nos{background:var(--brand-soft);color:var(--brand-word)}
+.compara td.nos{background:var(--brand-soft);font-weight:700}
+.compara td:first-child{font-weight:800;width:28%}
+.compara .sim{color:var(--brand-word);font-weight:800}
+.compara .nao{color:var(--ink-faint)}
+/* No celular quatro colunas não cabem: cada linha vira um bloco, com o nome
+   da opção antes de cada resposta. */
+@media(max-width:720px){
+  .compara thead{display:none}
+  .compara tr{display:block;border-bottom:1px solid var(--line);padding:6px 0 10px}
+  .compara tr:last-child{border-bottom:0}
+  .compara td{display:grid;grid-template-columns:110px 1fr;gap:10px;border:0;padding:5px 16px;width:auto!important}
+  .compara td:first-child{display:block;padding-top:12px;font-size:16px}
+  .compara td[data-o]::before{content:attr(data-o);font-weight:700;color:var(--ink-soft);font-size:13.5px}
+  .compara td.nos{background:none}
+}
+
+/* ==========================================================================
+   Guias
+   ========================================================================== */
+.guias-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+@media(max-width:900px){.guias-lista{grid-template-columns:1fr}}
+.guia-card{
+  display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--raio);padding:22px;
+  box-shadow:var(--sombra-1);transition:transform .18s ease,border-color .18s ease;
+}
+.guia-card:hover{transform:translateY(-3px);border-color:var(--brand)}
+.guia-card .tag{font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-word)}
+.guia-card h3{font-size:20px}
+.guia-card p{color:var(--ink-soft);font-size:15.5px}
+.guia-card .ler{margin-top:auto;font-weight:800;color:var(--brand-word);font-size:15px}
+
+/* ==========================================================================
+   Tudo no mesmo app
+   ========================================================================== */
+/* Fundo branco de ponta a ponta: quebra a sequência de seções no mesmo
+   verde-claro, que fazia a página parecer uma coisa só rolando sem fim. */
+.faixa-clara{background:var(--surface);border-block:1px solid var(--line)}
+.vitrine{position:relative;margin:48px auto 0;max-width:980px;padding-right:clamp(0px,6vw,80px)}
+.navegador{
+  border-radius:18px;overflow:hidden;background:var(--surface);
+  border:1px solid var(--line-strong);box-shadow:var(--sombra-3);
+}
+.barra-navegador{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--ground);border-bottom:1px solid var(--line)}
+.barra-navegador span{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
+.barra-navegador em{
+  margin-left:12px;font-style:normal;font-size:12.5px;font-weight:700;color:var(--ink-soft);
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 12px;
+}
+.navegador img{display:block;width:100%;height:auto}
+.tela-cel.menor{
+  position:absolute;right:0;bottom:-40px;width:clamp(120px,22vw,220px);
+  transform:none;padding:7px;border-radius:30px;
+}
+.tela-cel.menor img{border-radius:24px}
+@media(max-width:640px){
+  .vitrine{padding-right:0;margin-bottom:24px}
+  .tela-cel.menor{right:-6px;bottom:-34px;width:112px;padding:5px;border-radius:22px}
+  .tela-cel.menor img{border-radius:18px}
+}
+#recursos .trio{margin-top:84px}
+.lista-recursos{
+  list-style:none;padding:0;margin:34px 0 0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+}
+.lista-recursos li{
+  font-size:14px;font-weight:700;color:var(--ink-soft);background:var(--ground);
+  border:1px solid var(--line);border-radius:999px;padding:6px 13px;
+}
+
+/* ==========================================================================
+   Barra fixa de baixar (só no celular)
+   ========================================================================== */
+.barra-fixa{display:none}
+@media(max-width:720px){
+  .barra-fixa{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:70;
+    background:var(--glass);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+    border:1px solid var(--glass-line);border-radius:18px;padding:9px 9px 9px 16px;
+    box-shadow:var(--sombra-2);font-size:13.5px;color:var(--ink-soft);
+    transform:translateY(140%);transition:transform .3s cubic-bezier(.22,.61,.36,1);
+  }
+  .barra-fixa b{color:var(--ink)}
+  .barra-fixa .botao{padding:11px 20px;font-size:15px;flex:none}
+  .barra-fixa.visivel{transform:none}
+}
+@media(max-width:720px) and (prefers-reduced-motion:reduce){.barra-fixa{transition:none}}
+/* Espaço no fim para a barra não cobrir o rodapé quando a página termina. */
+@media(max-width:720px){footer{padding-bottom:84px}}
+/* Com a ficha do topo por cima do título do app no celular, sobe um pouco. */
+@media(max-width:520px){.ficha-a{top:-44px}}
 </style>
 </head>
 <body>
@@ -846,6 +1003,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       <a class="item" href="#recursos">Recursos</a>
       <a class="item" href="#preco">Preço</a>
       <a class="item" href="#duvidas">Dúvidas</a>
+      <a class="item" href="#guias">Guias</a>
       <div class="acoes-topo">
         <a class="entrar" href="/app/">Entrar</a>
         <a class="botao" href="#preco">Começar agora</a>
@@ -896,78 +1054,29 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       </div>
     </div>
 
-    <!-- O cenário. Não é captura de tela: é o conceito do Resumo montado em
-         HTML, para ficar nítido em qualquer densidade e traduzido junto com
-         o resto da página. -->
+    <!-- O cenário: o app de verdade num celular, inclinado em 3D. -->
     <div class="cena" id="cena" aria-hidden="true">
       <div class="palco" id="palco">
 
         <div class="ficha ficha-a">
-          <div class="k">Dia 22</div>
-          <div class="v num">−R$ 1.559</div>
+          <div class="k">Dia 28</div>
+          <div class="v num">−R$ 390</div>
           <div class="d">saldo no vermelho</div>
         </div>
 
-        <div class="painel">
-          <div class="painel-cab">
-            <div class="primeira">
-              <span class="risquinhos"><i></i><i></i><i></i></span>
-              <span class="t">Fluxo Diário</span>
-            </div>
-            <div class="mes">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="m6 15 6-6 6 6" stroke="currentColor" stroke-width="2.4"
-                      stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Agosto de 2026
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.4"
-                      stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-          </div>
-
-          <div class="tres">
-            <div class="cx e"><div class="k">Entradas</div><div class="v num">R$ 4.300,00</div></div>
-            <div class="cx s"><div class="k">Saídas</div><div class="v num">R$ 4.759,00</div></div>
-            <div class="cx f"><div class="k">Saldo final</div><div class="v num">−R$ 459,00</div></div>
-          </div>
-
-          <div class="tabela-dias">
-            <div class="cab-dias">
-              <span>Dia</span><span>Entradas</span><span>Saídas</span><span>Saldo</span>
-            </div>
-            <div class="linha-dia">
-              <span class="dia">01</span><span class="vazio">—</span>
-              <span class="menos num">1.450,00</span><span class="sal neg num">−1.450,00</span>
-            </div>
-            <div class="linha-dia">
-              <span class="dia">05</span><span class="mais num">3.200,00</span>
-              <span class="vazio">—</span><span class="sal num">1.750,00</span>
-            </div>
-            <div class="linha-dia">
-              <span class="dia">12</span><span class="vazio">—</span>
-              <span class="menos num">189,00</span><span class="sal num">1.561,00</span>
-            </div>
-            <div class="linha-dia aperto">
-              <span class="dia">22</span><span class="vazio">—</span>
-              <span class="menos num">3.120,00</span><span class="sal neg num">−1.559,00</span>
-            </div>
-            <div class="linha-dia">
-              <span class="dia">30</span><span class="mais num">1.100,00</span>
-              <span class="vazio">—</span><span class="sal neg num">−459,00</span>
-            </div>
-          </div>
-
-          <div class="nav-baixo">
-            <span class="ativa"><span class="quadrs"><i></i><i></i><i></i><i></i></span>Fluxo Diário</span>
-            <span><span class="quadrs"><i></i><i></i><i></i><i></i></span>Visão Geral</span>
-            <span><span class="quadrs"><i></i><i></i><i></i><i></i></span>Projetado x Real</span>
-          </div>
+        <!-- Tela de verdade do app, com dados de exemplo (nunca de alguém):
+             o mesmo mês das outras telas deste site, rolado até o dia em que
+             a fatura derruba o saldo. -->
+        <div class="tela-cel">
+          <img src="/img/app-fluxo-diario.webp" width="720" height="1558"
+               alt="Tela Fluxo Diário do LibMoney: no dia 28 a fatura de R$ 3.120 deixa o saldo em menos R$ 390, e no dia 30 uma entrada de R$ 1.100 recupera o mês"
+               fetchpriority="high">
         </div>
 
         <div class="ficha ficha-b">
-          <div class="k">Objetivo</div>
-          <div class="v num">75%</div>
-          <div class="d">Viagem</div>
+          <div class="k">Fatura do cartão</div>
+          <div class="v num neg">R$ 3.120</div>
+          <div class="d">vence dia 28</div>
         </div>
 
       </div>
@@ -991,7 +1100,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
     <div class="dois-saldos">
       <div class="saldo-caixa hoje rev" data-atraso="1">
         <div class="k">Seu banco diz, hoje</div>
-        <div class="v num">R$ 1.561,00</div>
+        <div class="v num">R$ 2.730,00</div>
         <div class="d">Parece tranquilo.</div>
       </div>
       <div class="entre rev" data-atraso="2">
@@ -999,14 +1108,60 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           <path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span class="rot">10 dias</span>
+        <span class="rot">3 dias</span>
       </div>
       <div class="saldo-caixa depois rev" data-atraso="3">
-        <div class="k">No dia 22, depois da fatura</div>
-        <div class="v num">−R$ 1.559,00</div>
+        <div class="k">No dia 28, depois da fatura</div>
+        <div class="v num">−R$ 390,00</div>
         <div class="d">A fatura vence, e não sobra.</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ======================= COMECE EM 3 MINUTOS ======================= -->
+<section id="comecar">
+  <div class="env">
+    <div class="cabecalho-secao">
+      <p class="rotulo rev">Como começar</p>
+      <h2 class="rev" data-atraso="1">Quatro perguntas e o seu mês aparece.</h2>
+      <p class="sub rev" data-atraso="2">
+        Não precisa lançar o mês inteiro antes de ver alguma coisa. O app
+        pergunta o essencial e, no fim, mostra com quanto o mês termina.
+      </p>
+    </div>
+    <!-- As perguntas são as do passo a passo do app, palavra por palavra
+         (lib/features/onboarding). Os números fecham: a conta aparece
+         embaixo, e quem conferir precisa achar o mesmo resultado. -->
+    <div class="comeco rev" data-atraso="3">
+      <div class="etapa-c">
+        <span class="qual">Pergunta 1</span>
+        <h3>Quanto você tem hoje em cada conta?</h3>
+        <div class="campo-c"><span>Conta corrente</span><span class="num">R$ 1.600</span></div>
+      </div>
+      <div class="etapa-c">
+        <span class="qual">Pergunta 2</span>
+        <h3>Você usa cartão de crédito?</h3>
+        <div class="campo-c"><span>Fatura de 10/10</span><span class="num">R$ 1.200</span></div>
+      </div>
+      <div class="etapa-c">
+        <span class="qual">Pergunta 3</span>
+        <h3>O que entra todo mês?</h3>
+        <div class="chips-c"><span class="on">Salário · R$ 3.200</span><span>Pró-labore</span><span>Aluguel recebido</span></div>
+      </div>
+      <div class="etapa-c">
+        <span class="qual">Pergunta 4</span>
+        <h3>E as contas que chegam todo mês?</h3>
+        <div class="chips-c"><span class="on">Aluguel · R$ 1.450</span><span class="on">Internet · R$ 189</span><span>Luz</span><span>Água</span></div>
+      </div>
+      <div class="fim">
+        <small>Pronto</small>
+        <p>Em outubro, seu mês termina com</p>
+        <span class="grande num">R$ 1.961</span>
+        <p>E o app mostra qual é o dia mais apertado.</p>
+      </div>
+    </div>
+    <p class="comeco-conta rev">1.600 + 3.200 − 1.450 − 189 − 1.200 = 1.961. Leva uns três minutos.</p>
   </div>
 </section>
 
@@ -1018,7 +1173,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       <h2 class="rev" data-atraso="1">Veja quanto sobra em cada dia.</h2>
       <p class="sub rev" data-atraso="2">
         Salário, aluguel, contas fixas, parcelas e faturas ficam na mesma linha
-        do tempo. Se o saldo ficar negativo no dia 22, você vê isso antes.
+        do tempo. Se o saldo ficar negativo no dia 28, você vê isso antes.
       </p>
 
       <div class="passos rev" data-atraso="3">
@@ -1049,12 +1204,12 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
     <div class="quadro-grafico rev" data-atraso="1">
       <div class="quadro-topo">
         <div>
-          <div class="k">Saldo hoje, dia 12</div>
-          <div class="v num">R$ 1.561,00</div>
+          <div class="k">Saldo hoje, dia 25</div>
+          <div class="v num">R$ 2.730,00</div>
         </div>
         <div>
           <div class="k">Pior dia do mês</div>
-          <div class="v num risco">−R$ 1.559,00 <span style="font-size:14px;font-weight:700;color:var(--ink-soft)">no dia 22</span></div>
+          <div class="v num risco">−R$ 390,00 <span style="font-size:14px;font-weight:700;color:var(--ink-soft)">no dia 28</span></div>
         </div>
       </div>
 
@@ -1062,51 +1217,39 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
            canvas: fica nítido em qualquer tela, escala sozinho e não precisa
            ser redesenhado quando a janela muda de tamanho. -->
       <svg class="grafico" viewBox="0 0 720 292" role="img"
-           aria-label="Gráfico do saldo acumulado ao longo de agosto. Começa negativo em R$ 1.450 no dia 1 com o aluguel, sobe para R$ 1.750 com o salário no dia 5, está em R$ 1.561 hoje, dia 12, despenca para menos R$ 1.559 no dia 22 quando a fatura do cartão vence, e fecha o mês em menos R$ 459.">
+           aria-label="Gráfico do saldo ao longo de setembro. Fica em R$ 50 no dia 1 depois do aluguel, sobe para R$ 3.250 com o salário no dia 5, está em R$ 2.730 hoje, dia 25, cai para menos R$ 390 no dia 28 quando a fatura do cartão vence, e fecha o mês em R$ 710 com a entrada do dia 30.">
         <defs>
           <linearGradient id="degradeVerde" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#66CC33" stop-opacity=".28"/>
             <stop offset="100%" stop-color="#66CC33" stop-opacity="0"/>
           </linearGradient>
         </defs>
-
         <!-- linha do zero -->
         <line class="zero" x1="40" y1="151.1" x2="700" y2="151.1"/>
         <text class="rotulo-eixo" x="40" y="145">R$ 0</text>
-
-        <!-- área sob a curva -->
-        <path class="area"
-              d="M50,243.1 L134,40 L239,40 L281,52 L407,74.9 L491,250 L575,250
-                 L659,180.2 L659,262 L50,262 Z"/>
-
-        <!-- o trecho afundado, abaixo do zero -->
-        <path class="afundado"
-              d="M443.6,151.1 L491,250 L575,250 L659,180.2 L659,151.1 Z"/>
-
-        <!-- a linha -->
-        <path class="traco"
-              d="M50,243.1 L134,40 L239,40 L281,52 L407,74.9 L491,250 L575,250 L659,180.2"/>
-
+        <!-- Os pontos são o saldo de cada dia da tela do app no topo da
+             página: mesmo mês, mesmos números. -->
+        <path class="area" d="M50,149.4 L115.2,149.4 L136.9,40 L158.6,41.3 L202.1,43.4 L245.5,44.3 L289,50.7 L354.1,54.5 L441,57.8 L614.8,57.8 L636.6,164.4 L658.3,164.4 L680,126.8 L680,262 L50,262 Z"/>
+        <path class="afundado" d="M633.8,151.1 L636.6,164.4 L658.3,164.4 L666,151.1 Z"/>
+        <path class="traco" d="M50,149.4 L115.2,149.4 L136.9,40 L158.6,41.3 L202.1,43.4 L245.5,44.3 L289,50.7 L354.1,54.5 L441,57.8 L614.8,57.8 L636.6,164.4 L658.3,164.4 L680,126.8"/>
         <!-- marca do dia de hoje -->
-        <line class="marco" x1="281" y1="30" x2="281" y2="262"/>
-        <text class="rotulo-eixo" x="281" y="24" text-anchor="middle">hoje</text>
-        <circle class="ponto-hoje" cx="281" cy="52" r="6.5"/>
-
-        <!-- o dia do aperto, chamado no canto vazio de cima -->
-        <circle class="ponto-risco" cx="491" cy="250" r="6.5"/>
+        <line class="marco" x1="571.4" y1="30" x2="571.4" y2="262"/>
+        <text class="rotulo-eixo" x="571.4" y="24" text-anchor="middle">hoje</text>
+        <circle class="ponto-hoje" cx="571.4" cy="57.8" r="6.5"/>
+        <!-- o dia do aperto, chamado no canto vazio de baixo -->
+        <circle class="ponto-risco" cx="636.6" cy="164.4" r="6.5"/>
         <g class="bolha">
-          <line x1="558" y1="88" x2="497" y2="241" stroke="#241B36" stroke-width="1.3"
+          <line x1="560" y1="228" x2="631.6" y2="171.4" stroke="#241B36" stroke-width="1.3"
                 stroke-dasharray="4 4" opacity=".5"/>
-          <rect class="bolha-fundo" x="500" y="58" width="186" height="28" rx="9"/>
-          <text class="bolha-txt" x="593" y="77" text-anchor="middle">fatura do cartão · dia 22</text>
+          <rect class="bolha-fundo" x="440" y="214" width="186" height="28" rx="9"/>
+          <text class="bolha-txt" x="533" y="233" text-anchor="middle">fatura do cartão · dia 28</text>
         </g>
-
         <!-- eixo dos dias -->
         <line class="eixo" x1="40" y1="262" x2="700" y2="262"/>
         <text class="rotulo-eixo" x="50" y="281" text-anchor="middle">1</text>
-        <text class="rotulo-eixo" x="239" y="281" text-anchor="middle">10</text>
-        <text class="rotulo-eixo" x="449" y="281" text-anchor="middle">20</text>
-        <text class="rotulo-eixo" x="680" y="281" text-anchor="middle">31</text>
+        <text class="rotulo-eixo" x="245.5" y="281" text-anchor="middle">10</text>
+        <text class="rotulo-eixo" x="462.8" y="281" text-anchor="middle">20</text>
+        <text class="rotulo-eixo" x="680" y="281" text-anchor="middle">30</text>
       </svg>
 
       <div class="legenda">
@@ -1153,7 +1296,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
         <div class="face">
           <div class="marca-cartao">
             <div class="chip"></div>
-            <span class="rot">Fatura de agosto</span>
+            <span class="rot">Fatura de setembro</span>
           </div>
           <div>
             <span class="rot">Em aberto</span>
@@ -1161,7 +1304,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
             <div class="barra"><i></i></div>
             <div class="miudos">
               <span>Limite usado 62%</span>
-              <span>Vence dia 22</span>
+              <span>Vence dia 28</span>
             </div>
           </div>
         </div>
@@ -1214,12 +1357,35 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   </div>
 </section>
 
-<!-- ======================= TRIO: PARCELAS, OBJETIVOS, OFX ======================= -->
-<section>
+<!-- ======================= TUDO NO MESMO APP ======================= -->
+<!-- Juntou três seções que repetiam o mesmo assunto (o trio, "celular e
+     navegador" e a grade de recursos). As telas são do app de verdade, com os
+     mesmos dados de exemplo do topo da página. -->
+<section id="recursos" class="faixa-clara">
   <div class="env">
     <div class="cabecalho-secao">
-      <p class="rotulo rev">Mais do que o saldo</p>
-      <h2 class="rev" data-atraso="1">Parcelas, objetivos e extratos no mesmo app.</h2>
+      <p class="rotulo rev">Tudo do mês no mesmo app</p>
+      <h2 class="rev" data-atraso="1">No celular, sem internet. No computador, com o Sync.</h2>
+      <p class="sub rev" data-atraso="2">
+        Depois do primeiro acesso, o app funciona sem internet no celular, e
+        toda licença inclui backup na nuvem. Com o Sync, o mesmo mês abre no
+        navegador e fica igual nos dois.
+      </p>
+    </div>
+
+    <div class="vitrine rev" data-atraso="2">
+      <div class="navegador">
+        <div class="barra-navegador" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <em>libmoney.com.br/app</em>
+        </div>
+        <img src="/img/app-painel-navegador.webp" width="1440" height="900" loading="lazy"
+             alt="LibMoney no navegador: painel de setembro com entradas de R$ 4.300, saídas de R$ 5.090, gráfico do saldo que cai no dia 28 e a fatura do Cartão Roxo de R$ 3.120 vencendo em 28/09">
+      </div>
+      <div class="tela-cel menor">
+        <img src="/img/app-visao-geral.webp" width="720" height="1558" loading="lazy"
+             alt="LibMoney no celular: Visão Geral com saldo total de R$ 2.730 e a fatura do cartão de R$ 3.120">
+      </div>
     </div>
 
     <div class="trio">
@@ -1302,120 +1468,40 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
         </div>
       </div>
     </div>
+
+    <ul class="lista-recursos rev" aria-label="Outros recursos">
+      <li>Receitas e despesas</li><li>Categorias suas</li><li>Contas e carteiras</li>
+      <li>Transferências</li><li>Contas fixas</li><li>Faturas por mês</li>
+      <li>Limite e disponível</li><li>Metas com prazo</li><li>Lembretes de vencimento</li>
+      <li>Extrato OFX</li><li>Exportar tudo</li><li>Sem senha de banco</li>
+    </ul>
   </div>
 </section>
 
-<!-- ======================= EM QUALQUER LUGAR ======================= -->
-<section>
+<!-- ======================= COMPARAÇÃO ======================= -->
+<section id="comparar">
   <div class="env">
     <div class="cabecalho-secao">
-      <p class="rotulo rev">Celular e navegador</p>
-      <h2 class="rev" data-atraso="1">Use no celular. Com o Sync, abra também no navegador.</h2>
+      <p class="rotulo rev">Planilha, app do banco ou LibMoney?</p>
+      <h2 class="rev" data-atraso="1">Cada um responde uma pergunta diferente.</h2>
       <p class="sub rev" data-atraso="2">
-        Depois do primeiro acesso, o app funciona sem internet no celular.
-        Toda licença inclui backup na nuvem. O Sync também mantém celular e
-        navegador atualizados automaticamente.
+        O app do banco diz quanto você tem hoje. A planilha diz o que você
+        quiser, desde que você monte. O LibMoney diz quanto vai sobrar em
+        cada dia.
       </p>
     </div>
-
-    <div class="aparelhos rev" data-atraso="2" aria-hidden="true">
-      <div class="dois-aparelhos">
-        <div class="tela-pc">
-          <div class="barra-nav">
-            <span class="bolinha"></span><span class="bolinha"></span><span class="bolinha"></span>
-            <span class="url">libmoney.com.br</span>
-          </div>
-          <div class="miolo-pc">
-            <div class="lateral-pc">
-              <span class="on"></span><span></span><span></span><span></span><span></span>
-            </div>
-            <div class="grade-pc">
-              <div class="card-pc alto"></div>
-              <div class="card-pc"></div>
-              <div class="card-pc"></div>
-            </div>
-          </div>
-        </div>
-        <div class="celular">
-          <div class="entalhe"></div>
-          <div class="cab">
-            <div class="k">Saldo de hoje</div>
-            <div class="v">R$ 1.561,00</div>
-          </div>
-          <div class="lista"><span></span><span></span><span></span><span></span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= RECURSOS ======================= -->
-<section id="recursos">
-  <div class="env">
-    <div class="cabecalho-secao">
-      <p class="rotulo rev">Recursos</p>
-      <h2 class="rev" data-atraso="1">O que você usa para organizar o mês.</h2>
-    </div>
-
-    <div class="grupos">
-      <div class="grupo rev" data-atraso="1">
-        <span class="ic">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 7h16M4 12h11M4 17h7" stroke="#3F7A1F" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Organização</h3>
-        <ul><li>Receitas e despesas</li><li>Categorias suas</li>
-            <li>Contas e carteiras</li><li>Transferências</li></ul>
-      </div>
-
-      <div class="grupo rev" data-atraso="2">
-        <span class="ic">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 19V5m0 14h16M8 15v-4m4 4V8m4 7v-6" stroke="#3F7A1F"
-                  stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <h3>Planejamento</h3>
-        <ul><li>Saldo projetado</li><li>Projetado x Real</li>
-            <li>Contas fixas</li><li>Parcelas futuras</li></ul>
-      </div>
-
-      <div class="grupo rev" data-atraso="3">
-        <span class="ic">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="6" width="18" height="12" rx="3" stroke="#3F7A1F" stroke-width="2.2"/>
-            <path d="M3 10.5h18" stroke="#3F7A1F" stroke-width="2.2"/>
-          </svg>
-        </span>
-        <h3>Cartões</h3>
-        <ul><li>Fechamento e vencimento</li><li>Faturas por mês</li>
-            <li>Limite e disponível</li><li>Parcelamento</li></ul>
-      </div>
-
-      <div class="grupo rev" data-atraso="4">
-        <span class="ic">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="8" stroke="#3F7A1F" stroke-width="2.2"/>
-            <circle cx="12" cy="12" r="3" stroke="#3F7A1F" stroke-width="2.2"/>
-          </svg>
-        </span>
-        <h3>Objetivos</h3>
-        <ul><li>Metas com prazo</li><li>Progresso guardado</li>
-            <li>Sem virar despesa</li></ul>
-      </div>
-
-      <div class="grupo rev" data-atraso="4">
-        <span class="ic">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v11m0 0 4-4m-4 4-4-4M4 18v2h16v-2" stroke="#3F7A1F"
-                  stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <h3>Importação</h3>
-        <ul><li>Extrato em OFX</li><li>Arquivo de texto</li>
-            <li>Sem senha de banco</li></ul>
-      </div>
+    <div class="compara rev" data-atraso="3">
+      <table>
+        <thead><tr><th><span class="pular">Recurso</span></th><th>Planilha</th><th>App do banco</th><th class="nos">LibMoney</th></tr></thead>
+        <tbody>
+          <tr><td>Saldo previsto de cada dia do mês</td><td data-o="Planilha">Se você montar as fórmulas</td><td data-o="App do banco" class="nao">Não, mostra o saldo de hoje</td><td data-o="LibMoney" class="nos"><span><span class="sim">Sim</span>, sozinho</span></td></tr>
+          <tr><td>Fatura do cartão no dia do vencimento</td><td data-o="Planilha">À mão, todo mês</td><td data-o="App do banco">Só a daquele banco</td><td data-o="LibMoney" class="nos"><span><span class="sim">Sim</span>, de todos os cartões</span></td></tr>
+          <tr><td>Parcelas dos próximos meses</td><td data-o="Planilha">Uma linha por parcela</td><td data-o="App do banco">Só as daquele cartão</td><td data-o="LibMoney" class="nos"><span><span class="sim">Sim</span>, criadas nas datas certas</span></td></tr>
+          <tr><td>Várias contas e bancos juntos</td><td data-o="Planilha"><span class="sim">Sim</span></td><td data-o="App do banco" class="nao">Não</td><td data-o="LibMoney" class="nos"><span class="sim">Sim</span></td></tr>
+          <tr><td>Planejado x realizado por categoria</td><td data-o="Planilha">Se você montar</td><td data-o="App do banco" class="nao">Não</td><td data-o="LibMoney" class="nos"><span class="sim">Sim</span></td></tr>
+          <tr><td>Quanto custa</td><td data-o="Planilha">Grátis</td><td data-o="App do banco">Grátis</td><td data-o="LibMoney" class="nos">R$ 29,90, uma vez</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -1502,6 +1588,36 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           seus lançamentos.
         </p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= GUIAS ======================= -->
+<section id="guias">
+  <div class="env">
+    <div class="cabecalho-secao">
+      <p class="rotulo rev">Guias</p>
+      <h2 class="rev" data-atraso="1">Para organizar o mês, com ou sem o app.</h2>
+    </div>
+    <div class="guias-lista">
+      <a class="guia-card rev" data-atraso="1" href="/guias/como-organizar-a-fatura-do-cartao.html">
+        <span class="tag">Cartão de crédito</span>
+        <h3>Como organizar a fatura do cartão de crédito</h3>
+        <p>Por que a fatura pega de surpresa mesmo quando você anota tudo, e como evitar.</p>
+        <span class="ler">Ler o guia →</span>
+      </a>
+      <a class="guia-card rev" data-atraso="2" href="/guias/planilha-ou-app-de-controle-financeiro.html">
+        <span class="tag">Organização</span>
+        <h3>Planilha ou app de controle financeiro?</h3>
+        <p>O que cada um faz bem, e quando vale trocar a planilha por um app.</p>
+        <span class="ler">Ler o guia →</span>
+      </a>
+      <a class="guia-card rev" data-atraso="3" href="/guias/quanto-vai-sobrar-no-fim-do-mes.html">
+        <span class="tag">Planejamento</span>
+        <h3>Como saber quanto vai sobrar no fim do mês</h3>
+        <p>A conta simples que mostra o dia mais apertado antes de ele chegar.</p>
+        <span class="ler">Ler o guia →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1618,6 +1734,15 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           <li><a href="/app/">Entrar no app</a></li>
         </ul>
       </div>
+
+      <div>
+        <h4>Guias</h4>
+        <ul>
+          <li><a href="/guias/como-organizar-a-fatura-do-cartao.html">Fatura do cartão</a></li>
+          <li><a href="/guias/planilha-ou-app-de-controle-financeiro.html">Planilha ou app?</a></li>
+          <li><a href="/guias/quanto-vai-sobrar-no-fim-do-mes.html">Quanto vai sobrar</a></li>
+        </ul>
+      </div>
     </div>
 
     <div class="pe-baixo">
@@ -1626,6 +1751,15 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
     </div>
   </div>
 </footer>
+
+<!-- Barra de baixar fixa no celular. Aparece depois que o botão do topo
+     sai da tela e some quando a chamada final aparece: no meio da página,
+     quem decidiu baixar não precisa voltar lá em cima. -->
+<div class="barra-fixa" id="barraFixa" aria-hidden="true">
+  <span><b>7 dias grátis</b> · depois R$ 29,90, uma vez</span>
+  <a class="botao" id="barraFixaBotao" tabindex="-1"
+     href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">Baixar</a>
+</div>
 
 <script>
 (function () {
@@ -1782,6 +1916,27 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
     }
   }
 
+
+  /* ---- barra fixa no celular ------------------------------------------- */
+  var barra = document.getElementById('barraFixa');
+  var topoAcoes = document.querySelector('.heroi .acoes');
+  var chamadaFinal = document.querySelector('.final');
+  if (barra && topoAcoes && chamadaFinal && 'IntersectionObserver' in window) {
+    var passouTopo = false, naFinal = false;
+    var atualizar = function () {
+      var mostrar = passouTopo && !naFinal;
+      barra.classList.toggle('visivel', mostrar);
+      barra.setAttribute('aria-hidden', mostrar ? 'false' : 'true');
+      document.getElementById('barraFixaBotao').tabIndex = mostrar ? 0 : -1;
+    };
+    new IntersectionObserver(function (e) {
+      passouTopo = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; atualizar();
+    }).observe(topoAcoes);
+    new IntersectionObserver(function (e) {
+      naFinal = e[0].isIntersecting; atualizar();
+    }).observe(chamadaFinal);
+  }
+
   /* ---- navegador embutido do WhatsApp / Instagram -----------------------
      Esses navegadores não concluem o download de um APK nem entregam o
      arquivo ao instalador do Android: a pessoa toca e nada acontece. Como é
@@ -1794,6 +1949,14 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   if (embutido) {
     var aviso = document.getElementById('avisoNavegador');
     aviso.hidden = false;
+    var botaoBarra = document.getElementById('barraFixaBotao');
+    if (botaoBarra) {
+      botaoBarra.href = '#';
+      botaoBarra.addEventListener('click', function (e) {
+        e.preventDefault();
+        aviso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
 
     // O esquema intent:// é a única forma no Android de mandar um endereço
     // para o Chrome a partir de outro app. Sem o "package", o sistema

@@ -18,7 +18,7 @@ não só "quanto tenho hoje?".
 - Planejado x realizado: quanto se planejou gastar em cada categoria e quanto se gastou.
 - Parcelas, contas fixas mensais, objetivos e importação de extrato OFX.
 - Funciona sem internet depois do primeiro acesso; backup na nuvem.
-- Não pede senha de banco.
+- Não pede senha de banco. Open Finance opcional para quem assina o Sync.
 
 ## Preço
 
@@ -31,5 +31,11 @@ não só "quanto tenho hoje?".
 - Site: https://libmoney.com.br/
 - Baixar para Android: https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk
 - Usar no navegador: https://libmoney.com.br/app/
-- Privacidade: https://libmoney.com.br/privacidade.html
-- Termos: https://libmoney.com.br/termos.html
+- Privacidade: https://libmoney.com.br/privacidade
+- Termos: https://libmoney.com.br/termos
+
+## Guias
+
+- Como organizar a fatura do cartão de crédito: https://libmoney.com.br/guias/como-organizar-a-fatura-do-cartao
+- Como saber quanto vai sobrar no fim do mês: https://libmoney.com.br/guias/quanto-vai-sobrar-no-fim-do-mes
+- Planilha ou app de controle financeiro?: https://libmoney.com.br/guias/planilha-ou-app-de-controle-financeiro
