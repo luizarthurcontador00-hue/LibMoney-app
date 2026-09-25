@@ -1,0 +1,35 @@
+# LibMoney
+
+> App de controle financeiro pessoal, em português, para Android e navegador.
+> Mostra o saldo previsto de cada dia do mês: a pessoa anota salário, contas
+> fixas, parcelas e cartões, e o app coloca cada valor no dia em que ele
+> acontece, inclusive a fatura do cartão no dia do vencimento.
+
+## Para quem é
+
+Para quem olha o saldo do banco, acha que está sobrando e descobre no dia da
+fatura que não estava. O LibMoney responde "quanto vai sobrar no dia 22?",
+não só "quanto tenho hoje?".
+
+## O que faz
+
+- Fluxo diário: saldo previsto de cada dia do mês, com o dia mais apertado.
+- Cartão de crédito: compras entram na fatura certa, e a fatura sai do saldo no vencimento.
+- Planejado x realizado: quanto se planejou gastar em cada categoria e quanto se gastou.
+- Parcelas, contas fixas mensais, objetivos e importação de extrato OFX.
+- Funciona sem internet depois do primeiro acesso; backup na nuvem.
+- Não pede senha de banco.
+
+## Preço
+
+- 7 dias grátis, sem cartão.
+- Licença Vitalícia: R$ 29,90, pagamento único, sem mensalidade.
+- Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho e no navegador.
+
+## Links
+
+- Site: https://libmoney.com.br/
+- Baixar para Android: https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk
+- Usar no navegador: https://libmoney.com.br/app/
+- Privacidade: https://libmoney.com.br/privacidade.html
+- Termos: https://libmoney.com.br/termos.html

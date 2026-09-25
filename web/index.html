@@ -3,18 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LibMoney | saiba como o mês termina</title>
-<meta name="description" content="App de finanças pessoais que mostra o saldo de cada dia, compara o planejado com o realizado e desconta a fatura no vencimento. 7 dias grátis, depois R$ 29,90 uma única vez.">
+<!-- O título carrega as palavras que as pessoas digitam no Google ("app de
+     controle financeiro"): o slogan sozinho não é buscado por ninguém, e o
+     título é o que mais pesa para o buscador decidir do que a página trata. -->
+<title>LibMoney: app de controle financeiro pessoal com saldo de cada dia</title>
+<meta name="description" content="App de controle financeiro pessoal que mostra quanto sobra em cada dia do mês, com contas, parcelas e a fatura do cartão no vencimento. 7 dias grátis, depois R$ 29,90 uma única vez, sem mensalidade.">
 <meta name="theme-color" content="#F9FCF4">
 <link rel="canonical" href="https://libmoney.com.br/">
-<meta property="og:title" content="LibMoney | saiba como o mês termina">
+<meta property="og:title" content="LibMoney: saiba como o mês termina, antes de ele começar">
 <meta property="og:description" content="Veja quanto deve sobrar em cada dia, incluindo contas, parcelas e faturas que ainda vão vencer.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://libmoney.com.br/">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:image" content="https://libmoney.com.br/favicon.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="LibMoney">
+<meta property="og:image" content="https://libmoney.com.br/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LibMoney: saldo hoje R$ 2.241, fatura de R$ 3.120 no dia 22, sobra negativa de R$ 879">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://libmoney.com.br/og.png">
 <link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+
+<!-- Dados estruturados: o Google e os assistentes de IA leem isto para saber,
+     sem interpretar o layout, que isto é um app, quanto custa e o que ele
+     responde. As perguntas repetem, palavra por palavra, a seção "O que
+     costumam perguntar" — se uma mudar, a outra muda junto, porque o Google
+     penaliza dado estruturado que diz algo que a página não diz. O preço
+     também vive em lib/features/licenca/tela_licenca.dart. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://libmoney.com.br/#org",
+      "name": "LibMoney",
+      "url": "https://libmoney.com.br/",
+      "logo": "https://libmoney.com.br/favicon.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://libmoney.com.br/#site",
+      "url": "https://libmoney.com.br/",
+      "name": "LibMoney",
+      "inLanguage": "pt-BR",
+      "publisher": {"@id": "https://libmoney.com.br/#org"}
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "LibMoney",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Android, Web",
+      "inLanguage": "pt-BR",
+      "url": "https://libmoney.com.br/",
+      "image": "https://libmoney.com.br/og.png",
+      "description": "App de controle financeiro pessoal que mostra o saldo previsto de cada dia do mês, com contas fixas, parcelas e a fatura do cartão de crédito no dia do vencimento, e compara o planejado com o realizado.",
+      "featureList": "Saldo previsto de cada dia; fatura do cartão descontada no vencimento; planejado x realizado por categoria; controle de parcelas; objetivos; importação de extrato OFX; funciona sem internet",
+      "publisher": {"@id": "https://libmoney.com.br/#org"},
+      "offers": {
+        "@type": "Offer",
+        "name": "Licença Vitalícia",
+        "price": "29.90",
+        "priceCurrency": "BRL",
+        "description": "Pagamento único, depois de 7 dias grátis. Não vira mensalidade."
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "O que acontece quando os 7 dias acabam?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Nada é apagado. O app passa a ser somente leitura: você continua abrindo, consultando e exportando tudo o que lançou, mas não consegue criar nem editar até comprar a licença. A licença é R$ 29,90, uma vez."}},
+        {"@type": "Question", "name": "Preciso pagar todo mês?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Não. A Licença Vitalícia é um pagamento único de R$ 29,90 e não vence. O Sync é uma assinatura opcional por cima dela (R$ 14,90/mês ou R$ 149,90/ano), só para quem quer sincronizar entre aparelhos ou entrar pelo navegador — nunca é necessária para usar o app. O Premium ainda não está à venda."}},
+        {"@type": "Question", "name": "Preciso de internet para usar?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Só no primeiro acesso, para entrar na conta. Depois disso o app funciona normalmente sem conexão. Quando a internet voltar, ele pode atualizar a sua cópia de segurança na nuvem."}},
+        {"@type": "Question", "name": "O app se conecta ao meu banco?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Não. Nós não pedimos, não guardamos e não usamos a senha do seu banco. Você lança à mão ou importa o extrato em arquivo OFX, que é o mesmo arquivo que o banco te deixa baixar."}},
+        {"@type": "Question", "name": "Tem para iPhone?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Ainda não. Hoje o aplicativo instalado é para Android. O acesso pelo navegador faz parte do Sync, que já pode ser assinado."}},
+        {"@type": "Question", "name": "Por que o Android avisa que é de fonte desconhecida?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Porque no momento o download é o arquivo direto, e não pela loja. É o aviso padrão do Android para qualquer app instalado assim. Estamos publicando na Google Play, e quando estiver no ar o botão passa a levar para lá."}}
+      ]
+    }
+  ]
+}
+</script>
 
 <!-- As fontes são as mesmas de dentro do aplicativo, servidas daqui. Vêm antes
      do CSS para o navegador começar a baixar enquanto ainda lê o resto. -->
