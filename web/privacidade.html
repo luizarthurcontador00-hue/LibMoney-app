@@ -57,6 +57,7 @@
   <li><b>Mensagens do Meu Assessor</b>, se você usar esse recurso: o texto das conversas, a data de cada mensagem e se ela já foi lida. Quando você escolhe enviar o resumo do mês ao assessor, esse resumo vai junto na mensagem, e só nesse caso.</li>
   <li><b>Sugestões e relatos de problema</b> que você envia em "Ajude a melhorar", para podermos responder e corrigir.</li>
   <li><b>Um identificador de aparelho para notificações</b>, se você permitir notificações, para avisar quando chega uma mensagem do assessor. Ele identifica o aparelho para o serviço de notificações, não identifica você, e é apagado quando você sai da conta.</li>
+  <li><b>Um resumo da sua previsão</b>, se você tiver o Sync: o saldo previsto de cada dia do mês atual e dos dois seguintes, as faturas em aberto e o saldo das contas, calculados pelo próprio app. Ele fica guardado junto com os seus outros dados na nuvem e só é usado para responder às perguntas de uma IA que você conectar (veja abaixo).</li>
 </ul>
 <p>
   Sobre cartões, uma observação importante: guardamos apenas o apelido que você
@@ -89,6 +90,7 @@
   <li><b>Mercado Pago</b>, que processa os pagamentos. Os dados do seu cartão ou do Pix são informados diretamente ao Mercado Pago; nós recebemos apenas a confirmação de que o pagamento foi aprovado.</li>
   <li><b>Google (Firebase Cloud Messaging)</b>, que entrega as notificações de mensagem do assessor ao seu aparelho.</li>
   <li><b>Pluggy</b>, apenas se você ativar a conexão por Open Finance (veja abaixo).</li>
+  <li><b>OpenAI (ChatGPT) ou Anthropic (Claude)</b>, apenas se você conectar o LibMoney a um desses assistentes (veja abaixo).</li>
   <li><b>Autoridades públicas</b>, somente quando formos obrigados por lei ou por ordem judicial.</li>
 </ul>
 
@@ -101,6 +103,23 @@
   as transações da conta autorizada para você revisar e transformar em
   lançamentos. Em nenhum momento temos acesso à senha do banco, e a conexão não
   permite movimentar dinheiro.
+</p>
+
+<h2>Conectar a um assistente de IA (opcional)</h2>
+<p>
+  Quem tem o Sync pode conectar o LibMoney ao ChatGPT ou ao Claude para fazer
+  perguntas sobre o próprio dinheiro, como "quanto vou ter no dia 28?". Isso só
+  acontece se você pedir: a autorização é dada por você numa página do
+  LibMoney, depois de entrar com a sua conta, e pode ser desfeita a qualquer
+  momento.
+</p>
+<p>
+  Com a conexão ativa, quando você faz uma pergunta, o assistente consulta o
+  LibMoney e recebe só o necessário para responder: o saldo previsto, as
+  faturas, os lançamentos de um período ou os gastos por categoria. Esses
+  dados passam a ser tratados também pela empresa do assistente (OpenAI ou
+  Anthropic), de acordo com a política de privacidade dela. O assistente só
+  consegue ler: ele não pode criar, alterar nem apagar nada no LibMoney.
 </p>
 
 <h2>Onde seus dados ficam</h2>
