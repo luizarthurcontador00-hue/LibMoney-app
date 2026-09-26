@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conectar o LibMoney</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.png">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+<style>
+#form-login input{font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+#form-login input:focus{outline:2.5px solid var(--brand);outline-offset:1px}
+</style>
+</head>
+<body>
+
+<header class="doc-topo">
+  <div class="env">
+    <a class="marca" href="/">
+      <svg width="24" height="24" viewBox="0 0 200 200" aria-hidden="true">
+        <defs><mask id="logo-mark-consent"><circle cx="100" cy="100" r="92" fill="#fff"/>
+          <path d="M 100,-14.4 A 59.7168,59.7168 0 0 1 100,100 A 59.7168,59.7168 0 0 0 100,214.4" fill="none" stroke="#000" stroke-width="28" stroke-linecap="round" transform="rotate(28 100 100)"/></mask></defs>
+        <circle cx="100" cy="100" r="92" fill="var(--brand)" mask="url(#logo-mark-consent)"/>
+      </svg>
+      LibMoney
+    </a>
+  </div>
+</header>
+
+<main class="doc" style="max-width:520px">
+
+<h1>Conectar o LibMoney</h1>
+
+<div id="carregando">
+  <p>Carregando…</p>
+</div>
+
+<div id="link-invalido" style="display:none">
+  <p>
+    Este link não é válido. Ele precisa vir direto do aplicativo que está
+    pedindo para se conectar ao LibMoney — copiar e colar o endereço, ou abrir
+    esta página sozinha, não funciona.
+  </p>
+</div>
+
+<div id="erro-pedido" style="display:none">
+  <p>
+    Não foi possível carregar este pedido de conexão. Ele pode ter expirado —
+    volte ao aplicativo que pediu a conexão e tente de novo.
+  </p>
+</div>
+
+<form id="form-login" style="display:none">
+  <p class="ink-soft" style="margin-top:0">
+    Entre com a conta do LibMoney que você quer conectar.
+  </p>
+  <p id="erro-login" style="display:none;color:var(--down-word);font-weight:700"></p>
+  <label style="display:block;margin-top:14px">
+    E-mail
+    <input type="email" id="campo-email" autocomplete="email" required
+           style="display:block;width:100%;margin-top:4px">
+  </label>
+  <label style="display:block;margin-top:14px">
+    Senha
+    <input type="password" id="campo-senha" autocomplete="current-password" required
+           style="display:block;width:100%;margin-top:4px">
+  </label>
+  <button class="botao" type="submit" id="botao-entrar" style="margin-top:20px;width:100%">
+    Entrar
+  </button>
+  <p class="pe-caixa" style="margin-top:16px">
+    Ainda não tem conta? <a href="https://libmoney.com.br/">Baixe o LibMoney</a>.
+  </p>
+</form>
+
+<div id="consentimento" style="display:none">
+  <p>
+    <b id="nome-cliente"></b> quer se conectar à sua conta do LibMoney.
+  </p>
+  <p class="ink-soft">
+    Conta: <b id="email-conta"></b> —
+    <a href="#" id="trocar-conta">Não é você? Trocar de conta</a>
+  </p>
+  <p>Com a permissão, ele vai poder:</p>
+  <ul>
+    <li>Ver seu saldo previsto, suas faturas, seus lançamentos e seus gastos por categoria.</li>
+  </ul>
+  <p class="ink-soft">
+    Ele não pode criar, alterar nem apagar nada. Para desconectar, use
+    Configurações › Assistentes de IA no app LibMoney.
+  </p>
+  <p id="destino-cliente" style="font-weight:700"></p>
+  <p class="ink-soft">
+    Só permita se você acabou de clicar em Conectar no ChatGPT ou no Claude.
+    Se alguém te mandou este link, feche esta página.
+  </p>
+  <div style="display:flex;gap:12px;margin-top:20px">
+    <button class="botao" type="button" id="botao-permitir" style="flex:1">Permitir</button>
+    <button type="button" id="botao-negar" style="flex:1">Negar</button>
+  </div>
+</div>
+
+<div id="destino-nao-confiavel" style="display:none">
+  <p>
+    Este pedido não veio do ChatGPT nem do Claude. Por segurança, ele foi
+    recusado.
+  </p>
+</div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"
+        integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok"
+        crossorigin="anonymous"></script>
+<script>
+// Esta página existe porque o Supabase, ao autorizar o ChatGPT ou o Claude a
+// ler dados do LibMoney, redireciona o navegador para cá em vez de mostrar
+// uma tela própria — o "Authorization Path" do OAuth 2.1 Server é sempre uma
+// página do site do cliente. E ela tem login próprio, separado do app,
+// porque o app guarda a sessão dele em outro formato (outro storage, outra
+// instância do cliente Supabase); não dá para supor que uma sessão já aberta
+// no app apareça aqui.
+//
+// Chamadas confirmadas em supabase.auth.oauth (pacote @supabase/auth-js@2,
+// que o supabase-js reexporta), a partir dos tipos publicados em
+// https://cdn.jsdelivr.net/npm/@supabase/auth-js@2/dist/module/lib/types.d.ts
+// e do guia https://supabase.com/docs/guides/auth/oauth-server/getting-started:
+//   supabase.auth.oauth.getAuthorizationDetails(authorizationId: string)
+//     -> Promise<{ data, error }>, onde data é OU os detalhes do pedido
+//        ({ authorization_id, redirect_uri, client: { id, name, uri, logo_uri },
+//        user: { id, email }, scope }) OU, se a pessoa já tiver consentido
+//        antes, direto um redirecionamento ({ redirect_url }).
+//   supabase.auth.oauth.approveAuthorization(authorizationId: string)
+//     -> Promise<{ data: { redirect_url }, error }>
+//   supabase.auth.oauth.denyAuthorization(authorizationId: string)
+//     -> Promise<{ data: { redirect_url }, error }>
+// Não testado contra o recurso ligado de verdade (está em beta): o formato
+// exato do "client" e se getAuthorizationDetails pode devolver outro
+// formato de erro só dá para confirmar habilitando o OAuth Server no painel
+// e testando um pedido real do ChatGPT ou do Claude.
+
+var supabaseUrl = 'https://fuaddebijztislqypxqk.supabase.co';
+var supabasePublishableKey = 'sb_publishable_0ok6EgwVc3E2CeYVg5_nCw_VSSaQ_gq';
+// Esta é uma tela de consentimento de terceiro (ChatGPT/Claude pedindo acesso
+// à conta), não a sessão do app em /app: ela não pode reaproveitar nem gravar
+// sessão nesta origem, ou logar nesta tela deixaria uma sessão persistida
+// aberta num navegador que outra pessoa usa no mesmo aparelho.
+var supa = supabase.createClient(supabaseUrl, supabasePublishableKey, {
+  auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+});
+
+var params = new URLSearchParams(window.location.search);
+var authorizationId = params.get('authorization_id');
+
+// Qualquer um pode registrar um cliente OAuth (DCR é aberto) e chamar esse
+// cliente "ChatGPT" ou "Claude" — o nome não prova nada. O que prova é para
+// onde o navegador vai voltar depois: só aprovamos se o redirect_uri aponta
+// para um domínio real desses produtos. Hosts confirmados na documentação
+// oficial em 26/09/2026:
+//   Claude (claude.ai web/Desktop/mobile/Cowork): exatamente
+//   https://claude.ai/api/mcp/auth_callback —
+//   https://claude.com/docs/connectors/building/authentication
+//   ChatGPT (conectores): https://chatgpt.com/connector_platform_oauth_redirect
+//   (redirect estável) ou, sem suporte a identificação de emissor no
+//   servidor, https://chatgpt.com/connector/oauth/{callback_id} — ambos em
+//   chatgpt.com —
+//   https://community.openai.com/t/oauth-code-issued-correctly-but-chatgpt-com-connector-platform-oauth-redirect-returns-503-on-callback/1398404
+//   e https://apxml.com/posts/how-to-setup-oauth-chatgpt-connector
+// chat.openai.com aparece só em fluxos antigos de GPT Actions (não
+// conectores) e não em documentação atual do OAuth Server; não entra aqui.
+var HOSTS_CONFIAVEIS = ['claude.ai', 'chatgpt.com'];
+
+function hostConfiavel(host) {
+  host = host.toLowerCase();
+  return HOSTS_CONFIAVEIS.some(function (permitido) {
+    return host === permitido || host.endsWith('.' + permitido);
+  });
+}
+
+function urlConfiavel(valor) {
+  var u;
+  try {
+    u = new URL(valor);
+  } catch (e) {
+    return null;
+  }
+  if (u.protocol !== 'https:' || !hostConfiavel(u.hostname)) return null;
+  return u;
+}
+
+var telas = {
+  carregando: document.getElementById('carregando'),
+  linkInvalido: document.getElementById('link-invalido'),
+  erroPedido: document.getElementById('erro-pedido'),
+  formLogin: document.getElementById('form-login'),
+  consentimento: document.getElementById('consentimento'),
+  destinoNaoConfiavel: document.getElementById('destino-nao-confiavel'),
+};
+
+function mostrar(nome) {
+  Object.keys(telas).forEach(function (chave) {
+    telas[chave].style.display = chave === nome ? 'block' : 'none';
+  });
+}
+
+if (!authorizationId) {
+  mostrar('linkInvalido');
+} else {
+  // A sessão não é persistida (item de segurança: esta página não pode
+  // reaproveitar nem gravar sessão), então nunca há sessão antes do login no
+  // formulário — sempre começa pedindo para entrar.
+  mostrar('formLogin');
+}
+
+document.getElementById('form-login').addEventListener('submit', async function (ev) {
+  ev.preventDefault();
+  var email = document.getElementById('campo-email').value;
+  var senha = document.getElementById('campo-senha').value;
+  var erroLogin = document.getElementById('erro-login');
+  var botao = document.getElementById('botao-entrar');
+  erroLogin.style.display = 'none';
+  botao.disabled = true;
+  botao.textContent = 'Entrando…';
+  var resultado = await supa.auth.signInWithPassword({ email: email, password: senha });
+  botao.disabled = false;
+  botao.textContent = 'Entrar';
+  if (resultado.error) {
+    erroLogin.textContent = 'E-mail ou senha incorretos.';
+    erroLogin.style.display = 'block';
+    return;
+  }
+  document.getElementById('campo-senha').value = '';
+  carregarPedido();
+});
+
+var detalhesAtuais = null;
+
+async function carregarPedido() {
+  mostrar('carregando');
+  var resultado;
+  try {
+    resultado = await supa.auth.oauth.getAuthorizationDetails(authorizationId);
+  } catch (e) {
+    mostrar('erroPedido');
+    return;
+  }
+  if (resultado.error || !resultado.data) {
+    mostrar('erroPedido');
+    return;
+  }
+  var dados = resultado.data;
+  // Se a pessoa já autorizou este mesmo cliente antes, o Supabase devolve o
+  // redirecionamento direto, sem detalhes — não há consentimento novo a
+  // mostrar.
+  if (dados.redirect_url) {
+    finalizar(dados.redirect_url);
+    return;
+  }
+  detalhesAtuais = dados;
+  // O nome do cliente ("ChatGPT", "Claude") não prova nada — qualquer um
+  // pode registrar um cliente OAuth com esse nome (DCR é aberto). O que
+  // importa é para onde o navegador vai voltar depois de aprovar.
+  var destino = dados.redirect_uri ? urlConfiavel(dados.redirect_uri) : null;
+  var sessao = await supa.auth.getSession();
+  var email = sessao.data.session && sessao.data.session.user && sessao.data.session.user.email;
+  document.getElementById('nome-cliente').textContent =
+    (dados.client && dados.client.name) || 'Um aplicativo';
+  document.getElementById('email-conta').textContent = email || dados.user && dados.user.email || '';
+  if (!destino) {
+    // Fica nesta página — não mostra o botão Permitir. O deny ainda é
+    // registrado no servidor, mas só seguimos o redirect_url dele se essa
+    // URL também passar na mesma checagem; como o redirect_uri original já
+    // falhou, o redirect_url do deny quase sempre é o mesmo domínio, então
+    // o normal aqui é permanecer na página em vez de sair dela.
+    mostrar('destinoNaoConfiavel');
+    try {
+      var negado = await supa.auth.oauth.denyAuthorization(authorizationId);
+      var urlDeVoltaNegado = negado && !negado.error && negado.data && negado.data.redirect_url;
+      var destinoNegado = urlDeVoltaNegado ? urlConfiavel(urlDeVoltaNegado) : null;
+      if (destinoNegado) {
+        await supa.auth.signOut({ scope: 'local' });
+        window.location.assign(destinoNegado.href);
+      }
+    } catch (e) {
+      // sem conexão com o servidor de deny — fica na página mesmo assim.
+    }
+    return;
+  }
+  document.getElementById('destino-cliente').textContent = 'Vai voltar para: ' + destino.host;
+  mostrar('consentimento');
+}
+
+document.getElementById('trocar-conta').addEventListener('click', async function (ev) {
+  ev.preventDefault();
+  // scope 'local' desconecta só este navegador — o padrão é global e
+  // derrubaria a pessoa em todos os aparelhos por causa de um login feito
+  // nesta tela de consentimento.
+  await supa.auth.signOut({ scope: 'local' });
+  mostrar('formLogin');
+});
+
+document.getElementById('botao-permitir').addEventListener('click', function () {
+  responder(true);
+});
+document.getElementById('botao-negar').addEventListener('click', function () {
+  responder(false);
+});
+
+async function responder(permitir) {
+  var botaoPermitir = document.getElementById('botao-permitir');
+  var botaoNegar = document.getElementById('botao-negar');
+  botaoPermitir.disabled = true;
+  botaoNegar.disabled = true;
+  var resultado;
+  try {
+    resultado = permitir
+      ? await supa.auth.oauth.approveAuthorization(authorizationId)
+      : await supa.auth.oauth.denyAuthorization(authorizationId);
+  } catch (e) {
+    botaoPermitir.disabled = false;
+    botaoNegar.disabled = false;
+    mostrar('erroPedido');
+    return;
+  }
+  if (resultado.error || !resultado.data || !resultado.data.redirect_url) {
+    mostrar('erroPedido');
+    return;
+  }
+  finalizar(resultado.data.redirect_url);
+}
+
+async function finalizar(urlDeVolta) {
+  // A permissão concedida (ou negada) já está registrada no servidor; a
+  // sessão local deste navegador não precisa continuar existindo, e não
+  // convém deixar login guardado numa tela que várias pessoas podem abrir
+  // no mesmo aparelho. scope 'local' evita derrubar a pessoa em outros
+  // aparelhos.
+  await supa.auth.signOut({ scope: 'local' });
+  // Segunda checagem antes de qualquer redirecionamento: mesmo a URL que o
+  // próprio servidor devolveu só é seguida se apontar para um domínio real
+  // do ChatGPT ou do Claude — nunca confiar cegamente num redirect_url.
+  var destino = urlConfiavel(urlDeVolta);
+  if (!destino) {
+    mostrar('erroPedido');
+    return;
+  }
+  window.location.assign(destino.href);
+}
+</script>
+</body>
+</html>

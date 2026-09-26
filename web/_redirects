@@ -4,3 +4,10 @@
 # O curinga é limitado a /app de propósito. Quando era "/*", toda página de
 # divulgação abria o aplicativo.
 /app/*  /app/index.html  200
+
+# O Supabase monta o endereço da tela de autorização do conector de IA como
+# "Site URL + /oauth/consent", e a Site URL do projeto é a página abrir.html
+# (é para lá que os e-mails de confirmação levam, então ela não pode mudar).
+# Esta regra entrega a página certa nesse endereço composto, sem redirecionar
+# e sem perder o ?authorization_id=.
+/abrir.html/oauth/consent  /oauth/consent  200
