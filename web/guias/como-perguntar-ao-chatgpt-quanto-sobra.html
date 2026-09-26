@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como perguntar ao ChatGPT (ou ao Claude) quanto vai sobrar no fim do mês | LibMoney</title>
+<meta name="description" content="O ChatGPT e o Claude não veem suas contas sozinhos. Veja o que um assistente precisa saber para responder direito, como montar isso à mão, e como o LibMoney faz isso pelo conector do Claude (ChatGPT em breve).">
+<meta name="theme-color" content="#F9FCF4">
+<link rel="canonical" href="https://libmoney.com.br/guias/como-perguntar-ao-chatgpt-quanto-sobra">
+<meta property="og:title" content="Como perguntar ao ChatGPT quanto vai sobrar no fim do mês">
+<meta property="og:description" content="O que o assistente precisa saber para responder direito, e como montar isso à mão ou pelo conector do LibMoney.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://libmoney.com.br/guias/como-perguntar-ao-chatgpt-quanto-sobra">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="LibMoney">
+<meta property="og:image" content="https://libmoney.com.br/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.png">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/fontes/Baloo2.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+
+<!-- Artigo, trilha de navegação e perguntas: as perguntas repetem, palavra
+     por palavra, as do fim do texto. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Como perguntar ao ChatGPT (ou ao Claude) quanto vai sobrar no fim do mês",
+      "description": "O que um assistente de IA precisa saber para responder direito quanto vai sobrar no fim do mês, como montar isso à mão, e como o LibMoney faz isso pelo conector do Claude (ChatGPT em breve).",
+      "image": "https://libmoney.com.br/og.png",
+      "inLanguage": "pt-BR",
+      "datePublished": "2026-09-26",
+      "dateModified": "2026-09-26",
+      "author": {"@type": "Organization", "name": "LibMoney", "url": "https://libmoney.com.br/"},
+      "publisher": {"@type": "Organization", "name": "LibMoney", "logo": {"@type": "ImageObject", "url": "https://libmoney.com.br/favicon.png"}},
+      "mainEntityOfPage": "https://libmoney.com.br/guias/como-perguntar-ao-chatgpt-quanto-sobra"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Início", "item": "https://libmoney.com.br/"},
+        {"@type": "ListItem", "position": 2, "name": "Guias", "item": "https://libmoney.com.br/#guias"},
+        {"@type": "ListItem", "position": 3, "name": "Perguntar ao ChatGPT quanto sobra"}
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "Por que o ChatGPT não sabe quanto vai sobrar sozinho?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Porque ele não vê suas contas. Ele só sabe o que você escreve na conversa, e colar um extrato mostra o que já aconteceu, não o que ainda vai vencer — como a fatura do cartão ou uma parcela do mês que vem."}},
+        {"@type": "Question", "name": "O que o assistente precisa saber para responder certo?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Quatro coisas: o saldo de hoje, as entradas futuras com data, as saídas futuras com data (contas fixas e parcelas) e as faturas de cartão em aberto, com o valor e o vencimento."}},
+        {"@type": "Question", "name": "Dá para fazer isso sem o LibMoney?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Dá. Basta montar essa lista à mão e colar no chat, pedindo para o assistente somar na ordem das datas. O trabalho de montar a lista de novo a cada gasto é o que o conector do LibMoney evita."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="/guias/guia.css">
+</head>
+<body>
+
+<header class="doc-topo">
+  <div class="env">
+    <a class="marca" href="/">
+      <svg width="24" height="24" viewBox="0 0 200 200" aria-hidden="true">
+        <defs><mask id="logo-g"><circle cx="100" cy="100" r="92" fill="#fff"/>
+          <path d="M 100,-14.4 A 59.7168,59.7168 0 0 1 100,100 A 59.7168,59.7168 0 0 0 100,214.4" fill="none" stroke="#000" stroke-width="28" stroke-linecap="round" transform="rotate(28 100 100)"/></mask></defs>
+        <circle cx="100" cy="100" r="92" fill="var(--brand)" mask="url(#logo-g)"/>
+      </svg>
+      LibMoney
+    </a>
+    <a class="volta" href="/#guias">Todos os guias</a>
+  </div>
+</header>
+
+<main class="doc">
+  <nav class="trilha" aria-label="Você está em"><a href="/">Início</a> › <a href="/#guias">Guias</a> › Perguntar ao ChatGPT quanto sobra</nav>
+
+  <h1>Como perguntar ao ChatGPT (ou ao Claude) quanto vai sobrar no fim do mês</h1>
+  <p class="linha-fina">Dá para usar um assistente de IA para essa conta — mas só se ele souber o que você ainda não gastou. Sem isso, a resposta é um chute com aparência de certeza.</p>
+  <p class="data">Atualizado em 26 de setembro de 2026 · 5 minutos de leitura</p>
+
+  <div class="resumo">
+    <b>Em resumo</b>
+    <ol>
+      <li>Sozinho, o assistente não vê suas contas nem o que ainda vai vencer.</li>
+      <li>Ele precisa do saldo de hoje e de cada entrada, saída e fatura futura, com data.</li>
+      <li>Dá para montar essa lista à mão e colar no chat, com um prompt pronto.</li>
+      <li>O LibMoney monta essa lista sozinho e responde pelo conector, sem colar nada.</li>
+    </ol>
+  </div>
+
+  <h2>Por que o assistente sozinho não sabe</h2>
+  <p>Pedir "quanto vai sobrar no fim do mês?" para o ChatGPT ou para o Claude, sem mais nada, produz uma resposta genérica ou uma pergunta de volta — porque nenhum dos dois tem acesso à sua conta bancária ou ao seu aplicativo financeiro. Eles só sabem o que está na conversa.</p>
+  <p>Colar o extrato do banco parece resolver, mas o extrato mostra só o passado: o que já entrou e já saiu. Ele não tem a fatura do cartão que fecha depois de amanhã, a parcela do sofá que vence dia 15, nem o aluguel que ainda não foi debitado. Sem essas datas futuras, qualquer soma que o assistente fizer está incompleta — e o problema mora exatamente nos dias que ainda não aconteceram.</p>
+
+  <h2>O que ele precisa para responder certo</h2>
+  <p>Para chegar num número que sirva, o assistente precisa de quatro informações, cada uma com data:</p>
+  <ul>
+    <li><b>Saldo de hoje:</b> a soma do que você tem agora em conta corrente e outras contas que usa no dia a dia.</li>
+    <li><b>Entradas futuras:</b> salário, pró-labore, qualquer recebimento já certo, com o dia em que cai.</li>
+    <li><b>Saídas futuras:</b> aluguel, contas fixas e parcelas que já estão contratadas, cada uma com o dia do vencimento.</li>
+    <li><b>Faturas de cartão em aberto:</b> o valor total (não o mínimo) e o dia do vencimento.</li>
+  </ul>
+  <p>Com essas quatro coisas, a conta é simples: começar pelo saldo de hoje e ir somando e subtraindo na ordem das datas. O menor número da lista é o dia mais apertado; o último é quanto sobra.</p>
+
+  <h2>Como fazer à mão</h2>
+  <p>Monte a lista você mesmo e cole no chat. Um exemplo, com os números de um mês comum:</p>
+
+  <div class="quadro">
+    <div class="tit">Prompt para colar no ChatGPT ou no Claude</div>
+    <div class="l" style="display:block;font-family:'Nunito',sans-serif;font-weight:600;color:var(--ink-soft);line-height:1.7;white-space:pre-wrap;border-bottom:0">Hoje é 25/09. Meu saldo agora é R$ 2.730.
+
+Ainda vão acontecer, antes do fim do mês:
+- 28/09: vence a fatura do cartão, R$ 3.120 (saída)
+- 30/09: trabalho extra, R$ 1.100 (entrada)
+
+Some na ordem das datas e me diga: qual vai ser o saldo em cada uma dessas datas, qual é o dia mais apertado (o menor saldo) e quanto sobra no fim do mês.</div>
+  </div>
+
+  <p>Com esses dados, a resposta do assistente é a mesma conta do exemplo: saldo de R$ 2.730 vira <b>− R$ 390</b> no dia 28, e fecha em <b>R$ 710</b> no dia 30 — o dia mais apertado é o 28.</p>
+  <p>O que dá trabalho aqui não é a conta, é manter a lista atualizada. Toda compra nova no cartão muda o valor da fatura; toda parcela nova soma numa data futura; e refazer isso à mão, no chat, a cada poucos dias, cansa rápido.</p>
+
+  <h2>Como o LibMoney faz isso direto pelo conector</h2>
+  <p>É exatamente essa lista — saldo de hoje, entradas e saídas futuras, faturas em aberto — que o LibMoney já mantém, porque é dela que o app calcula o saldo previsto de cada dia. O conector do Sync deixa o Claude ler esse mesmo cálculo, então a pergunta vira só isso: <i>"Quanto vou ter no dia 28?"</i>, sem colar nada antes. ChatGPT chega em breve.</p>
+  <p>É só leitura: o assistente lê o saldo previsto, o dia mais apertado, as faturas em aberto e o gasto por categoria comparado ao planejado, mas não cria, não altera e não apaga nenhum lançamento — isso é garantido no banco de dados, não apenas prometido pelo assistente.</p>
+
+  <h2>Dúvidas comuns</h2>
+  <h3>Por que o ChatGPT não sabe quanto vai sobrar sozinho?</h3>
+  <p>Porque ele não vê suas contas. Ele só sabe o que você escreve na conversa, e colar um extrato mostra o que já aconteceu, não o que ainda vai vencer — como a fatura do cartão ou uma parcela do mês que vem.</p>
+  <h3>O que o assistente precisa saber para responder certo?</h3>
+  <p>Quatro coisas: o saldo de hoje, as entradas futuras com data, as saídas futuras com data (contas fixas e parcelas) e as faturas de cartão em aberto, com o valor e o vencimento.</p>
+  <h3>Dá para fazer isso sem o LibMoney?</h3>
+  <p>Dá. Basta montar essa lista à mão e colar no chat, pedindo para o assistente somar na ordem das datas. O trabalho de montar a lista de novo a cada gasto é o que o conector do LibMoney evita.</p>
+
+  <div class="chamada">
+    <h2>Pergunte direto ao Claude, sem colar nada</h2>
+    <p>Conecte o Claude ao seu LibMoney e receba o saldo de cada dia, o dia mais apertado e a fatura do cartão na hora, com os números reais da sua conta. ChatGPT em breve.</p>
+    <a class="botao" href="/assistentes-de-ia.html">Ver como conectar</a>
+    <small>Recurso do Sync. Só leitura, garantido no banco de dados.</small>
+  </div>
+
+  <h2>Leia também</h2>
+  <div class="relacionados">
+    <a href="/guias/quanto-vai-sobrar-no-fim-do-mes.html">Como saber quanto vai sobrar no fim do mês<span>A conta que mostra o dia mais apertado antes de ele chegar.</span></a>
+    <a href="/guias/como-organizar-a-fatura-do-cartao.html">Como organizar a fatura do cartão de crédito<span>Fechamento, vencimento e o método para a fatura não pegar você de surpresa.</span></a>
+  </div>
+
+  <div class="doc-pe">
+    <a href="/">Início</a>
+    <a href="/privacidade.html">Privacidade</a>
+    <a href="/termos.html">Termos de uso</a>
+    <span>© 2026 LibMoney</span>
+  </div>
+</main>
+
+</body>
+</html>

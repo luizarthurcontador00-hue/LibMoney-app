@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pergunte ao Claude (e em breve ao ChatGPT) quanto sobra no fim do mês | LibMoney</title>
+<meta name="description" content="Conecte o LibMoney ao Claude e pergunte quanto vai sobrar, qual é o dia mais apertado ou quanto está a fatura do cartão. Só leitura, garantido no banco de dados. ChatGPT em breve.">
+<meta name="theme-color" content="#F9FCF4">
+<link rel="canonical" href="https://libmoney.com.br/assistentes-de-ia">
+<meta property="og:title" content="LibMoney no Claude (e em breve no ChatGPT)">
+<meta property="og:description" content="Pergunte quanto vai sobrar, qual é o dia mais apertado ou quanto está a fatura, direto no Claude. ChatGPT em breve. Só leitura.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://libmoney.com.br/assistentes-de-ia">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="LibMoney">
+<meta property="og:image" content="https://libmoney.com.br/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.png">
+<link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/fontes/Baloo2.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/estilo.css">
+
+<!-- WebPage + FAQPage: as perguntas repetem, palavra por palavra, as da seção
+     "Dúvidas comuns" mais abaixo. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "LibMoney no Claude (e em breve no ChatGPT)",
+      "description": "Conecte o LibMoney ao Claude e pergunte quanto vai sobrar, qual é o dia mais apertado ou quanto está a fatura do cartão. Só leitura, garantido no banco de dados. ChatGPT em breve.",
+      "url": "https://libmoney.com.br/assistentes-de-ia",
+      "inLanguage": "pt-BR",
+      "isPartOf": {"@type": "WebSite", "url": "https://libmoney.com.br/"}
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "O Claude ou o ChatGPT conseguem alterar meus lançamentos?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Não. O conector é só leitura, e isso é garantido no banco de dados, não apenas no comportamento do assistente: não existe comando que crie, altere ou apague nada no seu LibMoney."}},
+        {"@type": "Question", "name": "Quem pode usar o conector com o Claude e o ChatGPT?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Quem assina o Sync (R$ 14,90/mês ou R$ 149,90/ano, por cima da Licença Vitalícia de R$ 29,90). O Claude já funciona; o ChatGPT chega em breve."}},
+        {"@type": "Question", "name": "Meus dados financeiros passam pela Anthropic ou pela OpenAI?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Sim. Para o assistente responder, os dados da consulta passam também pela empresa que faz o Claude (Anthropic) ou o ChatGPT (OpenAI), como em qualquer conector desse tipo."}},
+        {"@type": "Question", "name": "Como eu desconecto o Claude ou o ChatGPT do LibMoney?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Em Configurações › Assistentes de IA, dentro do app. Desligar a chave apaga o resumo da previsão que fica na nuvem e desconecta todos os assistentes de uma vez."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+/* Só o que esta página tem e o resto do site não: a conversa de exemplo, os
+   passos de conexão e o quadro de segurança. Reaproveita .doc, .quadro,
+   .chamada e .grupo de /estilo.css e do guia. */
+.pg-ia{max-width:900px;margin:0 auto;padding:0 24px}
+.pg-ia .cabecalho-pg{padding:clamp(48px,7vw,76px) 0 8px;text-align:center}
+.pg-ia .cabecalho-pg .sub{margin:16px auto 0;max-width:38em;text-align:center}
+.pg-ia section{padding:44px 0;border-top:1px solid var(--line)}
+.pg-ia section:first-of-type{border-top:0}
+.pg-ia h2{font-size:clamp(24px,3.4vw,32px);max-width:20em}
+.pg-ia .rotulo{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--brand-word);margin-bottom:16px;
+}
+.pg-ia .rotulo::before{content:"";width:18px;height:2px;border-radius:2px;background:var(--brand)}
+.pg-ia .sub{color:var(--ink-soft);font-size:clamp(16.5px,1.5vw,19px)}
+
+/* conversa de exemplo */
+.conversa{display:grid;gap:14px;margin-top:30px}
+.bolha-pg{max-width:80%;padding:14px 18px;border-radius:18px;font-size:15.5px;line-height:1.5}
+.bolha-pg.pergunta{justify-self:end;background:var(--brand-soft);color:var(--ink);border-bottom-right-radius:4px}
+.bolha-pg.resposta{justify-self:start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px;box-shadow:var(--sombra-1)}
+.bolha-pg b{font-family:'Baloo2',sans-serif;font-variant-numeric:tabular-nums}
+.bolha-pg .neg{color:var(--down-word)}
+.bolha-pg .pos{color:var(--brand-word)}
+@media(max-width:640px){.bolha-pg{max-width:92%}}
+
+/* como conectar */
+.colunas-conectar{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:30px}
+@media(max-width:760px){.colunas-conectar{grid-template-columns:1fr}}
+.coluna-conectar{background:var(--surface);border:1px solid var(--line);border-radius:var(--raio-g);padding:24px;box-shadow:var(--sombra-1)}
+.coluna-conectar h3{font-size:18px;display:flex;align-items:center;gap:10px}
+.coluna-conectar ol{margin:16px 0 0;padding-left:20px;display:grid;gap:10px}
+.coluna-conectar li{color:var(--ink-soft);font-size:15px;line-height:1.5}
+.coluna-conectar li b{color:var(--ink)}
+.aviso-autoriza{
+  margin-top:16px;padding:12px 14px;border-radius:12px;font-size:13.5px;line-height:1.5;
+  background:var(--warn-soft);color:var(--ink);
+}
+
+/* segurança */
+.pontos-seguranca{display:grid;gap:14px;margin-top:28px}
+.ponto-seguranca{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.ponto-seguranca .ic{width:32px;height:32px;border-radius:10px;background:var(--brand-soft);
+  display:grid;place-items:center;flex:none}
+.ponto-seguranca p{color:var(--ink-soft);font-size:15px;line-height:1.55}
+.ponto-seguranca b{color:var(--ink)}
+
+/* quem pode usar */
+.plano-sync{
+  margin-top:28px;background:var(--surface);border:1.5px solid var(--brand);border-radius:var(--raio-g);
+  padding:26px;box-shadow:var(--sombra-2);display:grid;gap:6px;
+}
+.plano-sync .nome{font-family:'Baloo2',sans-serif;font-size:19px;font-weight:800}
+.plano-sync .precos{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
+.plano-sync .precos b{font-family:'Baloo2',sans-serif;font-size:24px}
+.plano-sync .precos span{display:block;font-size:12.5px;color:var(--ink-soft);font-weight:700}
+.plano-sync .obs{font-size:14px;color:var(--ink-soft);margin-top:10px}
+
+.chamada-final-ia{
+  margin-top:10px;text-align:center;background:#241B36;color:#F2F0F7;border-radius:var(--raio-g);
+  padding:36px 28px;display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.chamada-final-ia h2{color:#fff;margin:0!important}
+.chamada-final-ia p{color:#D9D4E6!important;margin:0!important;max-width:32em}
+.chamada-final-ia small{color:#A79FC0;font-size:14px}
+</style>
+</head>
+<body>
+
+<header class="doc-topo">
+  <div class="env">
+    <a class="marca" href="/">
+      <svg width="24" height="24" viewBox="0 0 200 200" aria-hidden="true">
+        <defs><mask id="logo-g"><circle cx="100" cy="100" r="92" fill="#fff"/>
+          <path d="M 100,-14.4 A 59.7168,59.7168 0 0 1 100,100 A 59.7168,59.7168 0 0 0 100,214.4" fill="none" stroke="#000" stroke-width="28" stroke-linecap="round" transform="rotate(28 100 100)"/></mask></defs>
+        <circle cx="100" cy="100" r="92" fill="var(--brand)" mask="url(#logo-g)"/>
+      </svg>
+      LibMoney
+    </a>
+    <a class="volta" href="/#guias">Todos os guias</a>
+  </div>
+</header>
+
+<main class="pg-ia">
+
+  <div class="cabecalho-pg">
+    <p class="rotulo" style="justify-content:center">Assistentes de IA</p>
+    <h1>LibMoney no Claude (e em breve no ChatGPT)</h1>
+    <p class="sub">Pergunte "quanto vou ter no fim do mês?" e receba a resposta com os números do seu LibMoney — sem abrir o app. O assistente só lê; quem lança, altera e apaga é sempre você. Funciona com Claude; ChatGPT em breve.</p>
+  </div>
+
+  <section>
+    <h2>O que dá para perguntar</h2>
+    <p>O assistente enxerga o saldo previsto de cada dia (o mês atual e os dois seguintes), o dia mais apertado, as faturas em aberto, o gasto por categoria comparado com o planejado, e consegue buscar seus lançamentos.</p>
+    <div class="conversa">
+      <div class="bolha-pg pergunta">Quanto vou ter no dia 28?</div>
+      <div class="bolha-pg resposta">Hoje você tem <b>R$ 2.730</b>. No dia 28 vence a fatura do Cartão Roxo (R$ 3.120), e o saldo fica em <b class="neg">− R$ 390</b>. No fim do mês, com o trabalho extra do dia 30, sobra <b class="pos">R$ 710</b>.</div>
+
+      <div class="bolha-pg pergunta">Qual é o dia mais apertado do mês?</div>
+      <div class="bolha-pg resposta">O dia 28, com <b class="neg">− R$ 390</b> — por causa da fatura do Cartão Roxo vencendo antes do trabalho extra cair na conta.</div>
+
+      <div class="bolha-pg pergunta">Quanto está a fatura do cartão e quando vence?</div>
+      <div class="bolha-pg resposta">Cartão Roxo: <b>R$ 3.120,00</b> em aberto, vence em 28/09. A próxima, que fecha em 21/10 e vence em 28/10, já está em R$ 820,00.</div>
+
+      <div class="bolha-pg pergunta">Quanto gastei com mercado em setembro e quanto eu tinha planejado?</div>
+      <div class="bolha-pg resposta">Planejado: R$ 1.200. Gasto até agora: <b>R$ 1.156</b> — dentro do previsto.</div>
+
+      <div class="bolha-pg pergunta">Quais lançamentos com "farmácia" eu fiz este mês?</div>
+      <div class="bolha-pg resposta">Encontrei 1 lançamento em Farmácia neste mês: <b>R$ 130,00</b> no dia 09/09, no cartão.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Como conectar</h2>
+    <p>No app, entre em <b>Configurações › Assistentes de IA</b>, ligue a chave e copie o endereço gerado. Depois, siga o guia do assistente que você usa:</p>
+    <div class="colunas-conectar">
+      <div class="coluna-conectar">
+        <h3>Claude</h3>
+        <ol>
+          <li>Abra <b>claude.ai pelo computador</b> — pelo app do celular a conexão não termina. Depois de feita no site, ela aparece também no app.</li>
+          <li>Vá em <b>Configurações › Conectores › Adicionar conector personalizado</b>.</li>
+          <li>Cole o endereço copiado do LibMoney.</li>
+          <li>Entre com a sua conta do LibMoney e clique em <b>Permitir</b>.</li>
+        </ol>
+      </div>
+      <div class="coluna-conectar">
+        <h3>ChatGPT</h3>
+        <p style="margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.5;">Em breve. Estamos terminando os testes com o ChatGPT; por enquanto, use o Claude.</p>
+      </div>
+    </div>
+    <div class="aviso-autoriza">A tela de autorização do LibMoney mostra para onde você vai voltar: "claude.ai" ou "chatgpt.com". Só clique em Permitir se você acabou de pedir para conectar — se aparecer sem você ter feito isso, feche a tela.</div>
+  </section>
+
+  <section>
+    <h2>Segurança</h2>
+    <div class="pontos-seguranca">
+      <div class="ponto-seguranca">
+        <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z" stroke="var(--brand-word)" stroke-width="2"/></svg></span>
+        <p><b>Só leitura, garantido no banco de dados.</b> Não é apenas o assistente que se recusa a alterar algo: não existe, do lado do servidor, um jeito de criar, editar ou apagar um lançamento por essa via.</p>
+      </div>
+      <div class="ponto-seguranca">
+        <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="var(--brand-word)" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+        <p><b>Você autoriza e desconecta quando quiser.</b> Ligar e desligar fica em Configurações › Assistentes de IA. Desligar apaga o resumo da previsão que fica na nuvem e desconecta todos os assistentes de uma vez.</p>
+      </div>
+      <div class="ponto-seguranca">
+        <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="var(--brand-word)" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="var(--brand-word)" stroke-width="2"/></svg></span>
+        <p><b>A página de autorização só aceita Claude e ChatGPT.</b> Um link parecido, de outro serviço, não completa a conexão.</p>
+      </div>
+      <div class="ponto-seguranca">
+        <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z" stroke="var(--brand-word)" stroke-width="2"/></svg></span>
+        <p><b>A resposta passa também pela empresa do assistente.</b> Para o Claude ou o ChatGPT responderem, os dados da consulta trafegam também pela Anthropic ou pela OpenAI. Veja mais em <a href="/privacidade.html">Privacidade</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quem pode usar</h2>
+    <p>O conector é um recurso do <b>Sync</b>, o plano de assinatura do LibMoney para quem sincroniza entre aparelhos ou usa pelo navegador.</p>
+    <div class="plano-sync">
+      <span class="nome">Sync</span>
+      <div class="precos">
+        <div><b>R$ 14,90</b><span>por mês</span></div>
+        <div><b>R$ 149,90</b><span>por ano</span></div>
+      </div>
+      <p class="obs">Por cima da Licença Vitalícia (R$ 29,90, pagamento único). O Claude já está testado e funcionando; o ChatGPT chega em breve.</p>
+    </div>
+  </section>
+
+  <section style="border-top:0">
+    <div class="chamada-final-ia">
+      <h2>Assine o Sync e pergunte ao Claude</h2>
+      <p>Conecte o Claude ao seu LibMoney e tenha o saldo do mês, o dia mais apertado e a fatura do cartão a uma pergunta de distância. ChatGPT em breve.</p>
+      <a class="botao" href="/#preco">Ver os planos</a>
+      <small>Recurso do Sync. Só leitura, garantido no banco de dados.</small>
+    </div>
+  </section>
+
+</main>
+
+<footer style="border-top:1px solid var(--line);margin-top:0">
+  <div class="env" style="padding:32px 24px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:13.5px;color:var(--ink-soft)">
+    <a href="/" style="color:inherit">Início</a>
+    <a href="/privacidade.html" style="color:inherit">Privacidade</a>
+    <a href="/termos.html" style="color:inherit">Termos de uso</a>
+    <span>© 2026 LibMoney</span>
+  </div>
+</footer>
+
+</body>
+</html>

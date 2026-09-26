@@ -904,7 +904,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
 /* ==========================================================================
    Guias
    ========================================================================== */
-.guias-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+.guias-lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:40px}
 @media(max-width:900px){.guias-lista{grid-template-columns:1fr}}
 .guia-card{
   display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);
@@ -1618,6 +1618,12 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
         <p>A conta simples que mostra o dia mais apertado antes de ele chegar.</p>
         <span class="ler">Ler o guia →</span>
       </a>
+      <a class="guia-card rev" data-atraso="4" href="/guias/como-perguntar-ao-chatgpt-quanto-sobra.html">
+        <span class="tag">Assistentes de IA</span>
+        <h3>Como perguntar ao ChatGPT quanto vai sobrar no fim do mês</h3>
+        <p>O que o assistente precisa saber para responder certo, à mão ou pelo conector do LibMoney.</p>
+        <span class="ler">Ler o guia →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1722,6 +1728,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           <li><a href="#recursos">Recursos</a></li>
           <li><a href="#preco">Preço</a></li>
           <li><a href="/comprar.html">Comprar a licença</a></li>
+          <li><a href="/assistentes-de-ia.html">Assistentes de IA</a></li>
         </ul>
       </div>
 

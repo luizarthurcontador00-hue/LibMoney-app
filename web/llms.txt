@@ -34,8 +34,20 @@ não só "quanto tenho hoje?".
 - Privacidade: https://libmoney.com.br/privacidade
 - Termos: https://libmoney.com.br/termos
 
+## Assistentes de IA
+
+O LibMoney tem um conector que liga o app ao Claude (disponível) e ao ChatGPT
+(em breve). É só leitura, garantido no banco de dados: o assistente vê o saldo
+previsto de cada dia, o dia mais apertado, as faturas em aberto e o planejado x
+realizado por categoria, mas não cria, não altera e não apaga nada. Recurso
+do Sync (R$ 14,90/mês ou R$ 149,90/ano).
+
+- LibMoney no Claude e no ChatGPT: https://libmoney.com.br/assistentes-de-ia
+- Como perguntar ao ChatGPT (ou ao Claude) quanto vai sobrar no fim do mês: https://libmoney.com.br/guias/como-perguntar-ao-chatgpt-quanto-sobra
+
 ## Guias
 
 - Como organizar a fatura do cartão de crédito: https://libmoney.com.br/guias/como-organizar-a-fatura-do-cartao
 - Como saber quanto vai sobrar no fim do mês: https://libmoney.com.br/guias/quanto-vai-sobrar-no-fim-do-mes
 - Planilha ou app de controle financeiro?: https://libmoney.com.br/guias/planilha-ou-app-de-controle-financeiro
+- Como perguntar ao ChatGPT (ou ao Claude) quanto vai sobrar no fim do mês: https://libmoney.com.br/guias/como-perguntar-ao-chatgpt-quanto-sobra
