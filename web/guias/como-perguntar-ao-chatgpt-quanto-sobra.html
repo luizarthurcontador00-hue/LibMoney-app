@@ -129,7 +129,7 @@ Some na ordem das datas e me diga: qual vai ser o saldo em cada uma dessas datas
 
   <h2>Como o LibMoney faz isso direto pelo conector</h2>
   <p>É exatamente essa lista — saldo de hoje, entradas e saídas futuras, faturas em aberto — que o LibMoney já mantém, porque é dela que o app calcula o saldo previsto de cada dia. O conector do Sync deixa o Claude ler esse mesmo cálculo, então a pergunta vira só isso: <i>"Quanto vou ter no dia 28?"</i>, sem colar nada antes. ChatGPT chega em breve.</p>
-  <p>É só leitura: o assistente lê o saldo previsto, o dia mais apertado, as faturas em aberto e o gasto por categoria comparado ao planejado, mas não cria, não altera e não apaga nenhum lançamento — isso é garantido no banco de dados, não apenas prometido pelo assistente.</p>
+  <p>O assistente lê o saldo previsto, o dia mais apertado, as faturas em aberto e o gasto por categoria comparado ao planejado. Ele pode pedir lançamentos novos, que só são criados depois que você confirma; nunca consegue alterar ou apagar nada — isso é garantido no banco de dados, não apenas prometido pelo assistente.</p>
 
   <h2>Dúvidas comuns</h2>
   <h3>Por que o ChatGPT não sabe quanto vai sobrar sozinho?</h3>
@@ -143,7 +143,7 @@ Some na ordem das datas e me diga: qual vai ser o saldo em cada uma dessas datas
     <h2>Pergunte direto ao Claude, sem colar nada</h2>
     <p>Conecte o Claude ao seu LibMoney e receba o saldo de cada dia, o dia mais apertado e a fatura do cartão na hora, com os números reais da sua conta. ChatGPT em breve.</p>
     <a class="botao" href="/assistentes-de-ia.html">Ver como conectar</a>
-    <small>Recurso do Sync. Só leitura, garantido no banco de dados.</small>
+    <small>Recurso do Sync. Você confirma cada lançamento novo, nada é alterado nem apagado.</small>
   </div>
 
   <h2>Leia também</h2>
