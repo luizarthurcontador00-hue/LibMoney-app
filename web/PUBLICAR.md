@@ -78,3 +78,21 @@ Duas coisas fora daqui precisam saber do endereço novo:
 
 2. **`lib/sync/supabase_config.dart`**, a constante `supabaseRedirectApp`.
    Mudar isso exige gerar um APK novo.
+
+## Publicar site e APK juntos pelo script
+
+Após `python scripts/montar_site.py` e o build do APK arm64:
+
+```powershell
+.\scripts\publicar_apk.ps1 -Site .\build\site
+```
+
+O script atualiza o checkout público limpo de `LibMoney-app`, copia o APK para
+`libmoney.apk` e o conteúdo completo do site para `web/`, confere SHA-256 de
+cada arquivo e publica os dois no mesmo commit. Arquivos antigos de `web/`
+que não existem mais no build são retirados. A Cloudflare publica `web/`
+automaticamente ao receber o push. Sem `-Site`, o script publica somente o APK.
+
+`-PastaPublica` permite reutilizar um checkout limpo; origem diferente,
+commits ainda não publicados, links de arquivos/pastas e um build incompleto
+são recusados. Não edite o checkout público manualmente.
