@@ -23,7 +23,7 @@ não só "quanto tenho hoje?".
 ## Preço
 
 - Android: gratuito, sem prazo de teste ou mensalidade, com backup e recuperação.
-- Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho, compartilhar e acessar pelo navegador.
+- Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho, compartilhar, acessar pelo navegador e integrar com Claude e ChatGPT.
 
 ## Links
 
@@ -35,8 +35,7 @@ não só "quanto tenho hoje?".
 
 ## Assistentes de IA
 
-O LibMoney tem um conector que liga o app ao Claude (disponível) e ao ChatGPT
-(em breve). O assistente lê seus dados e pode pedir lançamentos novos, que só
+O LibMoney tem um conector que liga o app ao Claude e ao ChatGPT. O assistente lê seus dados e pode pedir lançamentos novos, que só
 são criados depois que você confirma — isso é garantido no banco de dados. Ele
 vê o saldo previsto de cada dia, o dia mais apertado, as faturas em aberto e o
 planejado x realizado por categoria, mas nunca consegue alterar ou apagar nada.
