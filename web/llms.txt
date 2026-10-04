@@ -1,6 +1,6 @@
 # LibMoney
 
-> App de controle financeiro pessoal, em português, para Android e navegador.
+> Controle financeiro gratuito, em português, para Android.
 > Mostra o saldo previsto de cada dia do mês: a pessoa anota salário, contas
 > fixas, parcelas e cartões, e o app coloca cada valor no dia em que ele
 > acontece, inclusive a fatura do cartão no dia do vencimento.
@@ -22,9 +22,8 @@ não só "quanto tenho hoje?".
 
 ## Preço
 
-- 7 dias grátis, sem cartão.
-- Licença Vitalícia: R$ 29,90, pagamento único, sem mensalidade.
-- Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho e no navegador.
+- Android: gratuito, sem prazo de teste ou mensalidade, com backup e recuperação.
+- Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho, compartilhar e acessar pelo navegador.
 
 ## Links
 

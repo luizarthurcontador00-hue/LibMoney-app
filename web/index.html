@@ -6,8 +6,8 @@
 <!-- O título carrega as palavras que as pessoas digitam no Google ("app de
      controle financeiro"): o slogan sozinho não é buscado por ninguém, e o
      título é o que mais pesa para o buscador decidir do que a página trata. -->
-<title>LibMoney: app de controle financeiro pessoal com saldo de cada dia</title>
-<meta name="description" content="App de controle financeiro pessoal que mostra quanto sobra em cada dia do mês, com contas, parcelas e a fatura do cartão no vencimento. 7 dias grátis, depois R$ 29,90 uma única vez, sem mensalidade.">
+<title>LibMoney — controle financeiro gratuito para Android</title>
+<meta name="description" content="Controle financeiro gratuito para Android, sem mensalidade: previsão do saldo diário, Projetado x Real, contas, parcelas e faturas.">
 <meta name="theme-color" content="#F9FCF4">
 <link rel="canonical" href="https://libmoney.com.br/">
 <meta property="og:title" content="LibMoney: saiba como o mês termina, antes de ele começar">
@@ -54,7 +54,7 @@
       "@type": "SoftwareApplication",
       "name": "LibMoney",
       "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Android, Web",
+      "operatingSystem": "Android",
       "inLanguage": "pt-BR",
       "url": "https://libmoney.com.br/",
       "image": "https://libmoney.com.br/og.png",
@@ -63,19 +63,19 @@
       "publisher": {"@id": "https://libmoney.com.br/#org"},
       "offers": {
         "@type": "Offer",
-        "name": "Licença Vitalícia",
-        "price": "29.90",
+        "name": "LibMoney para Android",
+        "price": "0",
         "priceCurrency": "BRL",
-        "description": "Pagamento único, depois de 7 dias grátis. Não vira mensalidade."
+        "description": "Controle financeiro gratuito no Android, sem mensalidade. O Sync é uma assinatura separada para web e sincronização entre aparelhos."
       }
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {"@type": "Question", "name": "O que acontece quando os 7 dias acabam?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Nada é apagado. O app passa a ser somente leitura: você continua abrindo, consultando e exportando tudo o que lançou, mas não consegue criar nem editar até comprar a licença. A licença é R$ 29,90, uma vez."}},
+        {"@type": "Question", "name": "O LibMoney é gratuito no Android?",
+         "acceptedAnswer": {"@type": "Answer", "text": "Sim. O controle financeiro completo para Android é gratuito, sem prazo de teste, cobrança ou mensalidade. Inclui backup e recuperação dos dados."}},
         {"@type": "Question", "name": "Preciso pagar todo mês?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Não. A Licença Vitalícia é um pagamento único de R$ 29,90 e não vence. O Sync é uma assinatura opcional por cima dela (R$ 14,90/mês ou R$ 149,90/ano), só para quem quer sincronizar entre aparelhos ou entrar pelo navegador — nunca é necessária para usar o app. O Premium ainda não está à venda."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "Não para usar no Android. O Sync é uma assinatura opcional de R$ 14,90 por mês ou R$ 149,90 por ano para sincronizar aparelhos, compartilhar e acessar pelo navegador."}},
         {"@type": "Question", "name": "Preciso de internet para usar?",
          "acceptedAnswer": {"@type": "Answer", "text": "Só no primeiro acesso, para entrar na conta. Depois disso o app funciona normalmente sem conexão. Quando a internet voltar, ele pode atualizar a sua cópia de segurança na nuvem."}},
         {"@type": "Question", "name": "O app se conecta ao meu banco?",
@@ -1018,8 +1018,8 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
 <div class="heroi">
   <div class="env">
     <div>
-      <span class="selo-topo"><span class="ponto"></span>O mês além do saldo de hoje</span>
-      <h1>Saiba como o mês termina.<br><span class="verde">Antes de ele começar.</span></h1>
+      <span class="selo-topo"><span class="ponto"></span>Grátis no Android, sem mensalidade</span>
+      <h1>Controle financeiro gratuito.<br><span class="verde">Feito para Android.</span></h1>
       <p class="sub">
         Anote salário, contas, parcelas e faturas. O LibMoney coloca cada valor
         no dia certo e mostra quanto deve sobrar ao longo do mês.
@@ -1032,14 +1032,14 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
             <path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16" stroke="currentColor"
                   stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Baixar para Android
+          Baixar grátis para Android
         </a>
         <a class="botao-2" href="#como">Ver como funciona</a>
       </div>
 
       <p class="abaixo-cta">
-        <b>7 dias grátis.</b> <span class="divisa"></span>
-        Depois, R$ 29,90 uma única vez. <span class="divisa"></span>
+        Grátis no Android. <span class="divisa"></span>
+        Sem prazo de teste. <span class="divisa"></span>
         Sem mensalidade.
       </p>
 
@@ -1499,7 +1499,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           <tr><td>Parcelas dos próximos meses</td><td data-o="Planilha">Uma linha por parcela</td><td data-o="App do banco">Só as daquele cartão</td><td data-o="LibMoney" class="nos"><span><span class="sim">Sim</span>, criadas nas datas certas</span></td></tr>
           <tr><td>Várias contas e bancos juntos</td><td data-o="Planilha"><span class="sim">Sim</span></td><td data-o="App do banco" class="nao">Não</td><td data-o="LibMoney" class="nos"><span class="sim">Sim</span></td></tr>
           <tr><td>Planejado x realizado por categoria</td><td data-o="Planilha">Se você montar</td><td data-o="App do banco" class="nao">Não</td><td data-o="LibMoney" class="nos"><span class="sim">Sim</span></td></tr>
-          <tr><td>Quanto custa</td><td data-o="Planilha">Grátis</td><td data-o="App do banco">Grátis</td><td data-o="LibMoney" class="nos">R$ 29,90, uma vez</td></tr>
+          <tr><td>Quanto custa</td><td data-o="Planilha">Grátis</td><td data-o="App do banco">Grátis</td><td data-o="LibMoney" class="nos">Grátis no Android</td></tr>
         </tbody>
       </table>
     </div>
@@ -1511,10 +1511,10 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">Preço</p>
-      <h2 class="rev" data-atraso="1">Use por sete dias. Depois, pague uma vez.</h2>
+      <h2 class="rev" data-atraso="1">Use o Android gratuitamente, sem mensalidade.</h2>
       <p class="sub rev" data-atraso="2">
-        Você não informa cartão para começar. A Licença Vitalícia custa
-        R$ 29,90 e não tem renovação.
+        Você não informa cartão para começar. Backup e recuperação dos dados
+        já fazem parte do LibMoney para Android.
       </p>
     </div>
 
@@ -1524,9 +1524,9 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
            criar-pagamento, que é quem cobra de verdade. -->
       <div class="plano principal rev" data-atraso="1">
         <span class="fita">Comece por aqui</span>
-        <div class="nome">Licença Vitalícia</div>
-        <div class="cifra"><strong class="num">R$ 29,90</strong><span>uma vez</span></div>
-        <p class="obs">Pagamento único. Não vence, não vira mensalidade.</p>
+        <div class="nome">Android</div>
+        <div class="cifra"><strong class="num">Grátis</strong><span>sem mensalidade</span></div>
+        <p class="obs">Sem teste, cobrança ou limite de lançamentos.</p>
 
         <ul class="lista">
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1542,11 +1542,9 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
         </ul>
 
         <a class="botao" href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">
-          Começar os 7 dias grátis
+          Baixar grátis para Android
         </a>
-        <p class="miudo">
-          Já usa o app? <a class="botao-texto" href="/comprar.html">Comprar a licença <span class="seta">→</span></a>
-        </p>
+        <p class="miudo">Já tinha Licença Vitalícia? Seus dados e direitos continuam preservados.</p>
       </div>
 
       <div class="futuros">
@@ -1568,7 +1566,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
                 Entrar pelo navegador</li>
           </ul>
           <a class="botao" href="/assinar.html">Assinar o Sync</a>
-          <p class="miudo">Precisa já ter a Licença Vitalícia — o Sync é por cima dela.</p>
+          <p class="miudo">O Sync é opcional e não é necessário para usar o Android.</p>
         </div>
 
         <div class="plano futuro rev" data-atraso="3">
@@ -1638,18 +1636,15 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
 
     <div class="perguntas rev" data-atraso="2">
       <details>
-        <summary>O que acontece quando os 7 dias acabam?<span class="mais">+</span></summary>
-        <p>Nada é apagado. O app passa a ser somente leitura: você continua
-        abrindo, consultando e exportando tudo o que lançou, mas não consegue
-        criar nem editar até comprar a licença. A licença é R$ 29,90, uma vez.</p>
+        <summary>O LibMoney é gratuito no Android?<span class="mais">+</span></summary>
+        <p>Sim. Você pode usar as finanças completas no Android sem prazo de
+        teste, cobrança ou mensalidade. Backup e recuperação dos dados já estão incluídos.</p>
       </details>
       <details>
         <summary>Preciso pagar todo mês?<span class="mais">+</span></summary>
-        <p>Não. A Licença Vitalícia é um pagamento único de R$ 29,90 e não
-        vence. O Sync é uma assinatura opcional por cima dela (R$ 14,90/mês
-        ou R$ 149,90/ano), só para quem quer sincronizar entre aparelhos ou
-        entrar pelo navegador — nunca é necessária para usar o app. O
-        Premium ainda não está à venda.</p>
+        <p>Não para usar no Android. O Sync é uma assinatura opcional de
+        R$ 14,90/mês ou R$ 149,90/ano para sincronizar entre aparelhos,
+        compartilhar e entrar pelo navegador.</p>
       </details>
       <details>
         <summary>Preciso de internet para usar?<span class="mais">+</span></summary>
@@ -1692,13 +1687,13 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           <path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16" stroke="currentColor"
                 stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Baixar para Android
+        Baixar grátis para Android
       </a>
       <a class="botao-2" href="/app/">Já uso, quero entrar</a>
     </div>
     <p class="abaixo-cta rev" data-atraso="3" style="justify-content:center">
-      <b>7 dias grátis.</b> <span class="divisa"></span>
-      Sem cartão para começar. <span class="divisa"></span>
+      <b>Grátis no Android.</b> <span class="divisa"></span>
+      Sem prazo de teste. <span class="divisa"></span>
       Android. Versão para iPhone em preparação.
     </p>
   </div>
@@ -1763,7 +1758,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
      sai da tela e some quando a chamada final aparece: no meio da página,
      quem decidiu baixar não precisa voltar lá em cima. -->
 <div class="barra-fixa" id="barraFixa" aria-hidden="true">
-  <span><b>7 dias grátis</b> · depois R$ 29,90, uma vez</span>
+  <span><b>Grátis no Android</b> · sem mensalidade</span>
   <a class="botao" id="barraFixaBotao" tabindex="-1"
      href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">Baixar</a>
 </div>
