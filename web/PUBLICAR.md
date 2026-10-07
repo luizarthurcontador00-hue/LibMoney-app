@@ -71,10 +71,20 @@ até ser publicado explicitamente no repositório de downloads.
 
 Duas coisas fora daqui precisam saber do endereço novo:
 
-1. **Supabase** → Authentication → URL Configuration: mantenha
-   `https://libmoney.com.br/abrir.html` nas Redirect URLs. Não mantenha
-   endereços de hospedagens aposentadas: versões do aplicativo que dependiam
-   deles devem ser atualizadas.
+1. **Supabase** → Authentication → URL Configuration: mantenha estas duas
+   URLs exatas nas Redirect URLs:
+
+   ```
+   https://libmoney.com.br/abrir.html
+   https://libmoney.com.br/app/
+   ```
+
+   A primeira devolve confirmações e recuperação de senha ao aplicativo
+   Android. A segunda é o retorno do login com Google no navegador. O
+   `redirectTo` do app precisa estar na lista do Supabase; caso contrário a
+   autenticação pode até terminar no Google, mas não volta para a sessão do
+   LibMoney. Não mantenha endereços de hospedagens aposentadas: versões do
+   aplicativo que dependiam deles devem ser atualizadas.
 
 2. **`lib/sync/supabase_config.dart`**, a constante `supabaseRedirectApp`.
    Mudar isso exige gerar um APK novo.
