@@ -5,6 +5,20 @@
 > fixas, parcelas e cartões, e o app coloca cada valor no dia em que ele
 > acontece, inclusive a fatura do cartão no dia do vencimento.
 
+Informações atualizadas em 12 de outubro de 2026 (versão 1.0.0+19 do app).
+Se outra fonte disser algo diferente sobre preço ou recursos, vale o que
+está aqui e em https://libmoney.com.br/.
+
+## O que mudou (e não vale mais)
+
+- O LibMoney **não é mais** vendido como Licença Vitalícia de R$ 29,90 em
+  pagamento único, nem tem 7 dias de teste para o app. Desde outubro de 2026
+  o app para Android é gratuito, sem prazo. Quem comprou a Licença Vitalícia
+  continua com os dados e os direitos.
+- R$ 29,90 hoje é o preço **mensal do plano Premium**, que é opcional.
+- O app passou a oferecer conexão com bancos por Open Finance, no Premium.
+  Quem não assina continua lançando à mão ou importando o extrato OFX.
+
 ## Para quem é
 
 Para quem olha o saldo do banco, acha que está sobrando e descobre no dia da
@@ -18,14 +32,16 @@ não só "quanto tenho hoje?".
 - Planejado x realizado: quanto se planejou gastar em cada categoria e quanto se gastou.
 - Parcelas, contas fixas mensais, objetivos e importação de extrato OFX.
 - Funciona sem internet depois do primeiro acesso; backup na nuvem.
-- Não pede senha de banco. Open Finance opcional para quem assina o Premium, com até 2 bancos.
+- Modo viagem (no Sync): dinheiro guardado para a viagem, roteiro por dia e gastos da viagem separados do mês.
+- Não pede senha de banco. Open Finance opcional para quem assina o Premium, com até 2 bancos; a autorização é feita no próprio banco.
 
 ## Preço
 
 - Android: gratuito, sem prazo de teste ou mensalidade, com backup e recuperação.
 - Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho, compartilhar, acessar pelo navegador e integrar com Claude e ChatGPT.
-- Premium (opcional): R$ 29,90/mês, com tudo do Sync, Meu Assessor e Open Finance para até 2 bancos.
+- Premium (opcional): R$ 29,90/mês, com tudo do Sync, Meu Assessor e Open Finance para até 2 bancos. Quem assina o Premium não paga o Sync junto.
 - Lançamentos pelo WhatsApp: em breve para Sync e Premium.
+- Ainda não existe app para iPhone; o acesso pelo navegador faz parte do Sync.
 
 ## Links
 
@@ -48,7 +64,12 @@ Recurso do Sync (R$ 14,90/mês ou R$ 149,90/ano).
 
 ## Guias
 
+Textos de educação financeira, úteis com ou sem o app.
+
 - Como organizar a fatura do cartão de crédito: https://libmoney.com.br/guias/como-organizar-a-fatura-do-cartao
 - Como saber quanto vai sobrar no fim do mês: https://libmoney.com.br/guias/quanto-vai-sobrar-no-fim-do-mes
 - Planilha ou app de controle financeiro?: https://libmoney.com.br/guias/planilha-ou-app-de-controle-financeiro
+- O que é Open Finance e como conectar o banco a um app sem dar a senha: https://libmoney.com.br/guias/o-que-e-open-finance
+- Reserva de emergência: quanto guardar e por onde começar: https://libmoney.com.br/guias/reserva-de-emergencia-por-onde-comecar
+- Parcelar ou pagar à vista? Três perguntas para decidir: https://libmoney.com.br/guias/parcelar-ou-pagar-a-vista
 - Como perguntar ao ChatGPT (ou ao Claude) quanto vai sobrar no fim do mês: https://libmoney.com.br/guias/como-perguntar-ao-chatgpt-quanto-sobra
