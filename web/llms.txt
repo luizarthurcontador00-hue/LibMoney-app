@@ -18,12 +18,14 @@ não só "quanto tenho hoje?".
 - Planejado x realizado: quanto se planejou gastar em cada categoria e quanto se gastou.
 - Parcelas, contas fixas mensais, objetivos e importação de extrato OFX.
 - Funciona sem internet depois do primeiro acesso; backup na nuvem.
-- Não pede senha de banco. Open Finance opcional para quem assina o Sync.
+- Não pede senha de banco. Open Finance opcional para quem assina o Premium, com até 2 bancos.
 
 ## Preço
 
 - Android: gratuito, sem prazo de teste ou mensalidade, com backup e recuperação.
 - Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho, compartilhar, acessar pelo navegador e integrar com Claude e ChatGPT.
+- Premium (opcional): R$ 29,90/mês, com tudo do Sync, Meu Assessor e Open Finance para até 2 bancos.
+- Lançamentos pelo WhatsApp: em breve para Sync e Premium.
 
 ## Links
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Assinar o Sync | LibMoney</title>
+<title>Assinar um plano | LibMoney</title>
 <link rel="icon" href="/favicon.png">
 <meta name="robots" content="noindex">
 <link rel="preload" href="/fontes/Nunito.ttf" as="font" type="font/ttf" crossorigin>
@@ -58,38 +58,40 @@
       </a>
     </div>
 
-    <h1>Sync</h1>
-    <p class="sub">Sincronize entre aparelhos, entre pelo navegador e use o LibMoney com Claude e ChatGPT.</p>
-
-    <ul class="lista">
-      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Sincronização automática dos seus dados</li>
-      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Usar em mais de um aparelho</li>
-      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Entrar pelo navegador</li>
-      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Integração com Claude e ChatGPT</li>
-    </ul>
-
-    <hr class="risca">
+    <h1>Escolha seu plano</h1>
+    <p class="sub">O Android continua gratuito. Assine só se quiser os recursos extras.</p>
 
     <form id="form">
-      <div class="periodos" role="radiogroup" aria-label="Período da assinatura">
+      <div class="periodos" role="radiogroup" aria-label="Plano e período da assinatura">
         <label class="periodo">
-          <input type="radio" name="periodo" value="mensal" checked>
-          <div class="rotulo">Mensal</div>
+          <input type="radio" name="oferta" value="sync-mensal" data-plano="sync" data-periodo="mensal" checked>
+          <div class="rotulo">Sync mensal</div>
           <div class="valor">R$ 14,90</div>
           <div class="cada">por mês</div>
         </label>
         <label class="periodo">
-          <input type="radio" name="periodo" value="anual">
-          <div class="rotulo">Anual</div>
+          <input type="radio" name="oferta" value="sync-anual" data-plano="sync" data-periodo="anual">
+          <div class="rotulo">Sync anual</div>
           <div class="valor">R$ 149,90</div>
           <div class="cada">por ano</div>
           <span class="economize">2 meses de desconto</span>
         </label>
+        <label class="periodo" style="grid-column:1/-1">
+          <input type="radio" name="oferta" value="premium-mensal" data-plano="premium" data-periodo="mensal">
+          <div class="rotulo">Premium mensal</div>
+          <div class="valor">R$ 29,90</div>
+          <div class="cada">por mês · inclui Sync, Meu Assessor e até 2 conexões bancárias por Open Finance</div>
+        </label>
       </div>
+
+      <ul class="lista">
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Sync: sincronização, navegador, compartilhamento e Claude/ChatGPT</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Premium: tudo do Sync, Meu Assessor e Open Finance</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Lançamentos pelo WhatsApp em breve nos dois planos</li>
+      </ul>
 
       <label class="campo" for="email">Seu e-mail do LibMoney</label>
       <input id="email" type="email" autocomplete="email" required
@@ -105,7 +107,7 @@
     <div id="aviso" class="recado"></div>
 
     <p class="pe-caixa">
-      O Android é gratuito. Assine o Sync quando quiser usar os recursos pagos.<br>
+      O Android é gratuito. Assine apenas se quiser os recursos pagos.<br>
       Ainda não tem conta? <a href="/app/">Crie no app</a> e volte aqui.
     </p>
   </div>
@@ -135,7 +137,9 @@ form.addEventListener('submit', async (e) => {
   mostrar('', '');
 
   try {
-    const periodo = form.periodo.value;
+    const oferta = form.querySelector('input[name="oferta"]:checked');
+    const plano = oferta.dataset.plano;
+    const periodo = oferta.dataset.periodo;
 
     // Mesma regra de comprar.html: o id de quem assina nunca vem de um
     // campo desta página, só do token da sessão criada aqui.
@@ -152,6 +156,7 @@ form.addEventListener('submit', async (e) => {
     const { data, error } = await supabase.functions.invoke('criar-assinatura', {
       body: {
         periodo,
+        plano,
         voltar_para: location.origin + '/obrigado-assinatura.html',
       },
     });
@@ -171,6 +176,11 @@ form.addEventListener('submit', async (e) => {
     botao.textContent = 'Ir para o pagamento';
   }
 });
+
+const premiumPedido = new URLSearchParams(location.search).get('plano') === 'premium';
+if (premiumPedido) {
+  form.querySelector('input[value="premium-mensal"]').checked = true;
+}
 </script>
 </body>
 </html>

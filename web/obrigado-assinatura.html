@@ -12,7 +12,7 @@
 <!--
   Irmã de obrigado.html, para a assinatura em vez do pagamento único.
 
-  Mesma regra: esta página não libera nada. Quem concede o Sync é o webhook,
+  Mesma regra: esta página não libera nada. Quem concede o plano é o webhook,
   no servidor, depois de conferir a assinatura com o próprio Mercado Pago.
   Aqui só se pergunta, algumas vezes seguidas, se já chegou.
 -->
@@ -67,11 +67,12 @@ const carta = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none">
   <path d="m3.5 7 8.5 6 8.5-6" stroke="#3F7A1F" stroke-width="2"
         stroke-linejoin="round"/></svg>`;
 
-function pronto() {
+function pronto(premium) {
   selo.innerHTML = certo;
-  titulo.textContent = 'Sync ativado';
-  texto.innerHTML = 'A partir de agora seus dados sincronizam entre '
-    + 'aparelhos, e você pode entrar pelo navegador.'
+  titulo.textContent = premium ? 'Premium ativado' : 'Sync ativado';
+  texto.innerHTML = premium
+    ? 'A partir de agora você tem Sync, Meu Assessor e pode conectar até 2 bancos pelo Open Finance.'
+    : 'A partir de agora seus dados sincronizam entre aparelhos, e você pode entrar pelo navegador.'
     + '<br><a class="botao" href="/app/">Abrir o LibMoney</a>';
 }
 
@@ -79,7 +80,7 @@ function demorando() {
   selo.innerHTML = carta;
   titulo.textContent = 'Assinatura recebida';
   texto.innerHTML = 'A confirmação do banco às vezes demora alguns minutos. '
-    + 'Assim que chegar, o Sync aparece no app sem exigir outra ação.'
+    + 'Assim que chegar, seu plano aparece no app sem exigir outra ação.'
     + '<br><a class="botao" href="/app/">Abrir o LibMoney</a>'
     + '<br><a class="voltar" href="/assinar.html">Voltar</a>';
 }
@@ -90,7 +91,7 @@ const esperas = [1500, 2000, 3000, 4000, 5000, 6000];
   for (const espera of esperas) {
     try {
       const { data } = await supabase.rpc('meus_direitos');
-      if (data && data.sync === true) return pronto();
+      if (data && data.sync === true) return pronto(data.premium === true);
     } catch (_) {
       // Sem sessão nesta aba, ou rede oscilando: segue tentando.
     }

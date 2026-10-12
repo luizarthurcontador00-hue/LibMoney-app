@@ -77,11 +77,11 @@
         {"@type": "Question", "name": "O LibMoney é gratuito no Android?",
          "acceptedAnswer": {"@type": "Answer", "text": "Sim. O controle financeiro completo para Android é gratuito, sem prazo de teste, cobrança ou mensalidade. Inclui backup e recuperação dos dados."}},
         {"@type": "Question", "name": "Preciso pagar todo mês?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Não para usar no Android. O Sync é uma assinatura opcional de R$ 14,90 por mês ou R$ 149,90 por ano para sincronizar aparelhos, compartilhar e acessar pelo navegador."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "Não para usar no Android. O Sync é uma assinatura opcional de R$ 14,90 por mês ou R$ 149,90 por ano para sincronizar aparelhos, compartilhar e acessar pelo navegador. O Premium custa R$ 29,90 por mês e inclui Meu Assessor e Open Finance."}},
         {"@type": "Question", "name": "Preciso de internet para usar?",
          "acceptedAnswer": {"@type": "Answer", "text": "Só no primeiro acesso, para entrar na conta. Depois disso o app funciona normalmente sem conexão. Quando a internet voltar, ele pode atualizar a sua cópia de segurança na nuvem."}},
         {"@type": "Question", "name": "O app se conecta ao meu banco?",
-         "acceptedAnswer": {"@type": "Answer", "text": "No Android gratuito, você lança os valores à mão ou importa um extrato OFX. Quem assina o Sync pode escolher a integração opcional por Open Finance, autorizada no próprio banco. O LibMoney não pede nem guarda a senha do banco."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "No Android gratuito, você lança os valores à mão ou importa um extrato OFX. No Premium, você pode conectar até 2 bancos por Open Finance, com autorização no próprio banco. O LibMoney não pede nem guarda a senha do banco."}},
         {"@type": "Question", "name": "Tem para iPhone?",
          "acceptedAnswer": {"@type": "Answer", "text": "Ainda não. Hoje o aplicativo instalado é para Android. O acesso pelo navegador faz parte do Sync, que já pode ser assinado."}},
         {"@type": "Question", "name": "Por que o Android avisa que é de fonte desconhecida?",
@@ -1550,11 +1550,9 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       </div>
 
       <div class="futuros">
-        <!-- O valor do Sync está definido aqui, em
-             lib/features/licenca/tela_licenca.dart e na Edge Function
-             criar-assinatura, que é quem cobra de verdade — os três lugares
-             mudam juntos. Premium continua sem valor: anunciar um número
-             ali venderia o que ninguém consegue pagar ainda. -->
+        <!-- Os valores também estão na tela de planos e na Edge Function que
+             cria a cobrança. O servidor continua sendo a fonte do valor,
+             para uma página alterada no navegador nunca escolher o preço. -->
         <div class="plano rev" data-atraso="2">
           <div class="nome">Sync</div>
           <div class="cifra"><strong class="num">R$ 14,90</strong><span>por mês</span></div>
@@ -1566,26 +1564,31 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
                 Usar em mais de um aparelho</li>
             <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Entrar pelo navegador</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Lançamentos pelo WhatsApp <span class="emBreve">Em breve</span></li>
           </ul>
           <a class="botao" href="/assinar.html">Assinar o Sync</a>
           <p class="miudo">O Sync é opcional e não é necessário para usar o Android.</p>
         </div>
 
-        <div class="plano futuro rev" data-atraso="3">
-          <div class="nome">Premium <span class="emBreve">Em breve</span></div>
-          <p class="obs" style="margin-top:6px">Inclui o Sync e os recursos abaixo.</p>
+        <div class="plano rev" data-atraso="3">
+          <div class="nome">Premium</div>
+          <div class="cifra"><strong class="num">R$ 29,90</strong><span>por mês</span></div>
+          <p class="obs">Inclui tudo do Sync e os recursos abaixo. Cancele quando quiser.</p>
           <ul class="lista">
             <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Meu Assessor: acompanhamento com um assessor financeiro</li>
             <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Conexão com bancos por Open Finance</li>
+                Open Finance: conecte até 2 bancos</li>
+            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Lançamentos pelo WhatsApp <span class="emBreve">Em breve</span></li>
           </ul>
+          <a class="botao" href="/assinar.html?plano=premium">Assinar o Premium</a>
         </div>
 
         <p class="nota-futuros rev" data-atraso="4">
-          O Premium ainda não está à venda e não tem valor definido. Cancelar
-          o Sync ou o Premium, quando existir, nunca tira a sua licença nem os
-          seus lançamentos.
+          Cancelar o Sync ou o Premium nunca tira a sua licença nem os seus
+          lançamentos. O Android continua gratuito.
         </p>
       </div>
     </div>
@@ -1646,7 +1649,8 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
         <summary>Preciso pagar todo mês?<span class="mais">+</span></summary>
         <p>Não para usar no Android. O Sync é uma assinatura opcional de
         R$ 14,90/mês ou R$ 149,90/ano para sincronizar entre aparelhos,
-        compartilhar e entrar pelo navegador.</p>
+        compartilhar e entrar pelo navegador. O Premium custa R$ 29,90/mês e
+        inclui Meu Assessor e Open Finance para até 2 bancos.</p>
       </details>
       <details>
         <summary>Preciso de internet para usar?<span class="mais">+</span></summary>
