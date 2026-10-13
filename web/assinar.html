@@ -82,6 +82,12 @@
           <div class="valor">R$ 29,90</div>
           <div class="cada">por mês · inclui Sync, Meu Assessor e até 2 conexões bancárias por Open Finance</div>
         </label>
+        <label class="periodo" id="open-finance" style="grid-column:1/-1;display:none">
+          <input type="radio" name="oferta" value="open-finance-mensal" data-plano="open_finance" data-periodo="mensal">
+          <div class="rotulo">Conexão Open Finance</div>
+          <div class="valor">R$ 10,00</div>
+          <div class="cada">por mês, por banco conectado · disponível para Premium liberado por cortesia</div>
+        </label>
       </div>
 
       <ul class="lista">
@@ -177,9 +183,15 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-const premiumPedido = new URLSearchParams(location.search).get('plano') === 'premium';
-if (premiumPedido) {
+const planoPedido = new URLSearchParams(location.search).get('plano');
+if (planoPedido === 'premium') {
   form.querySelector('input[value="premium-mensal"]').checked = true;
+}
+if (planoPedido === 'open_finance') {
+  document.getElementById('open-finance').style.display = '';
+  form.querySelector('input[value="open-finance-mensal"]').checked = true;
+  document.querySelector('h1').textContent = 'Adicionar conexão bancária';
+  document.querySelector('.sub').textContent = 'R$ 10,00 por mês para cobrir uma conexão Open Finance.';
 }
 </script>
 </body>
