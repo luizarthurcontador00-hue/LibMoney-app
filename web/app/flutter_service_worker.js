@@ -1,31 +1,20 @@
-'use strict';
-
-self.addEventListener('install', () => {
-  self.skipWaiting();
-});
+// Migração única para quem ainda está controlado pelo service worker antigo.
+// O banco financeiro mora no IndexedDB; aqui saem apenas caches de arquivos
+// estáticos criados pelo próprio Flutter.
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    (async () => {
-      try {
-        await self.registration.unregister();
-      } catch (e) {
-        console.warn('Failed to unregister the service worker:', e);
-      }
+  event.waitUntil((async () => {
+    const nomes = await caches.keys();
+    await Promise.all(
+      nomes
+        .filter((nome) => nome.startsWith('flutter-'))
+        .map((nome) => caches.delete(nome)),
+    );
 
-      try {
-        const clients = await self.clients.matchAll({
-          type: 'window',
-        });
-        // Reload clients to ensure they are not using the old service worker.
-        clients.forEach((client) => {
-          if (client.url && 'navigate' in client) {
-            client.navigate(client.url);
-          }
-        });
-      } catch (e) {
-        console.warn('Failed to navigate some service worker clients:', e);
-      }
-    })()
-  );
+    await self.clients.claim();
+    const janelas = await self.clients.matchAll({ type: 'window' });
+    await self.registration.unregister();
+    await Promise.all(janelas.map((janela) => janela.navigate(janela.url)));
+  })());
 });
