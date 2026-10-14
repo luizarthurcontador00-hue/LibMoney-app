@@ -41,6 +41,13 @@
     display:inline-block;margin-top:4px;font-size:11px;font-weight:800;
     color:var(--brand-word);
   }
+  .periodo .valor small{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--ink-soft)}
+  .periodo .valor{white-space:nowrap;font-size:22px}
+  .grupo-plano{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin-top:6px}
+  .grupo-plano b{font-size:15px}
+  .grupo-plano .selo{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    background:var(--brand);color:var(--on-brand);padding:3px 9px;border-radius:999px}
+  .total{font-size:13.5px;color:var(--ink-soft);margin:-8px 0 18px;min-height:1.4em}
 </style>
 </head>
 <body>
@@ -63,38 +70,54 @@
 
     <form id="form">
       <div class="periodos" role="radiogroup" aria-label="Plano e período da assinatura">
+        <div class="grupo-plano"><b>Premium</b><span class="selo">Recomendado</span></div>
         <label class="periodo">
-          <input type="radio" name="oferta" value="sync-mensal" data-plano="sync" data-periodo="mensal" checked>
-          <div class="rotulo">Sync mensal</div>
-          <div class="valor">R$ 14,90</div>
-          <div class="cada">por mês</div>
+          <input type="radio" name="oferta" value="premium-anual" data-plano="premium" data-periodo="anual"
+                 data-total="Cobrança anual de R$ 238,80. Renova uma vez por ano até você cancelar." checked>
+          <div class="rotulo">Anual</div>
+          <div class="valor">R$&nbsp;19,90<small>/mês</small></div>
+          <div class="cada">cobrança anual</div>
+          <span class="economize">economize R$ 120 por ano</span>
         </label>
         <label class="periodo">
-          <input type="radio" name="oferta" value="sync-anual" data-plano="sync" data-periodo="anual">
-          <div class="rotulo">Sync anual</div>
-          <div class="valor">R$ 149,90</div>
-          <div class="cada">por ano</div>
-          <span class="economize">2 meses de desconto</span>
+          <input type="radio" name="oferta" value="premium-mensal" data-plano="premium" data-periodo="mensal"
+                 data-total="Cobrança de R$ 29,90 por mês. Cancele quando quiser.">
+          <div class="rotulo">Mensal</div>
+          <div class="valor">R$&nbsp;29,90<small>/mês</small></div>
+          <div class="cada">cancele quando quiser</div>
         </label>
-        <label class="periodo" style="grid-column:1/-1">
-          <input type="radio" name="oferta" value="premium-mensal" data-plano="premium" data-periodo="mensal">
-          <div class="rotulo">Premium mensal</div>
-          <div class="valor">R$ 29,90</div>
-          <div class="cada">por mês · inclui Sync, Meu Assessor e até 2 conexões bancárias por Open Finance</div>
+
+        <div class="grupo-plano"><b>Sync</b></div>
+        <label class="periodo">
+          <input type="radio" name="oferta" value="sync-anual" data-plano="sync" data-periodo="anual"
+                 data-total="Cobrança anual de R$ 149,90. Renova uma vez por ano até você cancelar.">
+          <div class="rotulo">Anual</div>
+          <div class="valor">R$&nbsp;12,49<small>/mês</small></div>
+          <div class="cada">cobrança anual</div>
+          <span class="economize">economize R$ 28,90 por ano</span>
+        </label>
+        <label class="periodo">
+          <input type="radio" name="oferta" value="sync-mensal" data-plano="sync" data-periodo="mensal"
+                 data-total="Cobrança de R$ 14,90 por mês. Cancele quando quiser.">
+          <div class="rotulo">Mensal</div>
+          <div class="valor">R$&nbsp;14,90<small>/mês</small></div>
+          <div class="cada">cancele quando quiser</div>
         </label>
         <label class="periodo" id="open-finance" style="grid-column:1/-1;display:none">
-          <input type="radio" name="oferta" value="open-finance-mensal" data-plano="open_finance" data-periodo="mensal">
+          <input type="radio" name="oferta" value="open-finance-mensal" data-plano="open_finance" data-periodo="mensal"
+                 data-total="Cobrança de R$ 10,00 por mês, por banco conectado.">
           <div class="rotulo">Conexão Open Finance</div>
           <div class="valor">R$ 10,00</div>
           <div class="cada">por mês, por banco conectado · disponível para Premium liberado por cortesia</div>
         </label>
       </div>
+      <p class="total" id="total" aria-live="polite"></p>
 
       <ul class="lista">
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Sync: sincronização, navegador, compartilhamento e Claude/ChatGPT</li>
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Premium: tudo do Sync, Meu Assessor e Open Finance</li>
+          Premium: tudo do Sync, Meu Assessor e Open Finance com até 2 bancos</li>
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Lançamentos pelo WhatsApp em breve nos dois planos</li>
       </ul>
@@ -183,9 +206,14 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-const planoPedido = new URLSearchParams(location.search).get('plano');
-if (planoPedido === 'premium') {
-  form.querySelector('input[value="premium-mensal"]').checked = true;
+// O app e a página inicial mandam o plano e o período escolhidos lá. Sem
+// período, vale o anual, que é o que as duas telas destacam.
+const pedido = new URLSearchParams(location.search);
+const planoPedido = pedido.get('plano');
+const periodoPedido = pedido.get('periodo') === 'mensal' ? 'mensal' : 'anual';
+if (planoPedido === 'premium' || planoPedido === 'sync') {
+  const escolhida = form.querySelector(`input[value="${planoPedido}-${periodoPedido}"]`);
+  if (escolhida) escolhida.checked = true;
 }
 if (planoPedido === 'open_finance') {
   document.getElementById('open-finance').style.display = '';
@@ -193,6 +221,14 @@ if (planoPedido === 'open_finance') {
   document.querySelector('h1').textContent = 'Adicionar conexão bancária';
   document.querySelector('.sub').textContent = 'R$ 10,00 por mês para cobrir uma conexão Open Finance.';
 }
+
+const total = document.getElementById('total');
+function mostrarTotal() {
+  const oferta = form.querySelector('input[name="oferta"]:checked');
+  total.textContent = oferta?.dataset.total ?? '';
+}
+form.addEventListener('change', mostrarTotal);
+mostrarTotal();
 </script>
 </body>
 </html>

@@ -39,7 +39,7 @@ não só "quanto tenho hoje?".
 
 - Android: gratuito, sem prazo de teste ou mensalidade, com backup e recuperação.
 - Sync (opcional): R$ 14,90/mês ou R$ 149,90/ano, para usar em mais de um aparelho, compartilhar, acessar pelo navegador e integrar com Claude e ChatGPT.
-- Premium (opcional): R$ 29,90/mês, com tudo do Sync, Meu Assessor e Open Finance para até 2 bancos. Quem assina o Premium não paga o Sync junto.
+- Premium (opcional): R$ 29,90/mês ou R$ 238,80/ano (R$ 19,90/mês no anual), com tudo do Sync, Meu Assessor e Open Finance para até 2 bancos. Quem assina o Premium não paga o Sync junto.
 - Lançamentos pelo WhatsApp: em breve para Sync e Premium.
 - Ainda não existe app para iPhone; o acesso pelo navegador faz parte do Sync.
 

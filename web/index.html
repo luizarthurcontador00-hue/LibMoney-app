@@ -61,7 +61,7 @@
       "description": "App de controle financeiro pessoal que mostra o saldo previsto de cada dia do mês, com contas fixas, parcelas e a fatura do cartão de crédito no dia do vencimento, e compara o planejado com o realizado.",
       "featureList": "Saldo previsto de cada dia; fatura do cartão descontada no vencimento; planejado x realizado por categoria; controle de parcelas; objetivos; importação de extrato OFX; funciona sem internet; Open Finance com até 2 bancos e Meu Assessor (Premium)",
       "softwareVersion": "Android",
-      "dateModified": "2026-10-12",
+      "dateModified": "2026-10-14",
       "isAccessibleForFree": true,
       "publisher": {"@id": "https://libmoney.com.br/#org"},
       "offers": [
@@ -92,6 +92,13 @@
           "price": "29.90",
           "priceCurrency": "BRL",
           "description": "Assinatura opcional: tudo do Sync, Meu Assessor e Open Finance com até 2 bancos, com autorização no próprio banco. R$ 29,90 por mês."
+        },
+        {
+          "@type": "Offer",
+          "name": "LibMoney Premium (anual)",
+          "price": "238.80",
+          "priceCurrency": "BRL",
+          "description": "O mesmo Premium, pago por ano: R$ 19,90 por mês, cobrados R$ 238,80 de uma vez."
         }
       ]
     },
@@ -101,7 +108,7 @@
         {"@type": "Question", "name": "O LibMoney é gratuito no Android?",
          "acceptedAnswer": {"@type": "Answer", "text": "Sim. O controle financeiro completo para Android é gratuito, sem prazo de teste, cobrança ou mensalidade. Inclui backup e recuperação dos dados."}},
         {"@type": "Question", "name": "Preciso pagar todo mês?",
-         "acceptedAnswer": {"@type": "Answer", "text": "Não para usar no Android. O Sync é uma assinatura opcional de R$ 14,90 por mês ou R$ 149,90 por ano para sincronizar aparelhos, compartilhar e acessar pelo navegador. O Premium custa R$ 29,90 por mês e inclui Meu Assessor e Open Finance."}},
+         "acceptedAnswer": {"@type": "Answer", "text": "Não para usar no Android. O Sync é uma assinatura opcional de R$ 14,90 por mês ou R$ 149,90 por ano para sincronizar aparelhos, compartilhar e acessar pelo navegador. O Premium custa R$ 29,90 por mês, ou R$ 19,90 por mês no plano anual (R$ 238,80 por ano), e inclui Meu Assessor e Open Finance."}},
         {"@type": "Question", "name": "Preciso de internet para usar?",
          "acceptedAnswer": {"@type": "Answer", "text": "Só no primeiro acesso, para entrar na conta. Depois disso o app funciona normalmente sem conexão. Quando a internet voltar, ele pode atualizar a sua cópia de segurança na nuvem."}},
         {"@type": "Question", "name": "O app se conecta ao meu banco?",
@@ -784,6 +791,46 @@ section{padding:var(--passo) 0;position:relative}
 .plano.futuro .lista{margin-top:16px}
 .plano.futuro .lista li{font-size:14.5px;color:var(--ink-soft)}
 .nota-futuros{font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+
+/* Três planos lado a lado; o recomendado à direita, com borda e fita. No
+   celular eles empilham, e o Premium vem primeiro para não ficar escondido
+   depois de duas rolagens. */
+.planos3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:52px;align-items:stretch}
+@media(max-width:980px){
+  .planos3{grid-template-columns:1fr;max-width:560px;margin-inline:auto}
+  .planos3 .principal{order:-1}
+}
+.planos3 .plano{display:flex;flex-direction:column;padding:30px 26px}
+.planos3 .plano .lista{margin-top:22px;flex:1;align-content:start}
+.planos3 .plano .cifra{margin:18px 0 0}
+.planos3 .plano .obs{margin-top:6px}
+.planos3 .miudo a{color:var(--ink-soft)}
+.planos3 .miudo a:hover{color:var(--brand-word)}
+
+/* Os dois preços de cada plano, um ao lado do outro: quem compara não
+   precisa alternar nada para ver quanto o anual economiza. */
+.dois-precos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.preco-op{
+  display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:var(--raio-m);padding:12px 12px 13px;
+  background:var(--surface);transition:border-color .16s ease,transform .16s ease;
+}
+.preco-op:hover{border-color:var(--brand);transform:translateY(-2px)}
+.preco-op.anual{border-color:var(--brand);background:var(--brand-soft)}
+.preco-op .k{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.preco-op .v{font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+.preco-op .v strong{font-family:'Baloo2',sans-serif;font-size:25px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.preco-op .d{font-size:12px;color:var(--ink-soft);line-height:1.35}
+.preco-op .eco{font-size:12px;font-weight:800;color:var(--brand-word);margin-top:2px}
+
+.garantias{
+  list-style:none;padding:0;margin:34px auto 0;display:flex;flex-wrap:wrap;justify-content:center;
+  gap:10px 26px;font-size:14.5px;color:var(--ink-soft);font-weight:700;
+}
+.garantias li{display:flex;align-items:center;gap:8px}
+.garantias li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);flex:none}
+.planos3 .botao-2{width:100%;justify-content:center;margin-top:26px}
+.planos3 .botao{width:100%;margin-top:26px}
 
 /* ==========================================================================
    Dúvidas
@@ -1537,85 +1584,112 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
   <div class="env">
     <div class="cabecalho-secao">
       <p class="rotulo rev">Preço</p>
-      <h2 class="rev" data-atraso="1">Use o Android gratuitamente, sem mensalidade.</h2>
+      <h2 class="rev" data-atraso="1">Grátis no Android. Assine só o que fizer falta.</h2>
       <p class="sub rev" data-atraso="2">
-        Você não informa cartão para começar. Backup e recuperação dos dados
-        já fazem parte do LibMoney para Android.
+        Você não informa cartão para começar. As assinaturas acrescentam
+        sincronização, navegador, um assessor e seus bancos conectados.
       </p>
     </div>
 
-    <div class="preco-grade">
-      <!-- O valor está definido aqui e em lib/features/licenca/tela_licenca.dart.
-           Para mudar o preço, são esses dois lugares mais a Edge Function
-           criar-pagamento, que é quem cobra de verdade. -->
-      <div class="plano principal rev" data-atraso="1">
-        <span class="fita">Comece por aqui</span>
+    <!-- Os valores estão aqui, em site/assinar.html e em
+         lib/features/licenca/tela_licenca.dart. Quem cobra de verdade é a
+         lista de ofertas das Edge Functions (supabase/functions/*/ofertas.ts):
+         uma página alterada no navegador nunca escolhe o preço. -->
+    <div class="planos3">
+      <div class="plano rev" data-atraso="1">
         <div class="nome">Android</div>
-        <div class="cifra"><strong class="num">Grátis</strong><span>sem mensalidade</span></div>
-        <p class="obs">Sem teste, cobrança ou limite de lançamentos.</p>
-
+        <p class="obs">O app inteiro no celular, sem prazo de teste.</p>
+        <div class="cifra"><strong class="num">Grátis</strong><span>para sempre</span></div>
         <ul class="lista">
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              O app inteiro, sem limite de lançamentos</li>
+              Sem limite de lançamentos, contas ou cartões</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Saldo previsto de cada dia do mês</li>
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Funciona sem internet depois do primeiro acesso</li>
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Dados no aparelho e backup na nuvem</li>
-          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Até sete cópias de segurança recentes</li>
-          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Atualizações incluídas</li>
+              Backup na nuvem, com até sete cópias recentes</li>
         </ul>
-
-        <a class="botao" href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">
+        <a class="botao-2" href="https://github.com/luizarthurcontador00-hue/LibMoney-app/raw/main/libmoney.apk">
           Baixar grátis para Android
         </a>
         <p class="miudo">Já tinha Licença Vitalícia? Seus dados e direitos continuam preservados.</p>
       </div>
 
-      <div class="futuros">
-        <!-- Os valores também estão na tela de planos e na Edge Function que
-             cria a cobrança. O servidor continua sendo a fonte do valor,
-             para uma página alterada no navegador nunca escolher o preço. -->
-        <div class="plano rev" data-atraso="2">
-          <div class="nome">Sync</div>
-          <div class="cifra"><strong class="num">R$ 14,90</strong><span>por mês</span></div>
-          <p class="obs">Ou R$ 149,90 por ano — dois meses de desconto. Cancele quando quiser.</p>
-          <ul class="lista">
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Sincronização automática dos seus dados</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Usar em mais de um aparelho</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Entrar pelo navegador</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Lançamentos pelo WhatsApp <span class="emBreve">Em breve</span></li>
-          </ul>
-          <a class="botao" href="/assinar.html">Assinar o Sync</a>
-          <p class="miudo">O Sync é opcional e não é necessário para usar o Android.</p>
+      <div class="plano rev" data-atraso="2">
+        <div class="nome">Sync</div>
+        <p class="obs">Seus dados em todos os aparelhos e no navegador.</p>
+        <div class="dois-precos" role="group" aria-label="Preços do Sync">
+          <a class="preco-op anual" href="/assinar?plano=sync&amp;periodo=anual">
+            <span class="k">Anual</span>
+            <span class="v"><strong>R$&nbsp;12,49</strong>/mês</span>
+            <span class="d">cobrança anual de R$&nbsp;149,90</span>
+            <span class="eco">economize R$ 28,90</span>
+          </a>
+          <a class="preco-op" href="/assinar?plano=sync&amp;periodo=mensal">
+            <span class="k">Mensal</span>
+            <span class="v"><strong>R$&nbsp;14,90</strong>/mês</span>
+            <span class="d">cancele quando quiser</span>
+          </a>
         </div>
+        <ul class="lista">
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Tudo do Android</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Sincronização entre aparelhos</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Entrar pelo navegador e compartilhar as finanças</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Consultar pelo Claude e pelo ChatGPT</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Lançamentos pelo WhatsApp <span class="emBreve">Em breve</span></span></li>
+        </ul>
+        <a class="botao-2" href="/assinar?plano=sync&amp;periodo=anual">Assinar o Sync anual</a>
+        <p class="miudo"><a href="/assinar?plano=sync&amp;periodo=mensal">Prefere o mensal? R$ 14,90 por mês</a></p>
+      </div>
 
-        <div class="plano rev" data-atraso="3">
-          <div class="nome">Premium</div>
-          <div class="cifra"><strong class="num">R$ 29,90</strong><span>por mês</span></div>
-          <p class="obs">Inclui tudo do Sync e os recursos abaixo. Cancele quando quiser.</p>
-          <ul class="lista">
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Meu Assessor: acompanhamento com um assessor financeiro</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Open Finance: conecte até 2 bancos</li>
-            <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Lançamentos pelo WhatsApp <span class="emBreve">Em breve</span></li>
-          </ul>
-          <a class="botao" href="/assinar.html?plano=premium">Assinar o Premium</a>
+      <div class="plano principal rev" data-atraso="3">
+        <span class="fita">Recomendado</span>
+        <div class="nome">Premium</div>
+        <p class="obs">Tudo do Sync, com um assessor e seus bancos conectados.</p>
+        <div class="dois-precos" role="group" aria-label="Preços do Premium">
+          <a class="preco-op anual" href="/assinar?plano=premium&amp;periodo=anual">
+            <span class="k">Anual</span>
+            <span class="v"><strong>R$&nbsp;19,90</strong>/mês</span>
+            <span class="d">cobrança anual de R$&nbsp;238,80</span>
+            <span class="eco">economize R$ 120</span>
+          </a>
+          <a class="preco-op" href="/assinar?plano=premium&amp;periodo=mensal">
+            <span class="k">Mensal</span>
+            <span class="v"><strong>R$&nbsp;29,90</strong>/mês</span>
+            <span class="d">cancele quando quiser</span>
+          </a>
         </div>
-
-        <p class="nota-futuros rev" data-atraso="4">
-          Cancelar o Sync ou o Premium nunca tira a sua licença nem os seus
-          lançamentos. O Android continua gratuito.
-        </p>
+        <ul class="lista">
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Tudo do Sync</li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><b>Meu Assessor:</b> uma pessoa acompanha as suas finanças com você</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span><b>Open Finance:</b> conecte até 2 bancos e pare de lançar à mão</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Lançamentos pelo WhatsApp <span class="emBreve">Em breve</span></span></li>
+        </ul>
+        <a class="botao" href="/assinar?plano=premium&amp;periodo=anual">Assinar o Premium anual</a>
+        <p class="miudo"><a href="/assinar?plano=premium&amp;periodo=mensal">Prefere o mensal? R$ 29,90 por mês</a></p>
       </div>
     </div>
+
+    <ul class="garantias rev" data-atraso="4">
+      <li>Sem fidelidade: cancele quando quiser</li>
+      <li>7 dias para desistir, com o valor de volta</li>
+      <li>Cancelar nunca apaga os seus lançamentos</li>
+      <li>Quem assina o Premium não paga o Sync junto</li>
+    </ul>
+    <p class="nota-futuros rev" data-atraso="4" style="text-align:center;margin-top:14px">
+      Quer ver como o LibMoney se compara a outros apps de finanças?
+      <a href="/comparar.html">Veja a comparação</a>.
+    </p>
   </div>
 </section>
 
@@ -1690,9 +1764,23 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       <details>
         <summary>Preciso pagar todo mês?<span class="mais">+</span></summary>
         <p>Não para usar no Android. O Sync é uma assinatura opcional de
-        R$ 14,90/mês ou R$ 149,90/ano para sincronizar entre aparelhos,
-        compartilhar e entrar pelo navegador. O Premium custa R$ 29,90/mês e
-        inclui Meu Assessor e Open Finance para até 2 bancos.</p>
+        R$ 14,90/mês, ou R$ 12,49/mês no plano anual, para sincronizar entre
+        aparelhos, compartilhar e entrar pelo navegador. O Premium custa
+        R$ 29,90/mês, ou R$ 19,90/mês no plano anual, e inclui Meu Assessor e
+        Open Finance para até 2 bancos.</p>
+      </details>
+      <details>
+        <summary>Como funciona o plano anual?<span class="mais">+</span></summary>
+        <p>Você paga o ano de uma vez e o mês sai mais barato: o Sync anual
+        custa R$ 149,90 (R$ 12,49 por mês) e o Premium anual custa R$ 238,80
+        (R$ 19,90 por mês, R$ 120 a menos que doze meses do mensal). A
+        cobrança se repete uma vez por ano até você cancelar.</p>
+      </details>
+      <details>
+        <summary>Posso cancelar quando quiser?<span class="mais">+</span></summary>
+        <p>Sim, sem fidelidade. Nos primeiros 7 dias depois da primeira
+        cobrança você pode desistir e receber o valor de volta. Cancelar nunca
+        apaga os seus lançamentos: o Android continua gratuito.</p>
       </details>
       <details>
         <summary>Preciso de internet para usar?<span class="mais">+</span></summary>
@@ -1702,9 +1790,11 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
       </details>
       <details>
         <summary>O app se conecta ao meu banco?<span class="mais">+</span></summary>
-        <p>Não. Nós não pedimos, não guardamos e não usamos a senha do seu
-        banco. Você lança à mão ou importa o extrato em arquivo OFX, que é o
-        mesmo arquivo que o banco te deixa baixar.</p>
+        <p>No Premium, sim: você conecta até 2 bancos pelo Open Finance e
+        autoriza no próprio banco. Nós não pedimos, não guardamos e não usamos
+        a senha do seu banco. No Android gratuito você lança à mão ou importa
+        o extrato em arquivo OFX, que é o mesmo arquivo que o banco te deixa
+        baixar.</p>
       </details>
       <details>
         <summary>Tem para iPhone?<span class="mais">+</span></summary>
@@ -1779,6 +1869,7 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:56px 0
           <li><a href="#preco">Preço</a></li>
           <li><a href="/comprar.html">Comprar a licença</a></li>
           <li><a href="/assistentes-de-ia.html">Assistentes de IA</a></li>
+          <li><a href="/comparar.html">Comparar com outros apps</a></li>
         </ul>
       </div>
 
