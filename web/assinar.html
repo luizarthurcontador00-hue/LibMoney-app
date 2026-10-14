@@ -48,6 +48,13 @@
   .grupo-plano .selo{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
     background:var(--brand);color:var(--on-brand);padding:3px 9px;border-radius:999px}
   .total{font-size:13.5px;color:var(--ink-soft);margin:-8px 0 18px;min-height:1.4em}
+  .cupom{display:flex;gap:8px;margin:0 0 6px}
+  .cupom input{flex:1;text-transform:uppercase}
+  .cupom button{flex:none;padding:0 18px;border-radius:999px;border:1.5px solid var(--line);
+    background:var(--surface);font:inherit;font-weight:800;cursor:pointer}
+  .cupom-recado{font-size:13.5px;margin:0 0 16px;min-height:1.2em}
+  .cupom-recado.ok{color:var(--brand-word);font-weight:800}
+  .cupom-recado.erro{color:#B42318}
 </style>
 </head>
 <body>
@@ -112,6 +119,13 @@
         </label>
       </div>
       <p class="total" id="total" aria-live="polite"></p>
+
+      <label class="campo" for="cupom">Tem um cupom de desconto?</label>
+      <div class="cupom">
+        <input id="cupom" type="text" autocomplete="off" placeholder="CÓDIGO" maxlength="30">
+        <button type="button" id="aplicar">Aplicar</button>
+      </div>
+      <p class="cupom-recado" id="cupom-recado" aria-live="polite"></p>
 
       <ul class="lista">
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 13 4.5 4.5L19 7" stroke="#3F7A1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -186,10 +200,16 @@ form.addEventListener('submit', async (e) => {
       body: {
         periodo,
         plano,
+        cupom: cupomAplicado || undefined,
         voltar_para: location.origin + '/obrigado-assinatura.html',
       },
     });
-    if (error) throw error;
+    if (error) {
+      // O servidor explica em português por que recusou (cupom vencido, já
+      // usado...); sem ler o corpo, a pessoa veria só "non-2xx status code".
+      const corpo = await error.context?.json?.().catch(() => null);
+      throw new Error(corpo?.erro ?? error.message);
+    }
 
     const destino = data.link_teste || data.link;
     if (!destino) throw new Error('o checkout não veio no retorno');
@@ -223,12 +243,72 @@ if (planoPedido === 'open_finance') {
 }
 
 const total = document.getElementById('total');
+const campoCupom = document.getElementById('cupom');
+const recadoCupom = document.getElementById('cupom-recado');
+// O código só é guardado depois que o servidor disse que vale para o plano
+// escolhido. O preço mostrado vem do servidor, com as mesmas contas de quem
+// cobra; a página nunca calcula desconto.
+let cupomAplicado = '';
+let descricaoCupom = '';
+
 function mostrarTotal() {
   const oferta = form.querySelector('input[name="oferta"]:checked');
-  total.textContent = oferta?.dataset.total ?? '';
+  total.textContent = cupomAplicado && descricaoCupom
+    ? 'Com o cupom ' + cupomAplicado + ': ' + descricaoCupom + '. Cancele quando quiser.'
+    : (oferta?.dataset.total ?? '');
 }
-form.addEventListener('change', mostrarTotal);
+
+async function aplicarCupom() {
+  const codigo = campoCupom.value.trim().toUpperCase();
+  cupomAplicado = '';
+  descricaoCupom = '';
+  recadoCupom.className = 'cupom-recado';
+  recadoCupom.textContent = '';
+  mostrarTotal();
+  if (!codigo) return;
+  const oferta = form.querySelector('input[name="oferta"]:checked');
+  recadoCupom.textContent = 'Conferindo...';
+  try {
+    const { data, error } = await supabase.functions.invoke('conferir-cupom', {
+      body: { cupom: codigo, plano: oferta.dataset.plano, periodo: oferta.dataset.periodo },
+    });
+    if (error) throw error;
+    if (data?.ok) {
+      cupomAplicado = data.codigo;
+      descricaoCupom = data.descricao;
+      recadoCupom.className = 'cupom-recado ok';
+      recadoCupom.textContent = 'Cupom aplicado.';
+    } else {
+      recadoCupom.className = 'cupom-recado erro';
+      recadoCupom.textContent = data?.motivo ?? 'Este cupom não vale.';
+    }
+  } catch (_) {
+    recadoCupom.className = 'cupom-recado erro';
+    recadoCupom.textContent = 'Não deu para conferir o cupom agora. Tente de novo.';
+  }
+  mostrarTotal();
+}
+
+document.getElementById('aplicar').addEventListener('click', aplicarCupom);
+campoCupom.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); aplicarCupom(); }
+});
+// Trocar de plano refaz a conferência: um cupom pode valer só para um deles.
+form.addEventListener('change', (e) => {
+  if (e.target.name === 'oferta' && campoCupom.value.trim()) aplicarCupom();
+  else mostrarTotal();
+});
 mostrarTotal();
+
+const cupomDoLink = pedido.get('cupom');
+if (cupomDoLink && planoPedido !== 'open_finance') {
+  campoCupom.value = cupomDoLink;
+  aplicarCupom();
+}
+if (planoPedido === 'open_finance') {
+  document.querySelector('label[for="cupom"]').style.display = 'none';
+  document.querySelector('.cupom').style.display = 'none';
+}
 </script>
 </body>
 </html>
