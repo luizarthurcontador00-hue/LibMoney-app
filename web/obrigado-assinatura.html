@@ -70,9 +70,19 @@ const carta = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none">
 function pronto(premium) {
   selo.innerHTML = certo;
   titulo.textContent = premium ? 'Premium ativado' : 'Sync ativado';
-  texto.innerHTML = premium
+  texto.innerHTML = (premium
     ? 'A partir de agora você tem Sync, Meu Assessor e pode conectar até 2 bancos pelo Open Finance.'
-    : 'A partir de agora seus dados sincronizam entre aparelhos, e você pode entrar pelo navegador.'
+    : 'A partir de agora seus dados sincronizam entre aparelhos, e você pode entrar pelo navegador.')
+    + '<br><a class="botao" href="/app/">Abrir o LibMoney</a>';
+}
+
+// Quem assinou pelo app não entrou nesta página: a sessão guardada aqui pode
+// ser de outra conta, e dizer "Sync ativado" a partir dela já mostrou o plano
+// errado. O app confere a assinatura sozinho quando a pessoa volta.
+function vindoDoApp() {
+  selo.innerHTML = certo;
+  titulo.textContent = 'Assinatura recebida';
+  texto.innerHTML = 'Volte ao LibMoney: seu plano aparece em alguns instantes.'
     + '<br><a class="botao" href="/app/">Abrir o LibMoney</a>';
 }
 
@@ -88,6 +98,7 @@ function demorando() {
 const esperas = [1500, 2000, 3000, 4000, 5000, 6000];
 
 (async function conferir() {
+  if (new URLSearchParams(location.search).get('origem') === 'app') return vindoDoApp();
   for (const espera of esperas) {
     try {
       const { data } = await supabase.rpc('meus_direitos');
