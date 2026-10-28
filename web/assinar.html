@@ -55,6 +55,13 @@
   .cupom-recado{font-size:13.5px;margin:0 0 16px;min-height:1.2em}
   .cupom-recado.ok{color:var(--brand-word);font-weight:800}
   .cupom-recado.erro{color:#B42318}
+  .largo{width:100%;justify-content:center;cursor:pointer;font-family:inherit}
+  .ou{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:13px;color:var(--ink-soft)}
+  .ou::before,.ou::after{content:"";flex:1;border-top:1px solid var(--line)}
+  .link{background:none;border:0;padding:0;font:inherit;font-weight:700;
+        color:var(--brand-word);text-decoration:underline;cursor:pointer}
+  .troca{text-align:center;font-size:13.5px;margin:12px 0 0}
+  .logado{font-size:14.5px;margin:0 0 16px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -136,15 +143,45 @@
           Lançamentos pelo WhatsApp em breve nos dois planos</li>
       </ul>
 
-      <label class="campo" for="email">Seu e-mail do LibMoney</label>
-      <input id="email" type="email" autocomplete="email" required
-             placeholder="voce@email.com">
+      <p class="logado" id="logado" hidden>
+        Assinando como <b id="quem"></b>.
+        <button type="button" class="link" id="trocar">Trocar de conta</button>
+      </p>
 
-      <label class="campo" for="senha">Sua senha</label>
-      <input id="senha" type="password" autocomplete="current-password" required
-             placeholder="a mesma que você usa no app">
+      <div id="entrar">
+        <p class="campo">Entre com a mesma conta do aplicativo</p>
+        <button type="button" class="botao-2 largo" id="google">
+          <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/>
+            <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/>
+          </svg>
+          Entrar com Google
+        </button>
+        <div class="ou"><span>ou pelo e-mail</span></div>
 
-      <button class="botao" id="botao" type="submit">Ir para o pagamento</button>
+        <label class="campo" for="email">Seu e-mail do LibMoney</label>
+        <input id="email" type="email" autocomplete="email"
+               placeholder="voce@email.com">
+
+        <div id="caixa-codigo" hidden>
+          <label class="campo" for="codigo">Código que chegou no seu e-mail</label>
+          <input id="codigo" type="text" inputmode="numeric" autocomplete="one-time-code"
+                 maxlength="10" placeholder="000000">
+        </div>
+
+        <div id="caixa-senha" hidden>
+          <label class="campo" for="senha">Sua senha</label>
+          <input id="senha" type="password" autocomplete="current-password"
+                 placeholder="a mesma que você usa no app">
+        </div>
+      </div>
+
+      <button class="botao" id="botao" type="submit">Receber código no e-mail</button>
+      <p class="troca" id="troca">
+        <button type="button" class="link" id="usar-senha">Prefiro entrar com senha</button>
+      </p>
     </form>
 
     <div id="aviso" class="recado"></div>
@@ -167,10 +204,136 @@ const supabase = createClient(
 const form   = document.getElementById('form');
 const botao  = document.getElementById('botao');
 const aviso  = document.getElementById('aviso');
+const campoEmail = document.getElementById('email');
+const campoCodigo = document.getElementById('codigo');
+const campoSenha = document.getElementById('senha');
 
 function mostrar(texto, tipo) {
   aviso.textContent = texto;
   aviso.className = 'recado ' + tipo;
+}
+
+// Quem entrou no app pelo Google nunca criou senha, então a senha não pode
+// ser o único jeito de entrar aqui. "email" pede o código, "codigo" confere
+// o que chegou, "senha" é o caminho antigo, e "logado" já tem sessão (voltou
+// do Google ou tocou no link do e-mail).
+let modo = 'email';
+const textoDoBotao = {
+  email: 'Receber código no e-mail',
+  codigo: 'Entrar e ir para o pagamento',
+  senha: 'Ir para o pagamento',
+  logado: 'Ir para o pagamento',
+};
+
+function mudarModo(novo, email) {
+  modo = novo;
+  document.getElementById('entrar').hidden = novo === 'logado';
+  document.getElementById('logado').hidden = novo !== 'logado';
+  document.getElementById('troca').hidden = novo === 'logado' || novo === 'senha';
+  document.getElementById('caixa-codigo').hidden = novo !== 'codigo';
+  document.getElementById('caixa-senha').hidden = novo !== 'senha';
+  if (email) document.getElementById('quem').textContent = email;
+  botao.textContent = textoDoBotao[novo];
+}
+
+// O Google e o link do e-mail saem desta página e voltam para ela. O plano e
+// o cupom escolhidos vão no endereço de volta, senão a pessoa voltaria no
+// plano padrão sem perceber.
+function enderecoDeVolta() {
+  const oferta = form.querySelector('input[name="oferta"]:checked');
+  const p = new URLSearchParams({
+    plano: oferta.dataset.plano,
+    periodo: oferta.dataset.periodo,
+  });
+  const cupom = cupomAplicado || campoCupom.value.trim();
+  if (cupom) p.set('cupom', cupom);
+  return location.origin + location.pathname + '?' + p.toString();
+}
+
+document.getElementById('google').addEventListener('click', async () => {
+  mostrar('', '');
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: enderecoDeVolta() },
+  });
+  if (error) mostrar('Não deu para abrir o Google agora. Tente pelo e-mail.', 'erro');
+});
+
+document.getElementById('usar-senha').addEventListener('click', () => {
+  mostrar('', '');
+  mudarModo('senha');
+  campoSenha.focus();
+});
+
+document.getElementById('trocar').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  mostrar('', '');
+  mudarModo('email');
+});
+
+const { data: { session: sessaoInicial } } = await supabase.auth.getSession();
+if (sessaoInicial) mudarModo('logado', sessaoInicial.user.email);
+supabase.auth.onAuthStateChange((evento, sessao) => {
+  if (evento === 'SIGNED_IN' && sessao && modo !== 'logado') {
+    mudarModo('logado', sessao.user.email);
+  }
+});
+
+// Só entra. Devolve false com o recado já na tela quando não deu.
+async function entrar() {
+  const email = campoEmail.value.trim();
+  if (modo === 'logado') return true;
+  if (!email) {
+    mostrar('Digite o e-mail da sua conta do LibMoney.', 'erro');
+    campoEmail.focus();
+    return false;
+  }
+  if (modo === 'senha') {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password: campoSenha.value,
+    });
+    if (error) {
+      mostrar('E-mail ou senha não conferem. Se você entra no app pelo '
+              + 'Google, use o botão do Google ou o código por e-mail.', 'erro');
+      return false;
+    }
+    return true;
+  }
+  if (modo === 'codigo') {
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: campoCodigo.value.trim(),
+      type: 'email',
+    });
+    if (error) {
+      mostrar('Este código não confere ou já venceu. Confira o e-mail mais '
+              + 'recente, ou peça outro recarregando a página.', 'erro');
+      return false;
+    }
+    return true;
+  }
+  // modo "email": manda o código e para aqui, esperando a pessoa digitá-lo.
+  // shouldCreateUser falso: esta página assina contas que já existem; criar
+  // uma conta vazia aqui faria alguém pagar por uma conta que não usa.
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: false, emailRedirectTo: enderecoDeVolta() },
+  });
+  if (error) {
+    const semConta = /signups? not allowed|user not found/i.test(error.message);
+    mostrar(semConta
+      ? 'Não achamos uma conta com este e-mail. Use o mesmo e-mail do '
+        + 'aplicativo, ou crie sua conta no app e volte aqui.'
+      : 'Não deu para mandar o código agora. Espere um minuto e tente de '
+        + 'novo.', 'erro');
+    return false;
+  }
+  mudarModo('codigo');
+  mostrar('Mandamos um e-mail para ' + email + '. Digite o código que está '
+          + 'nele, ou toque no link de entrada. Confira também o spam.', 'info');
+  campoCodigo.focus();
+  return false;
 }
 
 form.addEventListener('submit', async (e) => {
@@ -185,16 +348,10 @@ form.addEventListener('submit', async (e) => {
     const periodo = oferta.dataset.periodo;
 
     // Mesma regra de comprar.html: o id de quem assina nunca vem de um
-    // campo desta página, só do token da sessão criada aqui.
-    const { error: erroLogin } = await supabase.auth.signInWithPassword({
-      email: document.getElementById('email').value.trim(),
-      password: document.getElementById('senha').value,
-    });
-    if (erroLogin) {
-      mostrar('E-mail ou senha não conferem. Use os mesmos do aplicativo.',
-              'erro');
-      return;
-    }
+    // campo desta página, só do token da sessão.
+    if (!await entrar()) return;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) mudarModo('logado', session.user.email);
 
     const { data, error } = await supabase.functions.invoke('criar-assinatura', {
       body: {
@@ -222,7 +379,7 @@ form.addEventListener('submit', async (e) => {
             + 'minutos.\n\n' + (err?.message ?? err), 'erro');
   } finally {
     botao.disabled = false;
-    botao.textContent = 'Ir para o pagamento';
+    botao.textContent = textoDoBotao[modo];
   }
 });
 

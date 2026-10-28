@@ -1,0 +1,83 @@
+<!--
+  Modelo do e-mail de entrada por código.
+  Cole no Supabase em Authentication > Emails > Magic Link, no campo "Corpo".
+  Assunto sugerido: Seu código de entrada no LibMoney
+
+  É o e-mail que a página de assinatura (assinar.html) manda para quem entra
+  sem senha, e quem entrou no app pelo Google nunca criou uma. A página pede o
+  código: sem {{ .Token }} aqui, o e-mail chegaria só com o link e a pessoa
+  ficaria sem o que digitar. O link continua, para quem prefere tocar.
+
+  Mesmas regras de email_confirmacao.html: tabelas, estilo em cada tag, nada
+  de fonte externa nem SVG.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F6F7F5;margin:0;padding:32px 12px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background-color:#FFFFFF;border-radius:16px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+        <tr>
+          <td style="background-color:#0E100E;padding:26px 32px;">
+            <span style="color:#FFFFFF;font-size:21px;font-weight:800;letter-spacing:-0.4px;">Lib</span><span style="color:#66CC33;font-size:21px;font-weight:800;letter-spacing:-0.4px;">Money</span>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:36px 32px 8px 32px;">
+            <h1 style="margin:0 0 14px 0;font-size:25px;line-height:1.25;font-weight:800;color:#0E100E;letter-spacing:-0.5px;">
+              Seu código de entrada
+            </h1>
+            <p style="margin:0 0 8px 0;font-size:16px;line-height:1.6;color:#3A3F3B;">
+              Digite este código na página do LibMoney para continuar:
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding:16px 32px 8px 32px;">
+            <p style="margin:0;font-size:34px;font-weight:800;letter-spacing:8px;color:#0E100E;font-family:Consolas,'Courier New',monospace;">
+              {{ .Token }}
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding:20px 32px 8px 32px;">
+            <p style="margin:0 0 12px 0;font-size:14px;line-height:1.6;color:#6B7270;">
+              Ou entre tocando no botão:
+            </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" bgcolor="#66CC33" style="border-radius:999px;">
+                  <a href="{{ .ConfirmationURL }}"
+                     style="display:inline-block;padding:14px 34px;font-size:16px;font-weight:800;color:#0B0D0B;text-decoration:none;border-radius:999px;">
+                    Entrar no LibMoney
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:26px 32px 34px 32px;">
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#8A918C;">
+              O código vale por pouco tempo e só uma vez. Se não foi você que pediu, é só ignorar este e-mail: ninguém entra na sua conta sem ele.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="background-color:#0E100E;padding:18px 32px;">
+            <p style="margin:0;font-size:12.5px;color:#8A918C;">
+              LibMoney &nbsp;·&nbsp;
+              <a href="https://libmoney.com.br/privacidade.html" style="color:#C8CEC9;text-decoration:none;">Privacidade</a> &nbsp;·&nbsp;
+              <a href="https://libmoney.com.br/termos.html" style="color:#C8CEC9;text-decoration:none;">Termos</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
