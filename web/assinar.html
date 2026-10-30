@@ -55,6 +55,9 @@
   .cupom-recado{font-size:13.5px;margin:0 0 16px;min-height:1.2em}
   .cupom-recado.ok{color:var(--brand-word);font-weight:800}
   .cupom-recado.erro{color:#B42318}
+  .outro-email{margin:6px 0 16px;font-size:14px}
+  .outro-email summary{cursor:pointer;font-weight:700;color:var(--brand-word)}
+  .outro-email .ajuda{font-size:13px;color:var(--ink-soft);margin:6px 0 0}
   .largo{width:100%;justify-content:center;cursor:pointer;font-family:inherit}
   .ou{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:13px;color:var(--ink-soft)}
   .ou::before,.ou::after{content:"";flex:1;border-top:1px solid var(--line)}
@@ -177,6 +180,16 @@
                  placeholder="a mesma que você usa no app">
         </div>
       </div>
+
+      <details class="outro-email" id="outro-email">
+        <summary>Vou pagar com outro e-mail no Mercado Pago</summary>
+        <label class="campo" for="email-mp">E-mail do Mercado Pago</label>
+        <input id="email-mp" type="email" autocomplete="off"
+               placeholder="o e-mail que você usa no Mercado Pago">
+        <p class="ajuda">O Mercado Pago só conclui a assinatura se o e-mail de quem paga
+        for o mesmo informado aqui. Se pagar como convidado, digite este mesmo e-mail
+        na tela de pagamento. Seu login no LibMoney não muda.</p>
+      </details>
 
       <button class="botao" id="botao" type="submit">Receber código no e-mail</button>
       <p class="troca" id="troca">
@@ -358,6 +371,8 @@ form.addEventListener('submit', async (e) => {
         periodo,
         plano,
         cupom: cupomAplicado || undefined,
+        // Vazio = o e-mail do login, como sempre. O servidor valida o formato.
+        email_pagador: document.getElementById('email-mp').value.trim() || undefined,
         voltar_para: location.origin + '/obrigado-assinatura.html',
       },
     });
