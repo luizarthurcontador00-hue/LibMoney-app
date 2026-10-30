@@ -30,7 +30,7 @@
 <main class="doc">
 
 <h1>Política de Privacidade</h1>
-<p class="data">Última atualização: 26 de outubro de 2026</p>
+<p class="data">Última atualização: 27 de outubro de 2026</p>
 
 <p>
   Esta política explica quais informações o LibMoney guarda, por que guarda, com
@@ -93,7 +93,7 @@
   <li><b>Mercado Pago</b>, que processa os pagamentos. Os dados do seu cartão ou do Pix são informados diretamente ao Mercado Pago; nós recebemos apenas a confirmação de que o pagamento foi aprovado.</li>
   <li><b>Google (Firebase Cloud Messaging)</b>, que entrega as notificações de mensagem do assessor ao seu aparelho.</li>
   <li><b>Malvo</b>, apenas se você ativar a conexão por Open Finance (veja abaixo).</li>
-  <li><b>OpenAI</b>, se você escolher conversar com o Lib no cadastro ou conectar o LibMoney ao ChatGPT; <b>Anthropic</b>, se você conectar o LibMoney ao Claude (veja abaixo).</li>
+  <li><b>OpenAI</b>, se você escolher conversar com o Lib no cadastro, usar o Lib para tirar dúvidas no app ou conectar o LibMoney ao ChatGPT; <b>Anthropic</b>, se você conectar o LibMoney ao Claude (veja abaixo).</li>
   <li><b>Autoridades públicas</b>, somente quando formos obrigados por lei ou por ordem judicial.</li>
 </ul>
 
@@ -160,6 +160,50 @@
   foi usada, quando e se deu certo — nunca os seus valores.
 </p>
 
+<h2>Perguntar ao Lib (opcional)</h2>
+<p>
+  O Lib é o assistente de dúvidas que fica dentro do app. Você pode fazer
+  perguntas sobre o app e, se quiser, sobre o seu mês. Usar o Lib é opcional:
+  sem perguntas, nada é enviado a ele.
+</p>
+<p>
+  Para responder, o app envia à OpenAI a sua pergunta e o histórico curto da
+  conversa. Só se você ligar a opção <b>Usar meus números</b>, também vai o
+  resumo do mês: o total de entradas, o total de saídas, o saldo no fim do mês,
+  o menor saldo e o dia em que ele acontece, e as categorias acima do
+  orçamento. O que você escrever na pergunta também pode ser enviado à OpenAI;
+  não escreva senhas, CPF ou números de cartão.
+</p>
+<p>
+  Se você autorizar consultas para uma conversa, o Lib poderá pedir dados
+  limitados das suas contas, cartões ou lançamentos para responder. O app
+  informa o tipo de dado e envia à OpenAI somente o resultado da consulta. A
+  autorização pode ser encerrada no chat e termina ao sair da conversa ou
+  mudar de conta ou perfil. Os dados não são enviados para essas consultas sem
+  sua autorização. O app não inclui automaticamente senhas nem números de
+  cartão cadastrados, mas as descrições que você escreveu podem conter dados
+  pessoais; confira o que deseja compartilhar.
+</p>
+<p>
+  Se você escolher anexar uma foto ou PDF e confirmar o envio, o conteúdo do
+  arquivo será enviado à OpenAI para responder àquela pergunta. Confira o
+  arquivo antes de enviar e não inclua senhas, CPF ou números completos de
+  cartão. Os limites de tamanho e páginas aparecem no aplicativo; divida
+  extratos grandes em arquivos menores.
+</p>
+<!-- CONFERIR: retenção e treinamento nos termos atuais da OpenAI -->
+<p>
+  O tratamento desses dados pela OpenAI fica sujeito às regras da OpenAI.
+</p>
+<p>
+  O LibMoney não guarda o texto da pergunta nem o da resposta. Ficam só a
+  quantidade de perguntas, o assunto de cada uma e se a resposta ajudou.
+</p>
+<p>
+  O Lib pode errar. Confira os valores importantes nas telas do app antes de
+  tomar uma decisão com base na resposta.
+</p>
+
 <h2>Onde seus dados ficam</h2>
 <p>
   Uma cópia fica no seu próprio aparelho, que é o que permite o app funcionar
@@ -170,8 +214,8 @@
 </p>
 <p>
   <b>Transferência internacional:</b> os servidores do Supabase que usamos ficam
-  nos Estados Unidos (região us-east-1), e o Google e o Mercado Pago também podem
-  tratar dados fora do Brasil. Essas transferências seguem o artigo 33 da Lei
+  nos Estados Unidos (região us-east-1), e o Google, o Mercado Pago e a OpenAI
+  (se você usar o Lib) também podem tratar dados fora do Brasil. Essas transferências seguem o artigo 33 da Lei
   Geral de Proteção de Dados, com fornecedores que adotam medidas de segurança
   compatíveis com a lei brasileira.
 </p>
