@@ -69,6 +69,10 @@
   <button class="botao" type="submit" id="botao-entrar" style="margin-top:20px;width:100%">
     Entrar
   </button>
+  <p class="ink-soft" style="text-align:center;margin:16px 0 8px">ou</p>
+  <button type="button" id="botao-google" style="width:100%">
+    Entrar com o Google
+  </button>
   <p class="pe-caixa" style="margin-top:16px">
     Ainda não tem conta? <a href="https://libmoney.com.br/">Baixe o LibMoney</a>.
   </p>
@@ -149,8 +153,19 @@ var supabasePublishableKey = 'sb_publishable_0ok6EgwVc3E2CeYVg5_nCw_VSSaQ_gq';
 // à conta), não a sessão do app em /app: ela não pode reaproveitar nem gravar
 // sessão nesta origem, ou logar nesta tela deixaria uma sessão persistida
 // aberta num navegador que outra pessoa usa no mesmo aparelho.
+// Exceção para o login com o Google: o navegador sai da página e volta, e o
+// código de verificação do PKCE precisa sobreviver a isso. Por isso o storage é
+// o sessionStorage — por aba, apagado ao fechar — e não o localStorage. A
+// página continua sempre começando pedindo login (ver o início do fluxo
+// abaixo) e sai da sessão ao terminar (finalizar).
 var supa = supabase.createClient(supabaseUrl, supabasePublishableKey, {
-  auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  auth: {
+    persistSession: true,
+    storage: window.sessionStorage,
+    flowType: 'pkce',
+    autoRefreshToken: false,
+    detectSessionInUrl: false
+  }
 });
 
 var params = new URLSearchParams(window.location.search);
@@ -218,11 +233,57 @@ function mostrar(nome) {
 
 if (!authorizationId) {
   mostrar('linkInvalido');
+} else if (params.get('code')) {
+  voltarDoGoogle(params.get('code'));
 } else {
-  // A sessão não é persistida (item de segurança: esta página não pode
-  // reaproveitar nem gravar sessão), então nunca há sessão antes do login no
-  // formulário — sempre começa pedindo para entrar.
-  mostrar('formLogin');
+  // Esta página não pode reaproveitar sessão de uma visita anterior (outra
+  // pessoa pode usar o mesmo navegador), então sempre começa pedindo para
+  // entrar: qualquer sessão que tenha sobrado na aba é encerrada.
+  supa.auth.signOut({ scope: 'local' }).then(function () {
+    mostrar('formLogin');
+    if (params.get('error')) {
+      var erro = document.getElementById('erro-login');
+      erro.textContent = 'Não foi possível entrar com o Google.';
+      erro.style.display = 'block';
+    }
+  });
+}
+
+document.getElementById('botao-google').addEventListener('click', async function () {
+  var erro = document.getElementById('erro-login');
+  erro.style.display = 'none';
+  // Volta para esta mesma página, com o mesmo pedido de conexão.
+  var volta = window.location.origin + '/oauth/consent?authorization_id=' +
+    encodeURIComponent(authorizationId);
+  var r = await supa.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: volta }
+  });
+  if (r.error) {
+    erro.textContent = 'Não foi possível entrar com o Google.';
+    erro.style.display = 'block';
+  }
+});
+
+async function voltarDoGoogle(codigo) {
+  mostrar('carregando');
+  var r;
+  try {
+    r = await supa.auth.exchangeCodeForSession(codigo);
+  } catch (e) {
+    r = { error: e };
+  }
+  // Tira o código da barra de endereço, mantendo só o pedido de conexão.
+  window.history.replaceState({}, '', '?authorization_id=' + encodeURIComponent(authorizationId));
+  if (r.error) {
+    await supa.auth.signOut({ scope: 'local' });
+    var erro = document.getElementById('erro-login');
+    erro.textContent = 'Não foi possível entrar com o Google.';
+    erro.style.display = 'block';
+    mostrar('formLogin');
+    return;
+  }
+  carregarPedido();
 }
 
 document.getElementById('form-login').addEventListener('submit', async function (ev) {
