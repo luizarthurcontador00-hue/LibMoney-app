@@ -90,6 +90,10 @@
     Para desconectar, use Configurações › Assistentes de IA no app LibMoney.
   </p>
   <p id="destino-cliente" style="font-weight:700"></p>
+  <p id="aviso-local" style="display:none;font-weight:700">
+    Este aplicativo roda no seu próprio computador. Só permita se você mesmo
+    o instalou e acabou de pedir para conectar.
+  </p>
   <p class="ink-soft">
     Só permita se você acabou de clicar em Conectar no ChatGPT ou no Claude.
     Se alguém te mandou este link, feche esta página.
@@ -184,8 +188,17 @@ function urlConfiavel(valor) {
   } catch (e) {
     return null;
   }
-  if (u.protocol !== 'https:' || !hostConfiavel(u.hostname)) return null;
-  return u;
+  if (u.protocol === 'https:' && hostConfiavel(u.hostname)) return u;
+  // Aplicativo instalado no próprio computador da pessoa (padrão RFC 8252):
+  // o código de acesso volta para a máquina dela e não para um servidor de
+  // terceiros. Só loopback exato, só http, e a tela avisa antes de permitir.
+  if (ehLocal(u)) return u;
+  return null;
+}
+
+function ehLocal(u) {
+  return u.protocol === 'http:' &&
+    (u.hostname === '127.0.0.1' || u.hostname === 'localhost' || u.hostname === '[::1]');
 }
 
 var telas = {
@@ -287,6 +300,7 @@ async function carregarPedido() {
     return;
   }
   document.getElementById('destino-cliente').textContent = 'Vai voltar para: ' + destino.host;
+  document.getElementById('aviso-local').style.display = ehLocal(destino) ? 'block' : 'none';
   mostrar('consentimento');
 }
 
