@@ -27,7 +27,7 @@ não só "quanto tenho hoje?".
 
 ## O que faz
 
-- Fluxo diário: saldo previsto de cada dia do mês, com o dia mais apertado.
+- Saldo dia a dia: saldo previsto de cada dia do mês, com o dia mais apertado.
 - Cartão de crédito: compras entram na fatura certa, e a fatura sai do saldo no vencimento.
 - Planejado x realizado: quanto se planejou gastar em cada categoria e quanto se gastou.
 - Parcelas, contas fixas mensais, objetivos e importação de extrato OFX.
