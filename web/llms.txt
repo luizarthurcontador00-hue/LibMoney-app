@@ -53,10 +53,12 @@ não só "quanto tenho hoje?".
 
 ## Assistentes de IA
 
-O LibMoney tem um conector que liga o app ao Claude e ao ChatGPT. O assistente lê seus dados e pode pedir lançamentos novos, que só
-são criados depois que você confirma — isso é garantido no banco de dados. Ele
+O LibMoney tem um conector que liga o app ao Claude e ao ChatGPT. O assistente lê seus dados e pode pedir ações (lançar, alterar, guardar em
+objetivo, ajustar orçamento, pagar fatura), que só valem depois que você
+confirma e podem ser desfeitas por até 30 dias; o pagamento de fatura também
+exige a sua resposta dentro do app, e o LibMoney não envia dinheiro ao banco. Ele
 vê o saldo previsto de cada dia, o dia mais apertado, as faturas em aberto e o
-planejado x realizado por categoria, mas nunca consegue alterar ou apagar nada.
+planejado x realizado por categoria.
 Recurso do Sync (R$ 14,90/mês ou R$ 149,90/ano).
 
 - LibMoney no Claude e no ChatGPT: https://libmoney.com.br/assistentes-de-ia
